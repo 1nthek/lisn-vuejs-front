@@ -1,11 +1,9 @@
 <template>
-  <!-- <transition appear name="fade"> -->
     <div id="write">
       <RecSidebar></RecSidebar>
       <base-header></base-header>
       <Workspace></Workspace>
     </div>
-  <!-- </transition> -->
 </template>
 
 <script>
