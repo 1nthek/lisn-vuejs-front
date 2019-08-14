@@ -3,24 +3,21 @@
       <!-- <sidebar></sidebar> -->
       <side-bar>
       <template slot-scope="props" slot="links">
-        <sidebar-item :link="{name: 'All Notes', icon: 'ni ni-books',}">
-          <sidebar-item :link="{ name: 'Notes1', path: '/dashboard' }"></sidebar-item>
-          <sidebar-item :link="{ name: 'Notes2', path: '/alternative' }"></sidebar-item>
-        </sidebar-item>
-
-        <sidebar-item :link="{name: 'Shared with Me', icon: 'ni ni-send',}">
+        <sidebar-item :link="{ name: '모든 노트', path: '/board', icon: 'ni ni-books' }"></sidebar-item>
+        <sidebar-item :link="{ name: '즐겨찾기', path: '/board', icon: 'fas fa-star' }"></sidebar-item>
+        <sidebar-item :link="{name: '공유된 노트', icon: 'ni ni-send',}">
           <sidebar-item :link="{ name: 'Shared1', path: '/dashboard' }"></sidebar-item>
           <sidebar-item :link="{ name: 'Shared2', path: '/alternative' }"></sidebar-item>
         </sidebar-item>
 
-        <sidebar-item :link="{name: 'Folder',icon: 'ni ni-folder-17'}">
-          <sidebar-item :link="{ name: 'Folder1', path: '/components/icons' }"/>
-          <sidebar-item :link="{ name: 'Folder2', path: '/components/typography' }"/>
+        <sidebar-item :link="{name: '폴더',icon: 'ni ni-folder-17'}">
+          <sidebar-item :link="{ name: '폴더1', path: '/components/icons' }"/>
+          <sidebar-item :link="{ name: '폴더2', path: '/components/typography' }"/>
 
-          <sidebar-item :link="{ name: 'Multi Folder' }">
+          <!-- <sidebar-item :link="{ name: 'Multi Folder' }">
             <sidebar-item :link="{ name: 'Folder3', path:'#!' }"/>
             <sidebar-item :link="{ name: 'Folder4', path:'#a' }"/>
-          </sidebar-item>
+          </sidebar-item> -->
         </sidebar-item>
       </template>
 
@@ -32,7 +29,7 @@
           <li class="nav-item">
             <div class="nav-link">
               <i class="fas fa-trash"></i>
-              <span class="nav-link-text">Trash</span>
+              <span class="nav-link-text">휴지통</span>
             </div>
           </li>
         </ul>
@@ -54,14 +51,14 @@
                     <!-- <board-table title="All Notes"></board-table> -->
                     <!-- <card body-classes="px-0 pb-0 pt-0" class="mb-0"> -->
                         <!-- <template slot="header"> -->
-                          <div style="padding: 0;display: flex;justify-content: space-between;">
-                            <div class="oleo" style="margin: 1.4rem 0 0 2rem;font-size: 26px;color:#3e4861">All Notes</div>
+                          <div style="padding: 0;display: flex;justify-content: space-between;align-items: center;">
+                            <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
                             <div class="create-bar">
                                 <md-button class="create-btn merienda" @click="newPage()">
-                                  <div style="padding: 10px;">
-                                    + New Project
+                                  <div class="ns-kr" style="padding: 10px;font-size: 16px;">
+                                    + 새 노트
                                   </div>
-                                    </md-button>
+                                </md-button>
                             </div>
 
                           </div>
@@ -137,15 +134,23 @@ export default {
   },
   data() {
     return {
+      user_id: -1,
     }
   },
+  created() {
+    this.$store.commit('setUserId', 'glisn_user_id');
+    this.user_id = this.$store.state.user_id;
+    this.$store.commit('getNoteList');
+  },
   methods: {
-    newPage(){
+    newPage() {
+      let self = this;
       var formData = new FormData();
-      formData.append('user_id', '1');
-      axios.post('http://localhost:8000/record/note', formData)
+      formData.append('user_id', this.$store.state.user_id);
+      axios.post( this.$store.state.domain + '/record/note', formData)
         .then((res) => {
-          this.$store.state.note_id = res.data.note_id;
+          var note_id = res.data.note_id;
+          self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
           this.$router.push('/write');
         })
         .catch((ex) => { 
@@ -153,32 +158,39 @@ export default {
         });
     }
   },
-  created() {
-    this.$store.commit('getNoteList');
-  },
 }
 </script>
 
 <style>
+.nav-link-text{
+  font-weight: bold;
+  font-size: 14px;
+}
+a {
+    text-decoration: none !important;
+}
 #noteList:hover{
     color: white;
     background: #246c8f;
 }
 #noteList{
-    background: #098db3;
-    background: #098db3a1;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    /* background: #098db3; */
+    /* background: #098db3a1; */
     color: black;
     font-size: 20px;
     transition: all .4s ease 0s;
     border-radius: 0.5rem;
 }
 #noteList .note-date{
+    color: #525f7f;
+}
+#noteList:hover .note-date{
     color: white;
 }
 #noteList H5{
-  color: #617386;
+    color: #617386;
     transition: all .4s ease 0s;
-
 }
 
 #noteList:hover H5{

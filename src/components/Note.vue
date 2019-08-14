@@ -1,6 +1,7 @@
 <template>
 <div>
     <div class="lisn-note-container">
+      <input v-on:input="typing" v-bind:value="title" class="h1" >
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -90,7 +91,8 @@
 import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
-// import axios from 'axios'
+import axios from 'axios'
+
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
   dayNames: ['Sunday', 'Monday', '화요일', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -113,6 +115,11 @@ export default {
     flag: false,
     dX: '9px',
     dY: '9px',
+
+    user_id: -1,
+    note_id: -1,
+
+    title: "제목",
     data: [],
     cellData: [
       {
@@ -169,17 +176,35 @@ export default {
       }
     ]
   }),
-  created () {
-    // for (var i = 0; i < this.cellData.length; ++i) {
-    //   localStorage.setItem(i, JSON.stringify(this.cellData[i]))
-    // }
-    // if (localStorage.length > 0) {
-    //   for (var i = 0; i < localStorage.length; ++i) {
-    //     if (localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-    //       this.cellData.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
-    //     }
-    //   }
-    // }
+   watch: {
+    title: function (newtitle) {
+      this.title = newtitle;
+    }
+  },
+  created() {
+    // window.addEventListener('beforeunload', this.handler)
+
+    this.$store.commit('setUserId', 'glisn_user_id');
+    this.user_id = this.$store.state.user_id;
+    this.$store.commit('setNoteId', 'glisn_note_id');
+    this.note_id = this.$store.state.note_id;
+    
+    let self = this;
+    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
+      .then((res) => {
+        
+        // var note_id = res.data.note_id;
+        // self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
+        // var note = JSON.parse(res.data.title);
+        self.title = res.data.title
+        
+        // user_content.value = res.data.content
+
+        // var audios = note['audios'];
+      })
+      .catch((ex) => { 
+        console.log('실패'); 
+      });
   },
   computed: {
     styleObject () {
@@ -222,11 +247,17 @@ export default {
     startWeekOnSunday: {type: Boolean, default: true}
   },
   watch: {
-    popUp: function () {
+    popUp() {
       console.log(this.$refs.date)
     }
   },
   methods: {
+    saveNote(){
+      this.$store.commit('saveNote', { note_id:this.note_id, title: this.title, content: ""} );
+    },
+    typing(e) {
+    	this.title = e.target.value
+    },
     addCell () {
       // localStorage.setItem(JSON.stringify({
       //   cellType: 'text',

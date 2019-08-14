@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import 'es6-promise/auto'
 import './plugins/vuetify'
 import Vuetify from 'vuetify'
 import vuescroll from 'vuescroll'
@@ -22,12 +23,12 @@ Vue.use(vuescroll, {
       showDelay: 500,
       onlyShowBarOnScroll: true,
       keepShow: true,
-      background: '#c1c1c1',
+      background: '#e0e4e1',
       opacity: 1,
       hoverStyle: false,
       specifyBorderRadius: false,
       minSize: 0,
-      size: '6px',
+      size: '4px',
       disable: false
     }
   },

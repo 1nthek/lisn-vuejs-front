@@ -1,9 +1,20 @@
 <template>
     <div class="lisn-stt">
         <div class="lisn-stt-container">
-          <ul>
-            <p v-for="(item, index) in this.$store.state.sttData" :key="index" @click="setCurrentTime(index)">{{item.content}}</p>
-          </ul>
+        <ul id="v-for-object" class="demo">
+          <template v-for="(item, index) in this.$store.state.sttText">
+            <div :key="index" style="padding: 0.5rem 0; margin:5px" @click="setCurrentTime(index)">
+              <span style="padding: 0 6px;border-radius: 20px;">
+                {{item.content}}
+              </span>
+            </div>
+          </template>
+        </ul>
+          <!-- <ul>
+            <span>
+              <p v-for="(item, index) in this.$store.state.sttData" :key="index" @click="setCurrentTime(index)">{{item.content}}</p>
+            </span>
+          </ul> -->
           <!-- <p>아베 정권은 식민지배에 대한 책임을 얘기할 때마다 1965년의 한·일청구권 협정으로 다 끝났다고 말하고 있지요.</p>
           <p>지금부터는 예고해드린대로 그 허구성을 짚는 뉴스룸의 특별취재입니다.</p>
           <p>지금 보시는 것은 2015년 일본 외무성이 전세계에 공개한 홍보 영상 가운데 일부입니다.</p>
@@ -61,15 +72,15 @@ export default {
 </script>
 
 <style scoped>
-p{
+span{
     font-weight: 400;
     width: fit-content;
 }
-p:hover {
+span:hover {
     background-color: bisque;
 }
 .lisn-stt-container{
-    padding: 0 2rem;
+    padding: 0rem 1.5rem 0rem 0rem;
     font-size: 14px;
 }
 .lisn-stt-container>ul{

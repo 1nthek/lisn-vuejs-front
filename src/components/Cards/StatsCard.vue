@@ -77,10 +77,9 @@ export default {
       xhr.open('DELETE', 'http://localhost:8000/record/note');
       xhr.send(formData);
 
-      noteList.fetch(this.$store.state.user_id)
-        .then(data => {
-          this.$store.commit('getNoteList');
-        })
+      this.$store.commit('setUserId', 'glisn_user_id');
+      this.user_id = this.$store.state.user_id;
+      this.$store.commit('getNoteList');
     }
   }
 }

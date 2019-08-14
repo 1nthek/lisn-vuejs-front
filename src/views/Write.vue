@@ -2,10 +2,8 @@
     <div>
       <!-- <RecSidebar></RecSidebar> -->
       <!-- <base-header></base-header> -->
-      <div class="main-content">
-        <write-navbar></write-navbar>
-      </div>
-      <Workspace></Workspace>
+      <write-navbar v-on:saveNote="saveNote"></write-navbar>
+      <Workspace ref="saveNote"></Workspace>
     </div>
 </template>
 
@@ -19,6 +17,23 @@ export default {
     // RecSidebar,
     Workspace,
     WriteNavbar,
+  },
+  data(){
+    return{
+      user_id: -1,
+      note_id: -1,
+    }
+  },
+  created() {
+    this.$store.commit('setUserId', 'glisn_user_id');
+    this.user_id = this.$store.state.user_id;
+    this.$store.commit('setNoteId', 'glisn_note_id');
+    this.note_id = this.$store.state.note_id;
+  },
+  methods: {
+    saveNote(){
+      this.$refs.saveNote.saveNote();
+    }
   }
 }
 </script>
