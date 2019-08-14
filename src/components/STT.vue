@@ -3,69 +3,45 @@
         <div class="lisn-stt-container">
         <ul id="v-for-object" class="demo">
           <template v-for="(item, index) in this.$store.state.sttText">
-            <div :key="index" style="padding: 0.5rem 0; margin:5px" @click="setCurrentTime(index)">
-              <span style="padding: 0 6px;border-radius: 20px;">
+            <div :key="index" style="padding: 0.5rem 0; margin:5px" >
+              <span style="padding: 0 6px;border-radius: 20px;" @click="getAudioAndPlay(item)">
                 {{item.content}}
               </span>
             </div>
           </template>
         </ul>
-          <!-- <ul>
-            <span>
-              <p v-for="(item, index) in this.$store.state.sttData" :key="index" @click="setCurrentTime(index)">{{item.content}}</p>
-            </span>
-          </ul> -->
-          <!-- <p>아베 정권은 식민지배에 대한 책임을 얘기할 때마다 1965년의 한·일청구권 협정으로 다 끝났다고 말하고 있지요.</p>
-          <p>지금부터는 예고해드린대로 그 허구성을 짚는 뉴스룸의 특별취재입니다.</p>
-          <p>지금 보시는 것은 2015년 일본 외무성이 전세계에 공개한 홍보 영상 가운데 일부입니다.</p>
-          <p>일본의 원조로 아시아가 번영할 수 있었다면서 그 대표적인 사업으로 서울지하철과 포스코 건설을 꼽고 있습니다.</p>
-          <p>[아베 신조/일본 총리 : 일본은 국제사회와 손을 맞잡고 지속적으로 커다란 책임을 다해나가고자 합니다.]</p>
-          <p>일본이 1965년에 한·일청구권 협정 이후 우리에게 보낸 것은 무상 협력기금 3억 달러, 유상차관 2억 달러, 그리고 상업차관 3억 달러까지 모두 8억 달러였습니다.</p>
-          <p>전쟁을 일으킨 당사자로서 당연히 갚아야 할 책임이었지만, 이를 '원조'라는 이름으로 둔갑시키고 스스로에게 면죄부까지 준 것입니다.</p>
-          <p>그리고 지금은 이를 통해서 강제징용에 대한 개인 배상도 끝냈다고 주장하고 있습니다.</p>
-          <p>저희 탐사보도 취재진이 일본 정부가 '원조'라는 이름으로 제공했던 8억 달러가 실제 어디로, 어떻게 쓰여졌는지를 추적했습니다.</p>
-          <p>그 8억 달러 뒤에는 전범과 전범기업이 있었고, 그것은 지금 우리 경제가 일본에 끌려다니게 된 단초가 됐습니다.</p>
-          <p>먼저 전범 기업 미쓰비시에 의해서 납품가가 2배 가까이 부풀려진 서울지하철 사업의 실체를 이지은 기자가 취재했습니다.</p>
-          <p>서울을 포함한 수도권 지하철 사업은 1971년 착공했습니다.</p>
-          <p>건설 자금은 일본에게 빌린 8000만 달러.</p>
-          <p>4%대 금리에 일본 기업들이 만든 객차와 부품만을 사용해야 한다는 조건이었습니다.</p>
-          <p>[김명년/전 서울지하철본부 초대본부장 : 일본 것이 아니면 차관을 안 주기로 돼 있었어요.
-          <p>돈을 빌려줄 때, 돈을 어떻게 쓰라고 하고…일본 것을 쓰라고 딱 돼 있어요.]</p>
-          <p>서울 수도권 지하철 사업을 수주한 곳은 전범기업 미쓰비시와 마루베니 등이 주도한 합작사였습니다.</p>
-          <p>당시 우리 경제정책을 총괄했던 경제기획원 내부 문건입니다.</p>
-          <p>애초 국무회의에 보고된 지하철 객차 예산은 84억엔.</p>
-          <p>그런데 미쓰비시 등이 물가 상승을 이유로 1년여 만에 40% 넘게 차량 납품가를 올려 118억엔이 됐습니다.</p>
-          <p>특히 해당 문건에는 우리가 공급받은 차량 가격이 일본 도쿄시가 납품받았던 가격보다 비싸다는 지적이 일본 국회에서 제기됐다는 내용도 있었습니다.</p>
-          <p>이곳은 일본 국회도서관 앞입니다.</p>
-          <p>미쓰비시, 미쓰이 등 일본 기업들이 한국에 지하철 객차를 납품하는 과정에서 가격을 부풀렸다는 당시 구체적인 기록이 확인돼 직접 찾았습니다.</p>
-          <p>1973년 9월 국회에서 열린 중의원 예산결산위원회의 기록입니다.</p>
-          <p>당시 질문한 사람은 사회당의 마츠우라 의원이었습니다.</p>
-          <p>일본 통상대신이었던 나카소네 전 총리에게 "한국의 민생 안정을 위하겠다면서 이렇게 비싸게 객차를 팔아도 되냐"고 수차례 지적합니다.</p>
-          <p>이렇게 일본 기업들이 한국에 납품한 객차는 186량, 총액 118억엔이었습니다.</p>
-          <p>한 객차당 6500만엔 이었습니다.</p>
-          <p>그런데 이들이 도쿄 지하철에 납품한 객차는 3500만엔인 것으로 드러났습니다.</p>
-          <p>사실상 2배 가까이 폭리를 취했다고 볼 수 있는 대목입니다.</p>
-          <p>서울지하철 사업은 이후 미국에서도 논란이 됐습니다.</p>
-          <p>당시 미국 국회로 들어간 우리 정부의 로비 자금이 서울지하철을 수주한 미쓰비시 계좌 등을 통해 흘러간 정황이 포착됐기 때문입니다.</p>
-          <p>실제 미쓰비시 상사 대표는 1977년 일본 국회 청문회에서 서울지하철의 납품가를 빼돌렸고, 일부는 한국 정부에 뇌물로 줬다고 밝혔습니다.</p>
-          <p>당시 일본 언론에 따르면 미쓰비시 등 일본 기업들이 서울지하철 사업에서 빼돌린 액수만 22억엔.</p>
-          <p>애초 우리가 지출하기로 한 객차 예산의 4분의 1에 달했습니다.</p>
-          <p>[와다 하루키/도쿄대 명예교수 : 반성과 사죄에 의한 경제협력이라고 말하고 있지 않습니다.</p>
-          <p>일본 기업들은 돈벌이 수단으로…일종의 이익을 챙길 수 있는 기회로 생각했던 것 같습니다.]</p> -->
         </div>
     </div>
 </template>
 
 <script>
-// import sttData from './stt.js';
+import axios from 'axios';
 
 export default {
-  // 
-  methods: {
-    setCurrentTime(index) {
-      this.$store.commit('setCurrentTime', index);
-      this.$store.commit('getCurrentWord');
+  data(){
+    return{
+      audioId: -1,
     }
+  },
+  methods: {
+    getAudioAndPlay(item) {
+      console.log('123');
+      console.log(item);
+      
+      
+      this.audioId = JSON.parse(JSON.stringify(item.audioId))
+      console.log('444');
+      axios.get(this.$store.state.domain + "/record/audio?audio_id=" + this.audioId)
+        .then((res) => {
+          console.log('555');
+          this.$store.state.audio.src = res.data.data_url;
+          this.$store.commit('setCurrentTime', item);
+          this.$store.state.audio.play();
+        })
+        .catch((ex) => {
+
+        })
+    },
   }
 
 }

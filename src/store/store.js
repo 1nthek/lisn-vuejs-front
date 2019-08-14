@@ -1,40 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import sttData from './stt.js';
 // import { noteList } from '../api/api.js'
 import axios from 'axios'
 
 const UNAUTHORIZED = 401
 
-
 Vue.use(Vuex);
-
-const storage = {
-  fetch() {
-    const arr = this.sttData;
-    
-    return arr;
-  }
-}
 
 export const store = new Vuex.Store({
   state: {
-    sttData,
     hour: '0',
     minute: '00',
     second: '00',
-    audio: new Audio('https://test-buck99.s3.ap-northeast-2.amazonaws.com/news.mp3'),
+    audio: new Audio(),
     timeOffset: 0.000,
     noteList: [],
     user_id: -1,
     note_id: -1,
     sttText: [{
       id: null,
-      content: "",
+      content: "none",
       begin: "",
       end: "",
+      audioId: "",
     }],
-    domain: 'http://localhost:8000'
+    domain: 'https://li-sn.io/v1/api'
   },
   actions: {
 
@@ -67,6 +57,8 @@ export const store = new Vuex.Store({
       state.note_id = value ? value[2] : null;
     },
     getNoteList(state) {
+      console.log('qqq');
+      
       axios.get(state.domain + '/record/list?user_id=' + state.user_id)
         .then(res => {
           console.log(res.data.notes);
@@ -86,8 +78,10 @@ export const store = new Vuex.Store({
           throw Error(response)
         })
     },
-    setCurrentTime(state, index) {
-      var stamp = parseFloat(state.sttData[index].begin) / 1000;
+    setCurrentTime(state, item) {
+      var stamp = parseFloat(item.begin) / 1000;
+      console.log('stamp', stamp);
+      
       state.timeOffset = stamp;
       state.audio.currentTime = stamp;
       
@@ -101,30 +95,30 @@ export const store = new Vuex.Store({
     },
     getCurrentWord(state) {      
       var word = null;
-      for (var i = 0, len = state.sttData.length; i < len; i += 1) {
+      for (var i = 0, len = state.sttText.length; i < len; i += 1) {
         console.log(i);
         
         console.log((
-          state.audio.currentTime >= (parseFloat(state.sttData[i].begin) / 1000)
+          state.audio.currentTime >= (parseFloat(state.sttText[i].begin) / 1000)
           &&
-          state.audio.currentTime < (parseFloat(state.sttData[i].end) / 1000)
+          state.audio.currentTime < (parseFloat(state.sttText[i].end) / 1000)
         ));
-        console.log((state.audio.currentTime < parseFloat(state.sttData[i].begin) / 1000));
+        console.log((state.audio.currentTime < parseFloat(state.sttText[i].begin) / 1000));
         
         
         var is_current_word = (
           (
-            state.audio.currentTime >= (parseFloat(state.sttData[i].begin) / 1000)
+            state.audio.currentTime >= (parseFloat(state.sttText[i].begin) / 1000)
             &&
-            state.audio.currentTime < (parseFloat(state.sttData[i].end) / 1000)
+            state.audio.currentTime < (parseFloat(state.sttText[i].end) / 1000)
           )
           // ||
-          // (state.audio.currentTime < parseFloat(state.sttData[i].begin) / 1000)
+          // (state.audio.currentTime < parseFloat(state.sttText[i].begin) / 1000)
         );
         console.log(is_current_word);
         
         if (is_current_word) {
-          word = state.sttData[i];
+          word = state.sttText[i];
           console.log(word);
           break;
         }

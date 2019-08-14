@@ -183,28 +183,6 @@ export default {
   },
   created() {
     // window.addEventListener('beforeunload', this.handler)
-
-    this.$store.commit('setUserId', 'glisn_user_id');
-    this.user_id = this.$store.state.user_id;
-    this.$store.commit('setNoteId', 'glisn_note_id');
-    this.note_id = this.$store.state.note_id;
-    
-    let self = this;
-    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
-      .then((res) => {
-        
-        // var note_id = res.data.note_id;
-        // self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
-        // var note = JSON.parse(res.data.title);
-        self.title = res.data.title
-        
-        // user_content.value = res.data.content
-
-        // var audios = note['audios'];
-      })
-      .catch((ex) => { 
-        console.log('실패'); 
-      });
   },
   computed: {
     styleObject () {

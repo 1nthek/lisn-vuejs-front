@@ -151,7 +151,7 @@ export default {
         .then((res) => {
           var note_id = res.data.note_id;
           self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
-          this.$router.push('/write');
+          self.$router.push('/write');
         })
         .catch((ex) => { 
           console.log('실패'); 

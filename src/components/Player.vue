@@ -43,6 +43,7 @@ import axios from 'axios'
 
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
+var recorder;
 
 recognition.continuous = true;
 recognition.interimResults = true;
@@ -52,12 +53,12 @@ export default {
   data() {
     return {
       user_id: -1,
-      
+      audio_id:-1,
+
       isRec: false,
       isPlay: false,
       timerId: null,
       is_record: false,
-      recorder: null,
       chunks: null,
 
       audio_start_time: null,
@@ -86,7 +87,10 @@ export default {
         var transcript = "";
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
           transcript += event_object_list.results[i][0].transcript;
-        }        
+        }
+        console.log(this.audio_timestamp);
+        console.log('로그', this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]} );
+        
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
         // var array = JSON.parse(JSON.stringify(this.$store.state.sttText));
         // console.log('array', array);
@@ -101,7 +105,7 @@ export default {
         // sentence_tag.style.color = '#666666';
     },
     post_record_sentence_info(tmp_sentence_id, formData) {
-      axios.post('http://localhost:8000/record/sentence', formData)
+      axios.post(this.$store.state.domain + '/record/sentence', formData)
         .then((res) => {
           var sentence_id = JSON.parse(res)['sentence_id'];
             var sentence_tag = document.getElementById(tmp_sentence_id);
@@ -116,6 +120,7 @@ export default {
         });
     },
     sendRecording() {
+        console.log('sendRecording');
         var blob = new Blob(this.chunks, {'type': 'audio/webm;'});
         // clear chunks
         this.chunks = [];
@@ -125,121 +130,161 @@ export default {
         }
 
         var self = this;
-        var note_id = this.$store.state.note_id;
-        console.log('note_id!!!!!!', this.$store.state.note_id);
-        console.log('user_id!!!!!!', this.$store.state.user_id);
         
         var formData = new FormData();
         formData.append('audio_data', blob, 'filename');
-        formData.append('note_id', note_id);
+        formData.append('note_id', this.$store.state.note_id);
 
-        axios.post('http://localhost:8000/record/audio', formData)
+        axios.post(this.$store.state.domain + '/record/audio', formData)
           .then((res) => {
-            // var audio_id = JSON.parse(res)['audio_id'];
-            // self.audio_timestamp.push(-1);
-            // for(var i=1; i<self.audio_timestamp.length; i++){
-            //     if(self.audio_timestamp[i] == self.audio_timestamp[i-1]){
-            //         self.audio_timestamp[i] = self.audio_timestamp[i-1]+1;
-            //     }
-            //     var current_tmp_id = self.current_start_tmp_id + i - 1
-            //     var started_at = self.audio_timestamp[i-1];
-            //     var ended_at = self.audio_timestamp[i];
-            //     var sentence_tag = document.getElementById('tmp_' + current_tmp_id);
-            //     var content = sentence_tag.textContent;
-                
-            //     var formData = new FormData();
-            //     formData.append('index', (i-1));
-            //     formData.append('audio_id', audio_id);
-            //     formData.append('started_at', started_at);
-            //     formData.append('ended_at', ended_at);
-            //     formData.append('content', content);
-            //     post_record_sentence_info('tmp_' + current_tmp_id, formData);
-            // }
-
+            self.audio_id = res.data.audio_id;
+            console.log('self.audio_id', self.audio_id);
+            
             self.audio_timestamp = [];
-        })
-        .catch((ex) => { 
-          console.log('실패'); 
-        });
+
+              this.$store.state.sttText.forEach(element => {
+                  var formData2 = new FormData();
+                  formData2.append('index', element.id);
+                  formData2.append('audio_id', self.audio_id);
+                  formData2.append('started_at', element.begin);
+                  formData2.append('ended_at', 99999);
+                  formData2.append('content', element.content);
+                  console.log('formData2', element.id, self.audio_id, element.begin, 99999, element.content);
+                  
+                  axios.post(this.$store.state.domain + '/record/sentence', formData2)
+                    .then((res) => {
+                      console.log('element.content', element.content);
+                      
+                    })
+                    .catch((ex) => {
+                      console.log(ex);
+                    })
+                })
+          })
+          .catch((ex) => { 
+            console.log('실패'); 
+          })
+          .then((res)=>{
+            let self = this;
+            axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
+              .then((res) => {
+                self.$store.state.sttText = [];
+                self.title = res.data.title;
+                res.data.audios.forEach(element => {
+                  var audio_id = element.audio_id;
+                  var sentences = element.sentences;
+                  var idx=0;
+                  sentences.forEach(ele => {
+                    self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
+                  })
+                });
+              })
+              .catch((ex) => { 
+                console.log('실패'); 
+              });
+          })
     },
     startRecording(stream) {
         var self = this;
        
-        this.recorder = new MediaRecorder(stream);
+        recorder = new MediaRecorder(stream);
         this.chunks = [];
         this.is_first_word = true;
         this.current_start_tmp_id = this.tmp_id;
 
+        recorder.start();
+        recognition.start();
+
         // recorder setting
-        this.recorder.onstart = function() {
+        recorder.onstart = function() {
             console.log('this.recorder.onstart');
             self.audio_start_time = Date.now();
         };
 
-        this.recorder.ondataavailable = function(e) {
+        recorder.ondataavailable = function(e) {
             console.log('this.recorder.ondataavailable');
             self.chunks.push(e.data);
+            self.sendRecording();
         };
 
-        this.recorder.onstop = function(e) {
+        recorder.onstop = function(e) {
             console.log('this.recorder.onstop');
         };
 
         recognition.onend = function() {
+            console.log('recognition.onend');
+          
             if(self.is_record == true) {
-                recognition.start();
                 console.log('Recognition restart!');
+                recognition.start();
             }
         }
 
         // recognition setting
         var self = this;
         recognition.onresult = function(event_object_list) {
+          // console.log('recognition.onresult');
+          
             var event_last_idx = event_object_list.results.length - 1;
             var transcript = event_object_list.results[event_last_idx][0].transcript;
             
             if(transcript == null) {
-                return;
+              return;
             }
-
+            // console.log(transcript);
+            // console.log(event_object_list.results[event_last_idx]);
+            
             if(event_object_list.results[event_last_idx].isFinal == true) {
-                console.log('isFinal');
-
-                // var sentence_tag = document.getElementById('tmp_' + this.tmp_id );
-                // sentence_tag.textContent = transcript;
-                // sentence_tag.style.color = '#000000';
+                if(self.is_first_word==true){
+                  var word_start_time = Date.now() - self.audio_start_time;
+                
+                  if(word_start_time > 2300)
+                      word_start_time -= 2300;
+                  else
+                      word_start_time = 0;
+                                  
+                  self.audio_timestamp.push(word_start_time);
+                  self.update_sentence_text(event_object_list);
+                }
                 self.is_first_word = true;
                 self.tmp_id ++;
+                // console.log('isFinal: self.tmp_id ++', self.tmp_id);
             }
             else if(self.is_first_word == true) {
+                // console.log('is_first_word');
+
                 var word_start_time = Date.now() - self.audio_start_time;
                 
                 if(word_start_time > 2300)
                     word_start_time -= 2300;
                 else
                     word_start_time = 0;
-                
+                                
                 self.audio_timestamp.push(word_start_time);
+                // console.log('audio_timestamp.push', self.audio_timestamp);
+                
                 
                 self.update_sentence_text(event_object_list);
                 self.is_first_word = false;
             }
             else {
-                console.log('is_not_first_word');
+                // console.log('is_not_first_word');
               
                 self.update_sentence_text(event_object_list);
             }
         };
-        this.recorder.start();
-        recognition.start();
+        
     },
     recBtnPressed(){
       if(this.isRec){
+        this.is_record = false;
         this.isRec = !this.isRec;
-        this.sendRecording();
-
         console.log('End');
+
+        recognition.stop();
+        recorder.stop();
       }else{
+        this.is_record = true;
         this.isRec = !this.isRec;
         console.log('Start');
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })

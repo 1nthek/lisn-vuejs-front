@@ -27,7 +27,7 @@
 <script>
 import Card from './Card.vue';
 import swal from 'sweetalert2';
-import { noteList } from '../../api/api.js'
+import axios from 'axios'
 
 export default {
   name: 'stats-card',
@@ -71,15 +71,17 @@ export default {
       });
     },
     deleteRow(note_id) {
+
+      console.log('delete', note_id);
+      let self = this;
       var xhr = new XMLHttpRequest();
       var formData = new FormData();
       formData.append('note_id', note_id);
-      xhr.open('DELETE', 'http://localhost:8000/record/note');
+      xhr.open('DELETE', this.$store.state.domain + '/record/note');
       xhr.send(formData);
-
-      this.$store.commit('setUserId', 'glisn_user_id');
-      this.user_id = this.$store.state.user_id;
-      this.$store.commit('getNoteList');
+      xhr.onload = function() {
+        self.$store.commit('getNoteList');
+      }
     }
   }
 }
