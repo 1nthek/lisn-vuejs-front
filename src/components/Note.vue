@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="lisn-note-container">
-      <input v-on:input="typing" v-bind:value="title" class="h1" >
+      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -181,7 +181,7 @@ export default {
       this.title = newtitle;
     }
   },
-  created() {
+  created(){
     // window.addEventListener('beforeunload', this.handler)
   },
   computed: {
@@ -231,7 +231,7 @@ export default {
   },
   methods: {
     saveNote(){
-      this.$store.commit('saveNote', { note_id:this.note_id, title: this.title, content: ""} );
+      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: ""} );      
     },
     typing(e) {
     	this.title = e.target.value
@@ -274,14 +274,13 @@ export default {
 }
 </script>
 <style>
-div[contenteditable="true"]:focus {
-   background: rgba(255, 212, 85, 0.2);
-   outline: none;
-   /* transition: background 160ms ease-in 0s; */
-}
-div[contenteditable=true]:empty:not(:focus):before{
-    content:attr(placeholder);
+div[contenteditable=true]:empty:before {
+    content: attr(placeholder);
     color: rgb(182, 182, 182);
+    display: block;
+}
+div[contenteditable="true"]:focus {
+   outline: none;
 }
 .cell-title-text{
     white-space: nowrap;
@@ -325,13 +324,13 @@ div.vdpComponent.vdpWithInput :focus{
     /* pointer-events: none; */
 }
 .cell{
-    display: flex; padding-bottom: 4px;
+    display: flex;
 }
 .cell-title-container{
     display: flex;
     align-items: center;
     height: 34px;
-    width: 140px;
+    width: 120px;
     flex: 0 0 auto;
     /* color: rgba(55, 53, 47, 0.6); */
 }
@@ -344,7 +343,6 @@ div.vdpComponent.vdpWithInput :focus{
     height: 100%;
     width: 100%;
     border-radius: 3px;
-    padding: 0px 6px;
 }
 .cell-title-inner{
     display: flex;

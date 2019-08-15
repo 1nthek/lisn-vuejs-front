@@ -6,7 +6,6 @@ import Badge from '../components/Badge'
 import BaseDropdown from '../components/BaseDropdown'
 import BasePagination from '../components/BasePagination'
 import BaseButton from '../components/BaseButton'
-import Card from '../components/Card'
 import SideBar from '../components/SidebarPlugin/SideBar';
 import SidebarItem from '../components/SidebarPlugin/SidebarItem';
 import SidebarPlugin from '../components/SidebarPlugin/index.js';
@@ -36,7 +35,6 @@ export default {
     Vue.component(BaseDropdown.name, BaseDropdown)
     Vue.component(BasePagination.name, BasePagination)
     Vue.component(BaseButton.name, BaseButton)
-    Vue.component(Card.name, Card)
     Vue.use(ElementUI, { locale })
     Vue.use(VueMaterial);
     Vue.use(Transitions);

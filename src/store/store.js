@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     audio: new Audio(),
     timeOffset: 0.000,
     noteList: [],
+    noteTitle: "",
     user_id: -1,
     note_id: -1,
     sttText: [{
@@ -26,15 +27,13 @@ export const store = new Vuex.Store({
     }],
     domain: 'https://li-sn.io/v1/api'
   },
-  actions: {
-
-  },
   mutations: {
     saveNote(state, { note_id, title, content }){
       var formData = new FormData();
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
+      
       axios.put(state.domain + '/record/note', formData)
         .then((res) => {
           console.log('title and content are saved!');
@@ -57,12 +56,14 @@ export const store = new Vuex.Store({
       state.note_id = value ? value[2] : null;
     },
     getNoteList(state) {
-      console.log('qqq');
-      
       axios.get(state.domain + '/record/list?user_id=' + state.user_id)
         .then(res => {
-          console.log(res.data.notes);
           res.data.notes.forEach(element => {
+            
+            if(element.title==""){
+              element.title = "untitled";
+            }
+            
             var date1 = new Date(Date.parse(element.created_at));
             var date2 = new Date(Date.parse(element.updated_at));
             element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
@@ -80,7 +81,6 @@ export const store = new Vuex.Store({
     },
     setCurrentTime(state, item) {
       var stamp = parseFloat(item.begin) / 1000;
-      console.log('stamp', stamp);
       
       state.timeOffset = stamp;
       state.audio.currentTime = stamp;
@@ -96,16 +96,6 @@ export const store = new Vuex.Store({
     getCurrentWord(state) {      
       var word = null;
       for (var i = 0, len = state.sttText.length; i < len; i += 1) {
-        console.log(i);
-        
-        console.log((
-          state.audio.currentTime >= (parseFloat(state.sttText[i].begin) / 1000)
-          &&
-          state.audio.currentTime < (parseFloat(state.sttText[i].end) / 1000)
-        ));
-        console.log((state.audio.currentTime < parseFloat(state.sttText[i].begin) / 1000));
-        
-        
         var is_current_word = (
           (
             state.audio.currentTime >= (parseFloat(state.sttText[i].begin) / 1000)
@@ -115,11 +105,9 @@ export const store = new Vuex.Store({
           // ||
           // (state.audio.currentTime < parseFloat(state.sttText[i].begin) / 1000)
         );
-        console.log(is_current_word);
         
         if (is_current_word) {
           word = state.sttText[i];
-          console.log(word);
           break;
         }
       }

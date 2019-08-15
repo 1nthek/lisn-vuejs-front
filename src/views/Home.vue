@@ -661,14 +661,12 @@
 </template>
 
 <script>
-import AppHeader from '../layout/AppHeader'
 import AppFooter from '../layout/AppFooter'
 import Logo from '../assets/Logo'
 import axios from 'axios'
 
 export default {
   components: {
-    AppHeader,
     AppFooter,
     Logo,
   },

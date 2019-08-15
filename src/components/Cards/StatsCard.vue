@@ -46,7 +46,7 @@ export default {
     iconClasses: [String, Array]
   },
   methods: {
-    handleDelete(note_id, title) {  //index from 0, 해당 row의 json객체      
+    handleDelete(note_id, title) {   
       swal.fire({
         title: '휴지통으로 이동',
         text: `휴지통에서 완전히 삭제할 수 있습니다`,
@@ -71,8 +71,6 @@ export default {
       });
     },
     deleteRow(note_id) {
-
-      console.log('delete', note_id);
       let self = this;
       var xhr = new XMLHttpRequest();
       var formData = new FormData();

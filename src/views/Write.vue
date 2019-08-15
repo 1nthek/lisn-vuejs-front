@@ -31,11 +31,18 @@ export default {
     this.$store.commit('setNoteId', 'glisn_note_id');
     this.note_id = this.$store.state.note_id;
 
+    this.$store.state.hour = '0';
+    this.$store.state.minute = '00';
+    this.$store.state.second = '00';
+    this.$store.state.audio.src = "";
+    this.$store.state.timeOffset =  0.000;
+    
     let self = this;
     axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
       .then((res) => {
         self.$store.state.sttText = [];
-        self.title = res.data.title;
+        self.$store.state.noteTitle = res.data.title;
+
         res.data.audios.forEach(element => {
           var audio_id = element.audio_id;
           var sentences = element.sentences;
@@ -48,6 +55,9 @@ export default {
       .catch((ex) => { 
         console.log('실패'); 
       });
+  },
+  beforeDestroy() {
+    
   },
   methods: {
     saveNote(){

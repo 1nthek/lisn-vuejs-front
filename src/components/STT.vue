@@ -25,15 +25,9 @@ export default {
   },
   methods: {
     getAudioAndPlay(item) {
-      console.log('123');
-      console.log(item);
-      
-      
       this.audioId = JSON.parse(JSON.stringify(item.audioId))
-      console.log('444');
       axios.get(this.$store.state.domain + "/record/audio?audio_id=" + this.audioId)
         .then((res) => {
-          console.log('555');
           this.$store.state.audio.src = res.data.data_url;
           this.$store.commit('setCurrentTime', item);
           this.$store.state.audio.play();

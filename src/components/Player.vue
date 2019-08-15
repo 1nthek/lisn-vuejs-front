@@ -88,9 +88,6 @@ export default {
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
           transcript += event_object_list.results[i][0].transcript;
         }
-        console.log(this.audio_timestamp);
-        console.log('로그', this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]} );
-        
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
         // var array = JSON.parse(JSON.stringify(this.$store.state.sttText));
         // console.log('array', array);
@@ -138,28 +135,25 @@ export default {
         axios.post(this.$store.state.domain + '/record/audio', formData)
           .then((res) => {
             self.audio_id = res.data.audio_id;
-            console.log('self.audio_id', self.audio_id);
-            
             self.audio_timestamp = [];
 
-              this.$store.state.sttText.forEach(element => {
-                  var formData2 = new FormData();
-                  formData2.append('index', element.id);
-                  formData2.append('audio_id', self.audio_id);
-                  formData2.append('started_at', element.begin);
-                  formData2.append('ended_at', 99999);
-                  formData2.append('content', element.content);
-                  console.log('formData2', element.id, self.audio_id, element.begin, 99999, element.content);
-                  
-                  axios.post(this.$store.state.domain + '/record/sentence', formData2)
-                    .then((res) => {
-                      console.log('element.content', element.content);
-                      
-                    })
-                    .catch((ex) => {
-                      console.log(ex);
-                    })
-                })
+            this.$store.state.sttText.forEach(element => {
+                var formData2 = new FormData();
+                formData2.append('index', element.id);
+                formData2.append('audio_id', self.audio_id);
+                formData2.append('started_at', element.begin);
+                formData2.append('ended_at', 99999);
+                formData2.append('content', element.content);
+                
+                axios.post(this.$store.state.domain + '/record/sentence', formData2)
+                  .then((res) => {
+                    console.log('element.content', element.content);
+                    
+                  })
+                  .catch((ex) => {
+                    console.log(ex);
+                  })
+              })
           })
           .catch((ex) => { 
             console.log('실패'); 

@@ -95,7 +95,7 @@
                           icon="fas fa-trash">
 
                 <template slot="footer">
-                  <div class="note-date">
+                  <div class="note-date ns-kr" style="font-weight: bold;">
                     <span class="text-nowrap mr-4"><i class="fa fa-arrow-up"></i>{{ p.updated_at }} </span>
                     <span class="text-nowrap">{{ p.created_at }}</span>
                   </div>
@@ -111,7 +111,6 @@
 
 <script>
 // import Sidebar from '../components/Sidebar.vue'
-import Notes from '../components/Notes'
 import StatsCard from '../components/Cards/StatsCard'
 import BoardNavbar from '../layout/BoardNavbar'
 import axios from 'axios'
@@ -125,7 +124,6 @@ import PaginatedTables from './Tables/PaginatedTables'
 export default {
   components: {
     // Sidebar,
-    Notes,
     PaginatedTables,
     BoardNavbar,
     StatsCard
