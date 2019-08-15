@@ -88,18 +88,8 @@ export default {
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
           transcript += event_object_list.results[i][0].transcript;
         }
+        this.$emit('scrollSTT')
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
-        // var array = JSON.parse(JSON.stringify(this.$store.state.sttText));
-        // console.log('array', array);
-        
-        // array[this.tmp_id].content = transcript;
-
-        // this.$store.state.sttText = array;
-      //  this.$store.state.sttText[tmp_sentence_id].content = transcript;
-        // console.log(transcript);
-        
-        // sentence_tag.textContent = transcript;
-        // sentence_tag.style.color = '#666666';
     },
     post_record_sentence_info(tmp_sentence_id, formData) {
       axios.post(this.$store.state.domain + '/record/sentence', formData)

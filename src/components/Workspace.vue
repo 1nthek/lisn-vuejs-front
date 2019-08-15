@@ -1,18 +1,14 @@
 <template>
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
-      <player></player>
+      <player v-on:scrollSTT="scrollSTT"></player>
       <div class="lisn-workspace-container workspace-width">
-          <div class="stt-container ">
-              <vuescroll style="min-height: fit-content;">
-                  <s-t-t></s-t-t>
-              </vuescroll>
+          <div class="stt-container">
+            <s-t-t ref="scrollSTT"></s-t-t>
           </div>
           <div class="divider"></div>
           <div class="note-container">
-              <vuescroll>
-                  <Note ref="saveNote"></Note>
-              </vuescroll>
+            <Note ref="saveNote"></Note>
           </div>
       </div>
     </div>
@@ -34,6 +30,9 @@ export default {
   methods:{
     saveNote(){
       this.$refs.saveNote.saveNote();
+    },
+    scrollSTT(){
+      this.$refs.scrollSTT.scrollSTT();
     }
   }
 }

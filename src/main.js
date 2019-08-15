@@ -19,18 +19,11 @@ Vue.use(globalComponents)
 Vue.use(DashboardPlugin);
 Vue.use(vuescroll, {
   ops: {
-    bar: {
-      showDelay: 500,
-      onlyShowBarOnScroll: true,
-      keepShow: true,
-      background: '#e0e4e1',
-      opacity: 1,
-      hoverStyle: false,
-      specifyBorderRadius: false,
-      minSize: 0,
-      size: '4px',
-      disable: false
-    }
+    vuescroll: {
+      mode: 'native',
+      sizeStrategy: 'percent',
+      detectResize: true
+    },
   },
   name: 'vuescroll' // customize component name, default -> vueScroll
 })

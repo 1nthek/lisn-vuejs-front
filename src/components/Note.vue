@@ -1,5 +1,5 @@
 <template>
-<div>
+  <vuescroll>
     <div class="lisn-note-container">
       <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-</div>
+    </vuescroll>
 </template>
 
 <script>
