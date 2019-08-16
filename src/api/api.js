@@ -1,39 +1,36 @@
 import axios from 'axios'
 // import router from '../router'
 
-const domain  = 'http://localhost:8000'
+// const domain  = 'http://localhost:8000'
 const UNAUTHORIZED = 401
 
 const request = {
   get(path) {
-    console.log(domain + path);
     return axios.get(domain + path)
       .catch(({ response }) => {
         const { status } = response
-        console.log('요기요!!!!!!!');
-        
-        console.log(response);
-        
+
         if (status === Unauthorized)
           return console.log('권한 없음');
         throw Error(response)
       })
   },
-  // post(path, data) {
-  //   return axios.post(domain + path, data)
-  // },
-  // delete(path) {
-  //   return axios.delete(domain + path)
-  // },
-  // put(path, data) {
-  //   return axios.put(domain + path, data)
-  // }
 }
 
 export const noteList = {
   fetch(user_id) {
-    if (user_id){
-      return request.get('/record/list?user_id=' + user_id).then(({ data }) => data.notes)
+    if (user_id) {
+      return axios.get(domain + '/record/list?user_id=' + user_id)
+        .then(({ data }) => data.notes)
+        .catch(({ response }) => {
+          const { status } = response
+
+          if (status === Unauthorized)
+            return console.log('권한 없음');
+          throw Error(response)
+        })
+      // return request.get('/record/list?user_id=' + user_id)
+      //   .then(({ data }) => data.notes)
     }
   },
   destroy(note_id) {

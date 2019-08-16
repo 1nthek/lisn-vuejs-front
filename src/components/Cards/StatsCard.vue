@@ -4,7 +4,7 @@
       <div class="col">
         <slot>
           <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
-          <h5 class="mb-0 ns-kr" v-if="subTitle">{{subTitle}}</h5>
+          <h5 class="mb-0 ns-kr" v-if="summery">{{summery}}</h5>
         </slot>
       </div>
 
@@ -27,7 +27,7 @@
 <script>
 import Card from './Card.vue';
 import swal from 'sweetalert2';
-import { noteList } from '../../api/api.js'
+import axios from 'axios'
 
 export default {
   name: 'stats-card',
@@ -42,11 +42,11 @@ export default {
     icon: String,
     note_id: "",
     title: String,
-    subTitle: String,
+    summery: String,
     iconClasses: [String, Array]
   },
   methods: {
-    handleDelete(note_id, title) {  //index from 0, 해당 row의 json객체      
+    handleDelete(note_id, title) {   
       swal.fire({
         title: '휴지통으로 이동',
         text: `휴지통에서 완전히 삭제할 수 있습니다`,
@@ -71,16 +71,15 @@ export default {
       });
     },
     deleteRow(note_id) {
+      let self = this;
       var xhr = new XMLHttpRequest();
       var formData = new FormData();
       formData.append('note_id', note_id);
-      xhr.open('DELETE', 'http://localhost:8000/record/note');
+      xhr.open('DELETE', this.$store.state.domain + '/record/note');
       xhr.send(formData);
-
-      noteList.fetch(this.$store.state.user_id)
-        .then(data => {
-          this.$store.commit('getNoteList');
-        })
+      xhr.onload = function() {
+        self.$store.commit('getNoteList');
+      }
     }
   }
 }

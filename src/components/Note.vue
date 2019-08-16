@@ -1,6 +1,7 @@
 <template>
-<div>
+  <vuescroll>
     <div class="lisn-note-container">
+      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -82,7 +83,8 @@
             </div>
         </div>
     </div>
-</div>
+    <yimoeditor v-model="content" class="ns-kr"></yimoeditor>
+    </vuescroll>
 </template>
 
 <script>
@@ -90,7 +92,9 @@
 import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
-// import axios from 'axios'
+import axios from 'axios'
+
+
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
   dayNames: ['Sunday', 'Monday', '화요일', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -113,73 +117,83 @@ export default {
     flag: false,
     dX: '9px',
     dY: '9px',
+
+    user_id: -1,
+    note_id: -1,
+    content: "",
+
+    title: "제목",
     data: [],
     cellData: [
       {
         cellType: 'date',
-        cellTitle: '회의 시작',
+        cellTitle: '시작 시간',
         cellContent: '2019.07.16 화 오후 1:00'
       },
       {
         cellType: 'date',
-        cellTitle: '회의 종료',
+        cellTitle: '종료 시간',
         cellContent: '2019.07.16 화 오후 3:30'
       },
-      {
-        cellType: 'person',
-        cellTitle: '작성자',
-        cellContent: [{
-          personName: '강인덕'
-        }
-        ]
-      },
-      {
-        cellType: 'person',
-        cellTitle: '참석자',
-        cellContent: [{
-          personName: '강인덕'
-        },
-        {
-          personName: '이규용'
-        },
-        {
-          personName: '손정연'
-        }
-        ]
-      },
-      {
-        cellType: 'text',
-        cellTitle: '안건',
-        cellContent: 'OO을 위한 샘플리스트 작성'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '회의 내용',
-        cellContent: '운영방침 및 방향성 파악'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '결정 사항',
-        cellContent: 'OOO 업체와 계약'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '향후일정',
-        cellContent: '2차 회의: 2019.07.17 10회의실에서 진행 예정'
-      }
+      // {
+      //   cellType: 'person',
+      //   cellTitle: '작성자',
+      //   cellContent: [{
+      //     personName: '강인덕'
+      //   }
+      //   ]
+      // },
+      // {
+      //   cellType: 'person',
+      //   cellTitle: '참석자',
+      //   cellContent: [{
+      //     personName: '강인덕'
+      //   },
+      //   {
+      //     personName: '이규용'
+      //   },
+      //   {
+      //     personName: '손정연'
+      //   }
+      //   ]
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '안건',
+      //   cellContent: 'OO을 위한 샘플리스트 작성'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '회의 내용',
+      //   cellContent: '운영방침 및 방향성 파악'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '결정 사항',
+      //   cellContent: 'OOO 업체와 계약'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '향후일정',
+      //   cellContent: '2차 회의: 2019.07.17 10회의실에서 진행 예정'
+      // }
     ]
   }),
-  created () {
-    // for (var i = 0; i < this.cellData.length; ++i) {
-    //   localStorage.setItem(i, JSON.stringify(this.cellData[i]))
-    // }
-    // if (localStorage.length > 0) {
-    //   for (var i = 0; i < localStorage.length; ++i) {
-    //     if (localStorage.key(i) !== 'loglevel:webpack-dev-server') {
-    //       this.cellData.push(JSON.parse(localStorage.getItem(localStorage.key(i))))
-    //     }
-    //   }
-    // }
+   watch: {
+    title: function (newtitle) {
+      this.title = newtitle;
+    }
+  },
+  created(){
+    // window.addEventListener('beforeunload', this.handler)
+    let self = this;
+    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
+      .then((res) => {
+        self.content = res.data.content;
+      })
+      .catch((ex) => { 
+        console.log('실패'); 
+      });
   },
   computed: {
     styleObject () {
@@ -222,11 +236,17 @@ export default {
     startWeekOnSunday: {type: Boolean, default: true}
   },
   watch: {
-    popUp: function () {
+    popUp() {
       console.log(this.$refs.date)
     }
   },
   methods: {
+    saveNote(){
+      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: this.content} );
+    },
+    typing(e) {
+    	this.title = e.target.value
+    },
     addCell () {
       // localStorage.setItem(JSON.stringify({
       //   cellType: 'text',
@@ -265,14 +285,13 @@ export default {
 }
 </script>
 <style>
-div[contenteditable="true"]:focus {
-   background: rgba(255, 212, 85, 0.2);
-   outline: none;
-   /* transition: background 160ms ease-in 0s; */
-}
-div[contenteditable=true]:empty:not(:focus):before{
-    content:attr(placeholder);
+div[contenteditable=true]:empty:before {
+    content: attr(placeholder);
     color: rgb(182, 182, 182);
+    display: block;
+}
+div[contenteditable="true"]:focus {
+   outline: none;
 }
 .cell-title-text{
     white-space: nowrap;
@@ -316,13 +335,13 @@ div.vdpComponent.vdpWithInput :focus{
     /* pointer-events: none; */
 }
 .cell{
-    display: flex; padding-bottom: 4px;
+    display: flex;
 }
 .cell-title-container{
     display: flex;
     align-items: center;
     height: 34px;
-    width: 140px;
+    width: 120px;
     flex: 0 0 auto;
     /* color: rgba(55, 53, 47, 0.6); */
 }
@@ -335,7 +354,6 @@ div.vdpComponent.vdpWithInput :focus{
     height: 100%;
     width: 100%;
     border-radius: 3px;
-    padding: 0px 6px;
 }
 .cell-title-inner{
     display: flex;

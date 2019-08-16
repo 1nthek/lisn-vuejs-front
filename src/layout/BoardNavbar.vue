@@ -1,5 +1,5 @@
 <template>
-  <base-nav container-classes="container-fluid" class="navbar-top border-bottom navbar-expand" :class="{'navbar-dark': type === 'default'}" style="background: #09b3af !important">
+  <base-nav container-classes="container-fluid" class="navbar-top border-bottom navbar-expand" :class="{'navbar-dark': type === 'default'}" style="background: #09b3af !important;height: 4rem;">
     <!-- Search form -->
     <!-- <form class="navbar-search form-inline mr-sm-3"
           :class="{'navbar-search-light': type === 'default', 'navbar-search-dark': type === 'light'}"
@@ -29,11 +29,6 @@
             <i class="sidenav-toggler-line"></i>
           </div>
         </div>
-      </li>
-      <li class="nav-item d-sm-none">
-        <a class="nav-link" href="#" data-action="search-show" data-target="#navbar-search-main">
-          <i class="ni ni-zoom-split-in"></i>
-        </a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,33 +78,43 @@
     </ul>
     <ul class="navbar-nav align-items-center ml-auto ml-md-0">
       <li class="nav-item dropdown">
-        <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <div class="media align-items-center">
-            <!-- <span class="avatar avatar-sm rounded-circle">
-              <img alt="Image placeholder" src="img/theme/team-4.jpg">
-            </span> -->
-            <div class="media-body ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm font-weight-bold" style="margin-right: 1rem;">IN DUCK</span>
-            </div>
-          </div>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
+            <img src="https://cdn140.picsart.com/245475461009202.jpg?c256x256" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
+            <!-- <span class="mb-0 text-sm font-weight-bold" style="padding-left: 10px;">IN DUCK</span> -->
         </a>
-        <div class="dropdown-menu dropdown-menu-right">
-          <div class="dropdown-header noti-title">
-            <h6 class="text-overflow m-0">Welcome!</h6>
-          </div>
-          <a href="#!" class="dropdown-item">
-            <i class="ni ni-single-02"></i>
-            <span>My profile</span>
-          </a>
-          <a href="#!" class="dropdown-item">
-            <i class="ni ni-settings-gear-65"></i>
-            <span>Settings</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#!" class="dropdown-item">
-            <i class="ni ni-user-run"></i>
-            <span>Logout</span>
-          </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
+            <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;">
+                <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;">
+                  <div>
+                    <div style="font-weight: bold;margin-bottom: 3px;">
+                      IN DUCK KANG
+                    </div>
+                    <div>
+                      abc@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-user-edit"></i>
+                  </div>
+                  <span class="ns-kr navbar-txt">프로필</span>
+                </div>
+                <div class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <span class="ns-kr navbar-txt">설정</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div @click="signOut()" class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-running" style="font-size: 1.4em;"></i>
+                  </div>
+                    <span class="ns-kr navbar-txt">로그아웃</span>
+                </div>
+            </ul>
         </div>
       </li>
     </ul>
@@ -118,6 +123,7 @@
 <script>
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
+import axios from 'axios'
 // import { BaseNav, Modal } from '@/components';
 
 export default {
@@ -148,6 +154,21 @@ export default {
     };
   },
   methods: {
+    signOut(){
+      let self = this;
+      axios.delete(this.$store.state.domain + '/signin/token')
+        .then((res) => {
+          var auth2 = gapi.auth2.getAuthInstance();
+          self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
+          self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+          auth2.signOut();
+          auth2.disconnect();
+          self.$router.push('/home');
+        })
+        .catch((ex)=> {
+          console.log(ex);
+        })
+    },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
@@ -166,3 +187,23 @@ export default {
   }
 };
 </script>
+<style scoped>
+.dropdown-title{
+  font-size: 13px;
+  font-weight: 400;
+}
+.navbar-txt{
+  font-weight: 600;
+  font-size: 14px;
+}
+.navbar-icon{
+    width: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 15px;
+}
+.nav-item{
+    cursor: pointer;
+}
+</style>

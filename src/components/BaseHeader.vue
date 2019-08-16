@@ -43,12 +43,10 @@
                     </li> -->
                     <li class="nav-item-right dropdown">
                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
-                            <img src="https://mdbootstrap.com/img/Photos/Avatars/avatar-5.jpg" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
+                            <img src="https://cdn140.picsart.com/245475461009202.jpg?c256x256" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
                             <span class="mb-0 text-sm font-weight-bold" style="padding-left: 10px;">IN DUCK</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
-                            <!-- <a class="dropdown-item" href="#">My Account</a>
-                            <a class="dropdown-item" href="#">Logout</a> -->
                             <ul class="dropdown-menu show dropdown-menu-right">
                                 <div class="dropdown-header noti-title" style="color:black;">Welcome!</div>
                                 <a href="#" class="dropdown-item" >

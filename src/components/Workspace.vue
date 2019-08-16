@@ -1,20 +1,18 @@
 <template>
+<div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
-      <player></player>
-      <div class="lisn-workspace-container">
+      <player v-on:scrollSTT="scrollSTT"></player>
+      <div class="lisn-workspace-container workspace-width show">
+          <!-- <div class="stt-container"> -->
+            <s-t-t ref="scrollSTT"></s-t-t>
+          <!-- </div> -->
           <div class="note-container">
-              <vuescroll>
-                  <Note></Note>
-              </vuescroll>
+            <Note ref="saveNote"></Note>
           </div>
           <div class="divider"></div>
-          <div class="stt-container">
-              <vuescroll>
-                  <s-t-t></s-t-t>
-              </vuescroll>
-          </div>
       </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -28,33 +26,68 @@ export default {
     Note,
     STT,
     Player
+  },
+  methods:{
+    saveNote(){
+      this.$refs.saveNote.saveNote();
+    },
+    scrollSTT(){
+      this.$refs.scrollSTT.scrollSTT();
+    }
   }
 }
 </script>
 
-<style scoped>
+<style>
+.workspace-width{
+	width:100%
+}
+@media (min-width: 576px) { 
 
+}
+
+@media (min-width: 768px) { 
+  .workspace-width {
+		width: 700px;
+	}
+}
+
+@media (min-width: 992px) { 
+  .workspace-width {
+		width: 1000px;
+	}
+}
+
+@media (min-width: 1200px) { 
+
+}
+
+.__view{
+  min-height: fit-content !important;
+}
 .divider {
   width: 1px;
   margin: 6px 0;
   background: rgb(209, 209, 209);
 }
 .lisn-workspace{
-    padding-left: 18rem;
-    padding-top: 3.5rem;
+    padding-left: 2rem;
+    padding-top: 0;
     padding-bottom: 2rem;
     padding-right: 2rem;
 }
 .lisn-workspace-container{
+  word-break: break-word;
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
+    /* justify-content:space-between; */
     height: 100vh;
-    margin: -7rem 0;
-    padding: 7rem 0 2.2rem 0;
+    margin: -7.4rem 0;
+    padding: 7.4rem 0 2.2rem 0;
 }
 .note-container, .stt-container{
-    flex: 1;
+    /* width: 100%; max-width: 700px; */
+    /* flex: 1; */
     height: auto;
     overflow: auto;
     background: white;
@@ -62,11 +95,12 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 .note-container{
-    border-radius: 0.8rem 0 0 0.8rem;
-    padding: .2rem 0rem .4rem .8rem;
+    border-radius: 0 1rem  1rem 0;
+    padding: 1rem 1rem 1rem 1rem;
+    flex: 1 1 auto;
 }
 .stt-container{
-    border-radius: 0 1rem  1rem 0;
-    padding: 0.8rem 0rem 0.8rem 0rem
+    border-radius: 0.8rem 0 0 0.8rem;
+    padding: 1rem 0rem 1rem 1rem;
 }
 </style>
