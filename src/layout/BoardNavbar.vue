@@ -108,7 +108,7 @@
                   <span class="ns-kr navbar-txt">설정</span>
                 </div>
                 <div class="dropdown-divider"></div>
-                <div class="dropdown-item" style="display: flex;">
+                <div @click="signOut()" class="dropdown-item" style="display: flex;">
                   <div class="navbar-icon">
                     <i class="fas fa-running" style="font-size: 1.4em;"></i>
                   </div>
@@ -154,6 +154,21 @@ export default {
     };
   },
   methods: {
+    signOut(){
+      let self = this;
+      axios.delete(this.$store.state.domain + '/signin/token')
+        .then((res) => {
+          var auth2 = gapi.auth2.getAuthInstance();
+          self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
+          self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+          auth2.signOut();
+          auth2.disconnect();
+          self.$router.push('/home');
+        })
+        .catch((ex)=> {
+          console.log(ex);
+        })
+    },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     },
