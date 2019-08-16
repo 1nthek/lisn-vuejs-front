@@ -31,9 +31,9 @@
                       </ul>
                   </li> -->
                   <li>
-                    <!-- <router-link to="/board"> -->
+                    <div id="customBtn0">
                       <span class="nav__link nav__link--cta">로그인</span>
-                    <!-- </router-link> -->
+                    </div>
                   </li>
               </ul>
           </nav>
@@ -47,15 +47,12 @@
                   <!-- <div class="ns-kr" style="font-size: 21px;font-weight: 600;letter-spacing: -1px;text-align: center;">쉽고 빠르게 회의록 정리하세요</div> -->
                       <h1 class="wave__h ns-kr" style="color: white;margin-top: 6rem;width: max-content;"> 대화를 쉽고 빠르게 정리하세요 </h1>
                         <div style="width: fit-content;">
-                        <!-- <router-link to="/board"> -->
-                          <div id="customBtn" class="btn-user btn btn-neutral btn-icon" style="background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
+                          <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
                               <div class="btn-inner--icon">
                                 <img src="../img/icons/common/google.svg">
                               </div>
                               <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 사용</div>
-                              <!-- <div class="btn-inner--text ns-kr" style="font-size: 18px;color: white;">Google 계정으로 사용</div> -->
                           </div>
-                        <!-- </router-link> -->
                       </div>
                   </div>
               </div>
@@ -645,13 +642,12 @@
           </div>
           <div class="steps__cta"> 
             <div style="display: flex;align-items: center;justify-content: center;">
-              <!-- <router-link to="/board"> -->
-                <a id="customBtn" class="btn-user btn btn-neutral btn-icon" style="width: 18rem;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
-                    <span class="btn-inner--icon"><img src="../img/icons/common/google.svg"></span>
-                    <!-- <span class="btn-inner--text ns-kr" style="font-size: 18px;color: white;">Google 계정으로 사용</span> -->
-                    <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 사용</div>
-                </a>
-              <!-- </router-link> -->
+              <div id="customBtn2" class="btn-user btn btn-neutral btn-icon" style="background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
+                  <div class="btn-inner--icon">
+                    <img src="../img/icons/common/google.svg">
+                  </div>
+                  <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 사용</div>
+              </div>
             </div>
           </div>
       </div>
@@ -684,14 +680,30 @@ export default {
       var auth2 = gapi.auth2.init({
         client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
       });
-      
-      auth2.attachClickHandler(document.getElementById('customBtn'), {},
+
+      auth2.attachClickHandler(document.getElementById('customBtn0'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
           console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
-        });
+      });
+      
+      auth2.attachClickHandler(document.getElementById('customBtn1'), {},
+        function(googleUser) {
+          self.onSignIn(googleUser);
+          console.log("Signed in: " + googleUser.getBasicProfile().getName());
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+      });
+
+      auth2.attachClickHandler(document.getElementById('customBtn2'), {},
+        function(googleUser) {
+          self.onSignIn(googleUser);
+          console.log("Signed in: " + googleUser.getBasicProfile().getName());
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+      });
     });
   },
   destroyed () {
