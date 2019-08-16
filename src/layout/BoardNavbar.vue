@@ -76,6 +76,48 @@
         </div>
       </li>
     </ul>
+    <ul class="navbar-nav align-items-center ml-auto ml-md-0">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
+            <img src="https://cdn140.picsart.com/245475461009202.jpg?c256x256" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
+            <!-- <span class="mb-0 text-sm font-weight-bold" style="padding-left: 10px;">IN DUCK</span> -->
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
+            <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;">
+                <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;">
+                  <div>
+                    <div style="font-weight: bold;margin-bottom: 3px;">
+                      IN DUCK KANG
+                    </div>
+                    <div>
+                      abc@gmail.com
+                    </div>
+                  </div>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-user-edit"></i>
+                  </div>
+                  <span class="ns-kr navbar-txt">프로필</span>
+                </div>
+                <div class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <span class="ns-kr navbar-txt">설정</span>
+                </div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" style="display: flex;">
+                  <div class="navbar-icon">
+                    <i class="fas fa-running" style="font-size: 1.4em;"></i>
+                  </div>
+                    <span class="ns-kr navbar-txt">로그아웃</span>
+                </div>
+            </ul>
+        </div>
+      </li>
+    </ul>
   </base-nav>
 </template>
 <script>
