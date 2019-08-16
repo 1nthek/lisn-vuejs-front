@@ -89,14 +89,14 @@
             <div class="col-xl-3 col-md-6"  v-for="p in this.$store.state.noteList" :key="p.no">
               <stats-card :title="p.title"
                           :note_id="p.note_id"
+                          :summery="p.summery"
                           type="gradient-orange"
-                          sub-title="STT"
                           id="noteList"
                           icon="fas fa-trash">
 
                 <template slot="footer">
                   <div class="note-date ns-kr" style="font-weight: bold;">
-                    <span class="text-nowrap mr-4"><i class="fa fa-arrow-up"></i>{{ p.updated_at }} </span>
+                    <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
                     <span class="text-nowrap">{{ p.created_at }}</span>
                   </div>
                 </template>

@@ -78,11 +78,11 @@ export const store = new Vuex.Store({
       axios.get(state.domain + '/record/list?user_id=' + state.user_id)
         .then(res => {
           res.data.notes.forEach(element => {
+            console.log(element.summery);
             
             if(element.title==""){
               element.title = "untitled";
             }
-            
             var date1 = new Date(Date.parse(element.created_at));
             var date2 = new Date(Date.parse(element.updated_at));
             element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()

@@ -4,7 +4,7 @@
       <div class="col">
         <slot>
           <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
-          <h5 class="mb-0 ns-kr" v-if="subTitle">{{subTitle}}</h5>
+          <h5 class="mb-0 ns-kr" v-if="summery">{{summery}}</h5>
         </slot>
       </div>
 
@@ -42,7 +42,7 @@ export default {
     icon: String,
     note_id: "",
     title: String,
-    subTitle: String,
+    summery: String,
     iconClasses: [String, Array]
   },
   methods: {
