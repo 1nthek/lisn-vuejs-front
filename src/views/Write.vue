@@ -42,6 +42,7 @@ export default {
       .then((res) => {
         self.$store.state.sttText = [];
         self.$store.state.noteTitle = res.data.title;
+        self.$store.state.content = res.data.content;
 
         res.data.audios.forEach(element => {
           var audio_id = element.audio_id;

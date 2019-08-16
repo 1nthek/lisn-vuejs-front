@@ -83,6 +83,7 @@
             </div>
         </div>
     </div>
+    <yimoeditor v-model="content" class="ns-kr"></yimoeditor>
     </vuescroll>
 </template>
 
@@ -92,6 +93,7 @@ import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
+
 
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
@@ -118,6 +120,7 @@ export default {
 
     user_id: -1,
     note_id: -1,
+    content: "",
 
     title: "제목",
     data: [],
@@ -183,6 +186,14 @@ export default {
   },
   created(){
     // window.addEventListener('beforeunload', this.handler)
+    let self = this;
+    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
+      .then((res) => {
+        self.content = res.data.content;
+      })
+      .catch((ex) => { 
+        console.log('실패'); 
+      });
   },
   computed: {
     styleObject () {
@@ -231,7 +242,7 @@ export default {
   },
   methods: {
     saveNote(){
-      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: ""} );      
+      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: this.content} );
     },
     typing(e) {
     	this.title = e.target.value

@@ -20,6 +20,8 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+    content: "",
+    
     user_id: -1,
     note_id: -1,
     sttText: [{
