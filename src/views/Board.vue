@@ -54,11 +54,11 @@
                           <div style="padding: 0;display: flex;justify-content: space-between;align-items: center;">
                             <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
                             <div class="create-bar">
-                                <md-button class="create-btn merienda" @click="newPage()">
-                                  <div class="ns-kr" style="padding: 10px;font-size: 16px;">
+                                <button class="create-btn" @click="newPage()">
+                                  <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
                                     + 새 노트
                                   </div>
-                                </md-button>
+                                </button>
                             </div>
 
                           </div>
@@ -223,7 +223,7 @@ a {
     justify-content: space-between;
 }
 .create-bar{
-    padding: 0.7rem 2rem 0.7rem 1.5rem;
+    padding: 12px;
     margin-bottom: 0;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -231,10 +231,7 @@ a {
     background-color: #1867c0 !important;
     border-color: #1867c0 !important;
     color: #fff !important;
-    padding: 0px;
-    margin: 6px 10px;
     border-radius: 0.2rem;
-    font-family: 'Cabin', sans-serif;
 }
 .lisn-navbar{
     position: fixed;

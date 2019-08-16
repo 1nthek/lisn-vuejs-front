@@ -76,37 +76,12 @@
         </div>
       </li>
     </ul>
-    <ul class="navbar-nav align-items-center ml-auto ml-md-0">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
-            <img src="https://cdn140.picsart.com/245475461009202.jpg?c256x256" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
-            <span class="mb-0 text-sm font-weight-bold" style="padding-left: 10px;">IN DUCK</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
-            <ul class="dropdown-menu show dropdown-menu-right">
-                <div class="dropdown-header noti-title" style="color:black;">Welcome!</div>
-                <a href="#" class="dropdown-item" >
-                    <i class="fas fa-user-edit navbar-icon"></i>
-                    <span >My profile</span>
-                </a>
-                <a href="#" class="dropdown-item" >
-                    <i class="fas fa-cog navbar-icon"></i>
-                    <span >Settings</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-running navbar-icon" style="font-size: 1.4em;"></i>
-                    <span >Logout</span>
-                </a>
-            </ul>
-        </div>
-      </li>
-    </ul>
   </base-nav>
 </template>
 <script>
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
+import axios from 'axios'
 // import { BaseNav, Modal } from '@/components';
 
 export default {
@@ -156,14 +131,20 @@ export default {
 };
 </script>
 <style scoped>
-.nav-link{
-    transition: all .4s ease 0s;
+.dropdown-title{
+  font-size: 13px;
+  font-weight: 400;
 }
-.nav-link:not(.btn):hover {
-    background-color: hsla(0,0%,100%,.3);
-    border-radius: .2rem;
-    color: #fff;
-    transition: all .4s ease 0s;
+.navbar-txt{
+  font-weight: 600;
+  font-size: 14px;
+}
+.navbar-icon{
+    width: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-size: 15px;
 }
 .nav-item{
     cursor: pointer;

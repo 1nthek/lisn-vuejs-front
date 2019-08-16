@@ -2,14 +2,14 @@
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
       <player v-on:scrollSTT="scrollSTT"></player>
-      <div class="lisn-workspace-container workspace-width">
-          <div class="stt-container">
+      <div class="lisn-workspace-container workspace-width show">
+          <!-- <div class="stt-container"> -->
             <s-t-t ref="scrollSTT"></s-t-t>
-          </div>
-          <div class="divider"></div>
+          <!-- </div> -->
           <div class="note-container">
             <Note ref="saveNote"></Note>
           </div>
+          <div class="divider"></div>
       </div>
     </div>
 </div>
@@ -80,14 +80,14 @@ export default {
   word-break: break-word;
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
+    /* justify-content:space-between; */
     height: 100vh;
     margin: -7.4rem 0;
     padding: 7.4rem 0 2.2rem 0;
 }
 .note-container, .stt-container{
     /* width: 100%; max-width: 700px; */
-    flex: 1;
+    /* flex: 1; */
     height: auto;
     overflow: auto;
     background: white;
@@ -97,6 +97,7 @@ export default {
 .note-container{
     border-radius: 0 1rem  1rem 0;
     padding: 1rem 1rem 1rem 1rem;
+    flex: 1 1 auto;
 }
 .stt-container{
     border-radius: 0.8rem 0 0 0.8rem;

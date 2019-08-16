@@ -11,11 +11,11 @@
           </template>
         </div>
         <div class="btn-play">
-          <template v-if="isPlay">
-            <i class="far fa-pause-circle" @click="isPlay = !isPlay" @click.prevent="pauseSound()"></i>        
+          <template v-if="this.$store.state.isPlay">
+            <i class="far fa-pause-circle" @click.prevent="pauseSound()"></i>        
           </template>
           <template v-else>
-            <i class="far fa-play-circle" @click="isPlay = !isPlay" @click.prevent="playSound()"></i>
+            <i class="far fa-play-circle" @click.prevent="playSound()"></i>
           </template>
         </div>
       </div>
@@ -44,6 +44,7 @@ import axios from 'axios'
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
 var recorder;
+var localstream;
 
 recognition.continuous = true;
 recognition.interimResults = true;
@@ -164,14 +165,17 @@ export default {
                 });
               })
               .catch((ex) => { 
-                console.log('실패'); 
+                console.log('실패', ex.name, ex.message); 
               });
           })
     },
     startRecording(stream) {
+        this.is_record = true;  
+        this.isRec = true;
         var self = this;
        
         recorder = new MediaRecorder(stream);
+        localstream = recorder.stream;
         this.chunks = [];
         this.is_first_word = true;
         this.current_start_tmp_id = this.tmp_id;
@@ -207,7 +211,6 @@ export default {
         // recognition setting
         var self = this;
         recognition.onresult = function(event_object_list) {
-          // console.log('recognition.onresult');
           
             var event_last_idx = event_object_list.results.length - 1;
             var transcript = event_object_list.results[event_last_idx][0].transcript;
@@ -215,8 +218,6 @@ export default {
             if(transcript == null) {
               return;
             }
-            // console.log(transcript);
-            // console.log(event_object_list.results[event_last_idx]);
             
             if(event_object_list.results[event_last_idx].isFinal == true) {
                 if(self.is_first_word==true){
@@ -232,10 +233,8 @@ export default {
                 }
                 self.is_first_word = true;
                 self.tmp_id ++;
-                // console.log('isFinal: self.tmp_id ++', self.tmp_id);
             }
             else if(self.is_first_word == true) {
-                // console.log('is_first_word');
 
                 var word_start_time = Date.now() - self.audio_start_time;
                 
@@ -245,15 +244,12 @@ export default {
                     word_start_time = 0;
                                 
                 self.audio_timestamp.push(word_start_time);
-                // console.log('audio_timestamp.push', self.audio_timestamp);
                 
                 
                 self.update_sentence_text(event_object_list);
                 self.is_first_word = false;
             }
-            else {
-                // console.log('is_not_first_word');
-              
+            else {              
                 self.update_sentence_text(event_object_list);
             }
         };
@@ -262,14 +258,15 @@ export default {
     recBtnPressed(){
       if(this.isRec){
         this.is_record = false;
-        this.isRec = !this.isRec;
+        this.isRec = false;
         console.log('End');
 
         recognition.stop();
         recorder.stop();
+        localstream.getTracks().forEach((track) => {
+          track.stop();
+        });
       }else{
-        this.is_record = true;
-        this.isRec = !this.isRec;
         console.log('Start');
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
           .then(this.startRecording)
@@ -279,16 +276,17 @@ export default {
       }
     },  
     playSound() {
-      this.$store.state.audio.currentTime = this.$store.state.timeOffset;
-      this.$store.state.audio.play();
-      this.timerId = setInterval(() => {
-        this.printTime();
-		  }, 1000)
+      this.$store.commit('playSound');
+
+      // this.$store.state.audio.currentTime = this.$store.state.timeOffset;
+      // this.$store.state.audio.play();
+      // this.timerId = setInterval(() => {
+      //   this.printTime();
+		  // }, 1000)
     },
     pauseSound() {
-      console.log('pause');
+      this.$store.state.isPlay = false;
       this.$store.state.audio.pause();
-      console.log(this.$store.state.audio.currentTime);
       this.$store.state.timeOffset = this.$store.state.audio.currentTime;
       clearInterval(this.timerId);
     },
@@ -304,6 +302,16 @@ export default {
     },
   },
   beforeDestroy() {
+    this.is_record = false;
+    this.isRec = false;
+    console.log('End');
+
+    recognition.stop();
+    recorder.stop();
+    localstream.getTracks().forEach((track) => {
+      track.stop();
+    });
+    this.$store.state.isPlay = false;
     clearInterval(this.timerId)
     this.$store.state.audio.pause();
   },

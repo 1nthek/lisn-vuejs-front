@@ -124,56 +124,56 @@ export default {
     cellData: [
       {
         cellType: 'date',
-        cellTitle: '회의 시작',
+        cellTitle: '시작 시간',
         cellContent: '2019.07.16 화 오후 1:00'
       },
       {
         cellType: 'date',
-        cellTitle: '회의 종료',
+        cellTitle: '종료 시간',
         cellContent: '2019.07.16 화 오후 3:30'
       },
-      {
-        cellType: 'person',
-        cellTitle: '작성자',
-        cellContent: [{
-          personName: '강인덕'
-        }
-        ]
-      },
-      {
-        cellType: 'person',
-        cellTitle: '참석자',
-        cellContent: [{
-          personName: '강인덕'
-        },
-        {
-          personName: '이규용'
-        },
-        {
-          personName: '손정연'
-        }
-        ]
-      },
-      {
-        cellType: 'text',
-        cellTitle: '안건',
-        cellContent: 'OO을 위한 샘플리스트 작성'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '회의 내용',
-        cellContent: '운영방침 및 방향성 파악'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '결정 사항',
-        cellContent: 'OOO 업체와 계약'
-      },
-      {
-        cellType: 'text',
-        cellTitle: '향후일정',
-        cellContent: '2차 회의: 2019.07.17 10회의실에서 진행 예정'
-      }
+      // {
+      //   cellType: 'person',
+      //   cellTitle: '작성자',
+      //   cellContent: [{
+      //     personName: '강인덕'
+      //   }
+      //   ]
+      // },
+      // {
+      //   cellType: 'person',
+      //   cellTitle: '참석자',
+      //   cellContent: [{
+      //     personName: '강인덕'
+      //   },
+      //   {
+      //     personName: '이규용'
+      //   },
+      //   {
+      //     personName: '손정연'
+      //   }
+      //   ]
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '안건',
+      //   cellContent: 'OO을 위한 샘플리스트 작성'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '회의 내용',
+      //   cellContent: '운영방침 및 방향성 파악'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '결정 사항',
+      //   cellContent: 'OOO 업체와 계약'
+      // },
+      // {
+      //   cellType: 'text',
+      //   cellTitle: '향후일정',
+      //   cellContent: '2차 회의: 2019.07.17 10회의실에서 진행 예정'
+      // }
     ]
   }),
    watch: {

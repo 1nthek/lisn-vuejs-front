@@ -676,7 +676,7 @@ export default {
       navOpen: false,
     }
   },
-  created() {
+  mounted() {
     window.addEventListener('scroll', this.handleScroll);
 
     let self = this;

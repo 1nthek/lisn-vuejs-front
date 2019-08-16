@@ -12,8 +12,12 @@ export const store = new Vuex.Store({
     hour: '0',
     minute: '00',
     second: '00',
+
+    timerId: null,
     audio: new Audio(),
     timeOffset: 0.000,
+    isPlay: false,
+
     noteList: [],
     noteTitle: "",
     user_id: -1,
@@ -28,6 +32,21 @@ export const store = new Vuex.Store({
     domain: 'https://li-sn.io/v1/api'
   },
   mutations: {
+    playSound(state) {
+      state.isPlay = true;
+      state.audio.currentTime = state.timeOffset;
+      state.audio.play();
+      state.timerId = setInterval(() => {
+        var curTime = state.audio.currentTime;
+
+        state.hour = Math.floor(curTime / 3600);
+        state.hour = (state.hour >= 10) ? state.hour : "0" + state.hour;
+        state.minute = Math.floor((curTime / 60) % 60);
+        state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
+        state.second = Math.floor(curTime % 60);
+        state.second = (state.second >= 10) ? state.second : "0" + state.second;
+      }, 1000)
+    },
     saveNote(state, { note_id, title, content }){
       var formData = new FormData();
       formData.append('note_id', note_id);
