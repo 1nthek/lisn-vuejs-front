@@ -726,7 +726,7 @@ export default {
         .then((res) => {
           var user_id = res.data.user_id
           self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
-          self.$router.push('/board');
+          self.$router.push('/list');
         })
         .catch((ex) => { 
           console.log('실패'); 
