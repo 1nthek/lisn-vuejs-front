@@ -89,6 +89,7 @@ export default {
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
           transcript += event_object_list.results[i][0].transcript;
         }
+        
         this.$emit('scrollSTT')
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
     },
@@ -182,8 +183,10 @@ export default {
         };
 
         recorder.ondataavailable = function(e) {
-            self.chunks.push(e.data);
-            self.sendRecording();
+          setTimeout(() => {
+              self.chunks.push(e.data);
+              self.sendRecording();
+          }, 1000);  //delay loading
         };
 
         recorder.onstop = function(e) {
@@ -222,7 +225,6 @@ export default {
                 self.tmp_id ++;
             }
             else if(self.is_first_word == true) {
-
                 var word_start_time = Date.now() - self.audio_start_time;
                 
                 if(word_start_time > 2300)
@@ -236,7 +238,7 @@ export default {
                 self.update_sentence_text(event_object_list);
                 self.is_first_word = false;
             }
-            else {              
+            else {
                 self.update_sentence_text(event_object_list);
             }
         };
@@ -245,7 +247,6 @@ export default {
     recBtnPressed(){
       if(this.is_record){
         this.is_record = false;
-        // this.isRec = false;
 
         recognition.stop();
         recorder.stop();
