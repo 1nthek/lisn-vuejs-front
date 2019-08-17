@@ -6,10 +6,10 @@
           <!-- <div class="stt-container"> -->
             <s-t-t ref="scrollSTT"></s-t-t>
           <!-- </div> -->
+          <div class="divider"></div>
           <div class="note-container">
             <Note ref="saveNote"></Note>
           </div>
-          <div class="divider"></div>
       </div>
     </div>
 </div>
@@ -53,13 +53,17 @@ export default {
 }
 
 @media (min-width: 992px) { 
-  .workspace-width {
-		width: 1000px;
-	}
+  .lisn-workspace-container{
+    padding-right: 2rem !important;
+    padding-left: 2rem !important;
+  }
 }
 
 @media (min-width: 1200px) { 
-
+  .lisn-workspace-container{
+    padding-right: 6rem !important;
+    padding-left: 6rem !important;
+  }
 }
 
 .__view{
@@ -82,6 +86,7 @@ export default {
     flex-direction: row;
     /* justify-content:space-between; */
     height: 100vh;
+    width: 100vw;
     margin: -7.4rem 0;
     padding: 7.4rem 0 2.2rem 0;
 }

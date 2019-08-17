@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // import { noteList } from '../api/api.js'
 import axios from 'axios'
+import { log } from 'util';
 
 const UNAUTHORIZED = 401
 

@@ -672,6 +672,18 @@ export default {
       navOpen: false,
     }
   },
+  created(){
+    setTimeout(() => {
+      gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          var auth2 = gapi.auth2.getAuthInstance();
+          if (auth2.isSignedIn.get() == true) {
+            location.href = "/#/list";
+          }
+        });
+      });
+    }, 300);  //delay loading
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
 
@@ -684,7 +696,6 @@ export default {
       auth2.attachClickHandler(document.getElementById('customBtn0'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          // console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
       });
