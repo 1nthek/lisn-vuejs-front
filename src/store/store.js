@@ -57,10 +57,10 @@ export const store = new Vuex.Store({
       
       axios.put(state.domain + '/record/note', formData)
         .then((res) => {
-          console.log('title and content are saved!');
+          // console.log('title and content are saved!');
         })
         .catch((ex) => {
-          console.log('저장 실패');
+          // console.log('저장 실패');
         })
     },
     setCookie(state, { name, value, exp }) {
@@ -80,8 +80,6 @@ export const store = new Vuex.Store({
       axios.get(state.domain + '/record/list?user_id=' + state.user_id)
         .then(res => {
           res.data.notes.forEach(element => {
-            console.log(element.summery);
-            
             if(element.title==""){
               element.title = "untitled";
             }
@@ -93,8 +91,6 @@ export const store = new Vuex.Store({
           state.noteList = res.data.notes;
         })
         .catch(({ response }) => {
-          console.log(response);
-          
           // if (status === Unauthorized)
           //   return console.log('권한 없음');
           throw Error(response)
@@ -134,8 +130,6 @@ export const store = new Vuex.Store({
       }
 
       if (!word) {
-        console.log('Unable to find current word and we should always be able to.');
-        
         throw Error('Unable to find current word and we should always be able to.');
       }
       return word;

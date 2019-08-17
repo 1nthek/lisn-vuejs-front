@@ -684,7 +684,7 @@ export default {
       auth2.attachClickHandler(document.getElementById('customBtn0'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
+          // console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
       });
@@ -692,7 +692,6 @@ export default {
       auth2.attachClickHandler(document.getElementById('customBtn1'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
       });
@@ -700,7 +699,6 @@ export default {
       auth2.attachClickHandler(document.getElementById('customBtn2'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
           alert(JSON.stringify(error, undefined, 2));
       });
@@ -714,8 +712,7 @@ export default {
       this.scrolled = window.scrollY > 80;
     },
     onSignInError (error) {
-      // `error` contains any error occurred.
-      console.log('OH NOES', error)
+      // console.log('OH NOES', error)
     },
     onSignIn(googleUser){
       let self = this;
@@ -728,8 +725,7 @@ export default {
           self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
           self.$router.push('/list');
         })
-        .catch((ex) => { 
-          console.log('실패'); 
+        .catch((ex) => {
         });
     }
   }

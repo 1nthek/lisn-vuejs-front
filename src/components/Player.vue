@@ -103,12 +103,10 @@ export default {
                 get_audio_and_play(event.target.id);
             };
         })
-        .catch((ex) => { 
-          console.log('실패'); 
+        .catch((ex) => {
         });
     },
     sendRecording() {
-        console.log('sendRecording');
         var blob = new Blob(this.chunks, {'type': 'audio/webm;'});
         // clear chunks
         this.chunks = [];
@@ -138,16 +136,12 @@ export default {
                 
                 axios.post(this.$store.state.domain + '/record/sentence', formData2)
                   .then((res) => {
-                    console.log('element.content', element.content);
-                    
                   })
                   .catch((ex) => {
-                    console.log(ex);
                   })
               })
           })
-          .catch((ex) => { 
-            console.log('실패'); 
+          .catch((ex) => {
           })
           .then((res)=>{
             let self = this;
@@ -164,8 +158,7 @@ export default {
                   })
                 });
               })
-              .catch((ex) => { 
-                console.log('실패', ex.name, ex.message); 
+              .catch((ex) => {
               });
           })
     },
@@ -185,25 +178,19 @@ export default {
 
         // recorder setting
         recorder.onstart = function() {
-            console.log('this.recorder.onstart');
             self.audio_start_time = Date.now();
         };
 
         recorder.ondataavailable = function(e) {
-            console.log('this.recorder.ondataavailable');
             self.chunks.push(e.data);
             self.sendRecording();
         };
 
         recorder.onstop = function(e) {
-            console.log('this.recorder.onstop');
         };
 
         recognition.onend = function() {
-            console.log('recognition.onend');
-          
             if(self.is_record == true) {
-                console.log('Recognition restart!');
                 recognition.start();
             }
         }
@@ -259,7 +246,6 @@ export default {
       if(this.isRec){
         this.is_record = false;
         this.isRec = false;
-        console.log('End');
 
         recognition.stop();
         recorder.stop();
@@ -267,7 +253,6 @@ export default {
           track.stop();
         });
       }else{
-        console.log('Start');
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
           .then(this.startRecording)
           .catch((ex) => {
@@ -304,7 +289,6 @@ export default {
   beforeDestroy() {
     this.is_record = false;
     this.isRec = false;
-    console.log('End');
 
     recognition.stop();
     recorder.stop();

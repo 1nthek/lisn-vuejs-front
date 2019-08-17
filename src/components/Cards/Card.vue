@@ -29,7 +29,7 @@
     methods: {
       openNote(note_id) {
         this.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
-        this.$router.push('/write');
+        this.$router.push('/note');
       },
     },
     props: {

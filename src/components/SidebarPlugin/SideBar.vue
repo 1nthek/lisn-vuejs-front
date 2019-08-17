@@ -5,7 +5,7 @@
        :data="backgroundColor">
     <div class="scrollbar-inner ns-kr" ref="sidebarScrollArea">
       <div class="sidenav-header d-flex align-items-center">
-          <router-link to="/board">
+          <router-link to="/list">
             <div id="sidenav-logo" class="navbar-brand" style="margin-left: -1rem;">
               <logo></logo>
             </div>

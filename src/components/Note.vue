@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <yimoeditor v-model="content" class="ns-kr"></yimoeditor>
+    <editor ref="saveNote" :content="content"></editor>
     </vuescroll>
 </template>
 
@@ -93,7 +93,7 @@ import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
-
+import Editor from './Editor'
 
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
@@ -108,7 +108,8 @@ fecha.i18n = {
 }
 export default {
   components: {
-    DatePick
+    DatePick,
+    Editor,
   },
   data: () => ({
     format: 'YYYY.MM.DD ddd A h:mm',
@@ -186,14 +187,6 @@ export default {
   },
   created(){
     // window.addEventListener('beforeunload', this.handler)
-    let self = this;
-    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
-      .then((res) => {
-        self.content = res.data.content;
-      })
-      .catch((ex) => { 
-        console.log('실패'); 
-      });
   },
   computed: {
     styleObject () {
@@ -237,12 +230,13 @@ export default {
   },
   watch: {
     popUp() {
-      console.log(this.$refs.date)
+      // console.log(this.$refs.date)
     }
   },
   methods: {
     saveNote(){
-      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: this.content} );
+      this.$refs.saveNote.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+      // this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: this.content} );
     },
     typing(e) {
     	this.title = e.target.value
@@ -264,12 +258,6 @@ export default {
     },
     formatDate (dateObj, format) {
       return fecha.format(dateObj, format)
-    },
-    add22 (event) {
-      this.dX = event.target.getBoundingClientRect().x
-      this.dY = event.target.getBoundingClientRect().y
-      console.log(event.target)
-      this.popUp = !this.popUp
     },
     goBack () {
       if (!this.flag) {
