@@ -54,7 +54,6 @@ export const store = new Vuex.Store({
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
-      
       axios.put(state.domain + '/record/note', formData)
         .then((res) => {
           // console.log('title and content are saved!');
@@ -77,24 +76,24 @@ export const store = new Vuex.Store({
       state.note_id = value ? value[2] : null;
     },
     getNoteList(state) {
-      axios.get(state.domain + '/record/list?user_id=' + state.user_id)
-        .then(res => {
-          res.data.notes.forEach(element => {
-            if(element.title==""){
-              element.title = "untitled";
-            }
-            var date1 = new Date(Date.parse(element.created_at));
-            var date2 = new Date(Date.parse(element.updated_at));
-            element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-            element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
-          });
-          state.noteList = res.data.notes;
-        })
-        .catch(({ response }) => {
-          // if (status === Unauthorized)
-          //   return console.log('권한 없음');
-          throw Error(response)
-        })
+      setTimeout(() => {
+        axios.get(state.domain + '/record/list?user_id=' + state.user_id)
+          .then(res => {
+            res.data.notes.forEach(element => {
+              if(element.title==""){
+                element.title = "untitled";
+              }
+              var date1 = new Date(Date.parse(element.created_at));
+              var date2 = new Date(Date.parse(element.updated_at));
+              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+            });
+            state.noteList = res.data.notes;
+          })
+          .catch(({ response }) => {
+            throw Error(response)
+          })
+        }, 300);  //delay loading
     },
     setCurrentTime(state, item) {
       var stamp = parseFloat(item.begin) / 1000;

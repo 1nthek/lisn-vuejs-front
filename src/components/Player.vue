@@ -3,7 +3,7 @@
     <div class="player">
       <div class="btn-container">
         <div class="btn-record">
-          <template v-if="isRec">
+          <template v-if="is_record">
               <i class="far fa-stop-circle" @click="recBtnPressed()"></i>
           </template>
           <template v-else>
@@ -56,7 +56,7 @@ export default {
       user_id: -1,
       audio_id:-1,
 
-      isRec: false,
+      // isRec: false,
       isPlay: false,
       timerId: null,
       is_record: false,
@@ -164,7 +164,7 @@ export default {
     },
     startRecording(stream) {
         this.is_record = true;  
-        this.isRec = true;
+        // this.isRec = true;
         var self = this;
        
         recorder = new MediaRecorder(stream);
@@ -243,9 +243,9 @@ export default {
         
     },
     recBtnPressed(){
-      if(this.isRec){
+      if(this.is_record){
         this.is_record = false;
-        this.isRec = false;
+        // this.isRec = false;
 
         recognition.stop();
         recorder.stop();
@@ -287,14 +287,17 @@ export default {
     },
   },
   beforeDestroy() {
-    this.is_record = false;
-    this.isRec = false;
+    if(this.is_record){
+      recognition.stop();
+      recorder.stop();
+      this.is_record = false;
+    }
+    if(localstream!=undefined){
+      localstream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
 
-    recognition.stop();
-    recorder.stop();
-    localstream.getTracks().forEach((track) => {
-      track.stop();
-    });
     this.$store.state.isPlay = false;
     clearInterval(this.timerId)
     this.$store.state.audio.pause();
