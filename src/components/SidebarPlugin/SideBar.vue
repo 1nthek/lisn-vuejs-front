@@ -1,8 +1,6 @@
 <template>
-  <div class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" style="overflow-x: hidden;"
-       @mouseenter="$sidebar.onMouseEnter()"
-       @mouseleave="$sidebar.onMouseLeave()"
-       :data="backgroundColor">
+  <div class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" style="overflow-x: hidden;" :data="backgroundColor">
+    <!-- @mouseenter="$sidebar.onMouseEnter()"@mouseleave="$sidebar.onMouseLeave()" -->
     <div class="scrollbar-inner ns-kr" ref="sidebarScrollArea">
       <div class="sidenav-header d-flex align-items-center">
           <router-link to="/list">
@@ -30,13 +28,11 @@
             <sidebar-item
               v-for="(link, index) in sidebarLinks"
               :key="link.name + index"
-              :link="link"
-            >
+              :link="link">
               <sidebar-item
                 v-for="(subLink, index) in link.children"
                 :key="subLink.name + index"
-                :link="subLink"
-              >
+                :link="subLink">
               </sidebar-item>
             </sidebar-item>
           </slot>
@@ -124,6 +120,9 @@ export default {
 };
 </script>
 <style>
+.sidenav:hover {
+    max-width: 61px;
+}
 #sidenav-logo g.logo-color1{
   fill: #000;
 }
