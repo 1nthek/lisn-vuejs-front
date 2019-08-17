@@ -697,21 +697,18 @@ export default {
         function(googleUser) {
           self.onSignIn(googleUser);
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
       
       auth2.attachClickHandler(document.getElementById('customBtn1'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
 
       auth2.attachClickHandler(document.getElementById('customBtn2'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
     });
   },
