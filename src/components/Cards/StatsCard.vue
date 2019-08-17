@@ -50,7 +50,7 @@ export default {
       swal.fire({
         title: '휴지통으로 이동',
         text: `휴지통에서 완전히 삭제할 수 있습니다`,
-        type: 'warning',
+        // type: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-success btn-fill',
         cancelButtonClass: 'btn btn-danger btn-fill',

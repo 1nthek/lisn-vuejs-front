@@ -1,7 +1,7 @@
 <template>
   <div style="background: #09b3af !important;height: 4rem;display: flex;justify-content: space-between;padding: 0 2rem;align-items: center;">
   <!-- <logo></logo> -->
-  <router-link to="/board" style="margin: 10px;">
+  <router-link to="/list" style="margin: 10px;">
     <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:white;position: relative;
     z-index: 2;">
       <i class="fas fa-chevron-left"></i>&nbsp;내 노트

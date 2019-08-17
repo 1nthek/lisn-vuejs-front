@@ -3,7 +3,7 @@
     <div class="player">
       <div class="btn-container">
         <div class="btn-record">
-          <template v-if="isRec">
+          <template v-if="is_record">
               <i class="far fa-stop-circle" @click="recBtnPressed()"></i>
           </template>
           <template v-else>
@@ -56,7 +56,7 @@ export default {
       user_id: -1,
       audio_id:-1,
 
-      isRec: false,
+      // isRec: false,
       isPlay: false,
       timerId: null,
       is_record: false,
@@ -89,6 +89,7 @@ export default {
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
           transcript += event_object_list.results[i][0].transcript;
         }
+        
         this.$emit('scrollSTT')
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
     },
@@ -103,12 +104,10 @@ export default {
                 get_audio_and_play(event.target.id);
             };
         })
-        .catch((ex) => { 
-          console.log('실패'); 
+        .catch((ex) => {
         });
     },
     sendRecording() {
-        console.log('sendRecording');
         var blob = new Blob(this.chunks, {'type': 'audio/webm;'});
         // clear chunks
         this.chunks = [];
@@ -138,16 +137,12 @@ export default {
                 
                 axios.post(this.$store.state.domain + '/record/sentence', formData2)
                   .then((res) => {
-                    console.log('element.content', element.content);
-                    
                   })
                   .catch((ex) => {
-                    console.log(ex);
                   })
               })
           })
-          .catch((ex) => { 
-            console.log('실패'); 
+          .catch((ex) => {
           })
           .then((res)=>{
             let self = this;
@@ -164,14 +159,13 @@ export default {
                   })
                 });
               })
-              .catch((ex) => { 
-                console.log('실패', ex.name, ex.message); 
+              .catch((ex) => {
               });
           })
     },
     startRecording(stream) {
         this.is_record = true;  
-        this.isRec = true;
+        // this.isRec = true;
         var self = this;
        
         recorder = new MediaRecorder(stream);
@@ -185,25 +179,21 @@ export default {
 
         // recorder setting
         recorder.onstart = function() {
-            console.log('this.recorder.onstart');
             self.audio_start_time = Date.now();
         };
 
         recorder.ondataavailable = function(e) {
-            console.log('this.recorder.ondataavailable');
-            self.chunks.push(e.data);
-            self.sendRecording();
+          setTimeout(() => {
+              self.chunks.push(e.data);
+              self.sendRecording();
+          }, 1000);  //delay loading
         };
 
         recorder.onstop = function(e) {
-            console.log('this.recorder.onstop');
         };
 
         recognition.onend = function() {
-            console.log('recognition.onend');
-          
             if(self.is_record == true) {
-                console.log('Recognition restart!');
                 recognition.start();
             }
         }
@@ -235,7 +225,6 @@ export default {
                 self.tmp_id ++;
             }
             else if(self.is_first_word == true) {
-
                 var word_start_time = Date.now() - self.audio_start_time;
                 
                 if(word_start_time > 2300)
@@ -249,17 +238,15 @@ export default {
                 self.update_sentence_text(event_object_list);
                 self.is_first_word = false;
             }
-            else {              
+            else {
                 self.update_sentence_text(event_object_list);
             }
         };
         
     },
     recBtnPressed(){
-      if(this.isRec){
+      if(this.is_record){
         this.is_record = false;
-        this.isRec = false;
-        console.log('End');
 
         recognition.stop();
         recorder.stop();
@@ -267,7 +254,6 @@ export default {
           track.stop();
         });
       }else{
-        console.log('Start');
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
           .then(this.startRecording)
           .catch((ex) => {
@@ -302,15 +288,17 @@ export default {
     },
   },
   beforeDestroy() {
-    this.is_record = false;
-    this.isRec = false;
-    console.log('End');
+    if(this.is_record){
+      recognition.stop();
+      recorder.stop();
+      this.is_record = false;
+    }
+    if(localstream!=undefined){
+      localstream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
 
-    recognition.stop();
-    recorder.stop();
-    localstream.getTracks().forEach((track) => {
-      track.stop();
-    });
     this.$store.state.isPlay = false;
     clearInterval(this.timerId)
     this.$store.state.audio.pause();

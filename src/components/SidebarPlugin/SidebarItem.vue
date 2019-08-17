@@ -4,16 +4,14 @@
     :to="link.path ? link.path : '/'"
     class="nav-item"
     :class="{ active: isActive }"
-    tag="li"
-  >
+    tag="li">
     <a
       v-if="isMenu"
       class="sidebar-menu-item nav-link"
       :class="{ active: isActive }"
       :aria-expanded="!collapsed"
       data-toggle="collapse"
-      @click.prevent="collapseMenu"
-    >
+      @click.prevent="collapseMenu">
       <template v-if="addLink">
         <span class="nav-link-text">
           {{ link.name }} <b class="caret"></b>

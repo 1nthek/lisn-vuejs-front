@@ -2,7 +2,7 @@
     <div>
       <!-- <RecSidebar></RecSidebar> -->
       <!-- <base-header></base-header> -->
-      <write-navbar v-on:saveNote="saveNote"></write-navbar>
+      <note-navbar v-on:saveNote="saveNote"></note-navbar>
       <Workspace ref="saveNote"></Workspace>
     </div>
 </template>
@@ -10,14 +10,14 @@
 <script>
 // import RecSidebar from './../components/RecSidebar.vue'
 import Workspace from './../components/Workspace.vue'
-import WriteNavbar from '../layout/WriteNavbar'
+import NoteNavbar from '../layout/NoteNavbar'
 import axios from 'axios'
 
 export default {
   components: {
     // RecSidebar,
     Workspace,
-    WriteNavbar,
+    NoteNavbar,
   },
   data(){
     return{
@@ -26,6 +26,16 @@ export default {
     }
   },
   created() {
+    let self = this;
+    gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          var auth2 = gapi.auth2.getAuthInstance();
+          if (auth2.isSignedIn.get() == false) {
+            self.$router.push('/home');
+          }
+        });
+    });
+
     this.$store.commit('setUserId', 'glisn_user_id');
     this.user_id = this.$store.state.user_id;
     this.$store.commit('setNoteId', 'glisn_note_id');
@@ -37,7 +47,7 @@ export default {
     this.$store.state.audio.src = "";
     this.$store.state.timeOffset =  0.000;
     
-    let self = this;
+    // let self = this;
     axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
       .then((res) => {
         self.$store.state.sttText = [];
@@ -54,7 +64,6 @@ export default {
         });
       })
       .catch((ex) => { 
-        console.log('실패'); 
       });
   },
   beforeDestroy() {

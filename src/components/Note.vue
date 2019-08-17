@@ -1,7 +1,7 @@
 <template>
   <vuescroll>
     <div class="lisn-note-container">
-      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -74,16 +74,16 @@
                 </div>
             </div>
         </template>
-        <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
+        <!-- <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
             <div style="display: block; fill: rgba(55, 53, 47, 0.3); flex-shrink: 0; backface-visibility: hidden; margin-right: 11px; margin-top: 1px;">
                 <i class="fas fa-plus"></i>
             </div>
             <div @click="addCell">
                 Add a Property
             </div>
-        </div>
+        </div> -->
     </div>
-    <yimoeditor v-model="content" class="ns-kr"></yimoeditor>
+    <editor ref="saveNote" :content="content"></editor>
     </vuescroll>
 </template>
 
@@ -93,7 +93,7 @@ import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
-
+import Editor from './Editor'
 
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
@@ -108,7 +108,8 @@ fecha.i18n = {
 }
 export default {
   components: {
-    DatePick
+    DatePick,
+    Editor,
   },
   data: () => ({
     format: 'YYYY.MM.DD ddd A h:mm',
@@ -135,48 +136,6 @@ export default {
         cellTitle: '종료 시간',
         cellContent: '2019.07.16 화 오후 3:30'
       },
-      // {
-      //   cellType: 'person',
-      //   cellTitle: '작성자',
-      //   cellContent: [{
-      //     personName: '강인덕'
-      //   }
-      //   ]
-      // },
-      // {
-      //   cellType: 'person',
-      //   cellTitle: '참석자',
-      //   cellContent: [{
-      //     personName: '강인덕'
-      //   },
-      //   {
-      //     personName: '이규용'
-      //   },
-      //   {
-      //     personName: '손정연'
-      //   }
-      //   ]
-      // },
-      // {
-      //   cellType: 'text',
-      //   cellTitle: '안건',
-      //   cellContent: 'OO을 위한 샘플리스트 작성'
-      // },
-      // {
-      //   cellType: 'text',
-      //   cellTitle: '회의 내용',
-      //   cellContent: '운영방침 및 방향성 파악'
-      // },
-      // {
-      //   cellType: 'text',
-      //   cellTitle: '결정 사항',
-      //   cellContent: 'OOO 업체와 계약'
-      // },
-      // {
-      //   cellType: 'text',
-      //   cellTitle: '향후일정',
-      //   cellContent: '2차 회의: 2019.07.17 10회의실에서 진행 예정'
-      // }
     ]
   }),
    watch: {
@@ -184,16 +143,13 @@ export default {
       this.title = newtitle;
     }
   },
+  beforeDestroy(){
+    this.$refs.saveNote.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+  },
   created(){
-    // window.addEventListener('beforeunload', this.handler)
     let self = this;
-    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
-      .then((res) => {
-        self.content = res.data.content;
-      })
-      .catch((ex) => { 
-        console.log('실패'); 
-      });
+    // window.addEventListener('beforeunload', function (event) {
+    // })
   },
   computed: {
     styleObject () {
@@ -237,22 +193,17 @@ export default {
   },
   watch: {
     popUp() {
-      console.log(this.$refs.date)
+      // console.log(this.$refs.date)
     }
   },
   methods: {
     saveNote(){
-      this.$store.commit('saveNote', { note_id: this.$store.state.note_id, title: this.$refs.noteTitle.innerHTML, content: this.content} );
+      this.$refs.saveNote.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
     },
     typing(e) {
     	this.title = e.target.value
     },
     addCell () {
-      // localStorage.setItem(JSON.stringify({
-      //   cellType: 'text',
-      //   cellTitle: '제목',
-      //   cellContent: ''
-      // }))
       this.cellData.push({
         cellType: 'text',
         cellTitle: '제목',
@@ -264,12 +215,6 @@ export default {
     },
     formatDate (dateObj, format) {
       return fecha.format(dateObj, format)
-    },
-    add22 (event) {
-      this.dX = event.target.getBoundingClientRect().x
-      this.dY = event.target.getBoundingClientRect().y
-      console.log(event.target)
-      this.popUp = !this.popUp
     },
     goBack () {
       if (!this.flag) {

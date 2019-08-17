@@ -9,7 +9,7 @@
           </h3>
         </div>
         <div class="create-bar">
-          <router-link to="/write">
+          <router-link to="/note">
               <div>
                   <v-btn class="create-btn"><i class="fas fa-plus"></i>&nbsp;&nbsp;New Project</v-btn>
               </div>

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Board from '../src/views/Board.vue'
-import WriteView from '../src/views/Write.vue'
+import List from '../src/views/List'
+import Note from '../src/views/Note'
 import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
 Vue.use(Router)
@@ -18,14 +18,14 @@ export default new Router({
       component: Home
     },
     {
-      path: '/board',
+      path: '/list',
       // name: 'HomeView',
-      component: Board
+      component: List
     },
     {
-      path: '/write',
+      path: '/note',
       // name: 'WriteView',
-      component: WriteView
+      component: Note
     },
     {
       path: '*',

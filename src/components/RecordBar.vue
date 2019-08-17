@@ -4,7 +4,7 @@
             <canvas id="canvas"></canvas>
             <div class="lisn-record-bar-container">
                 <div class="circlr-margin">
-                    <router-link to="/write" style="cursor:default">
+                    <router-link to="/note" style="cursor:default">
                         <div class="circlr">
                             <i class="fas fa-microphone fa-2x" ></i>
                         </div>
@@ -48,7 +48,6 @@ window.onload = function () {
     analyser.fftSize = 2048
 
     var bufferLength = analyser.frequencyBinCount
-    console.log(bufferLength)
 
     var dataArray = new Uint8Array(bufferLength)
 

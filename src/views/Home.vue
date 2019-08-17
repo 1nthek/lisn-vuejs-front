@@ -672,6 +672,18 @@ export default {
       navOpen: false,
     }
   },
+  created(){
+    setTimeout(() => {
+      gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          var auth2 = gapi.auth2.getAuthInstance();
+          if (auth2.isSignedIn.get() == true) {
+            location.href = "/#/list";
+          }
+        });
+      });
+    }, 300);  //delay loading
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
 
@@ -684,25 +696,19 @@ export default {
       auth2.attachClickHandler(document.getElementById('customBtn0'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
       
       auth2.attachClickHandler(document.getElementById('customBtn1'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
 
       auth2.attachClickHandler(document.getElementById('customBtn2'), {},
         function(googleUser) {
           self.onSignIn(googleUser);
-          console.log("Signed in: " + googleUser.getBasicProfile().getName());
         }, function(error) {
-          alert(JSON.stringify(error, undefined, 2));
       });
     });
   },
@@ -714,8 +720,7 @@ export default {
       this.scrolled = window.scrollY > 80;
     },
     onSignInError (error) {
-      // `error` contains any error occurred.
-      console.log('OH NOES', error)
+      // console.log('OH NOES', error)
     },
     onSignIn(googleUser){
       let self = this;
@@ -726,10 +731,9 @@ export default {
         .then((res) => {
           var user_id = res.data.user_id
           self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
-          self.$router.push('/board');
+          self.$router.push('/list');
         })
-        .catch((ex) => { 
-          console.log('실패'); 
+        .catch((ex) => {
         });
     }
   }

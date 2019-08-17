@@ -166,7 +166,6 @@ export default {
           self.$router.push('/home');
         })
         .catch((ex)=> {
-          console.log(ex);
         })
     },
     capitalizeFirstLetter(string) {

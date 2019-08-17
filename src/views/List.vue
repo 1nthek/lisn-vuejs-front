@@ -1,90 +1,51 @@
 <template>
     <div id="home">
-      <!-- <sidebar></sidebar> -->
       <side-bar>
-      <template slot-scope="props" slot="links">
-        <sidebar-item :link="{ name: '모든 노트', path: '/board', icon: 'ni ni-books' }"></sidebar-item>
-        <sidebar-item :link="{ name: '즐겨찾기', path: '/board', icon: 'fas fa-star' }"></sidebar-item>
-        <sidebar-item :link="{name: '공유된 노트', icon: 'ni ni-send',}">
-          <sidebar-item :link="{ name: 'Shared1', path: '/dashboard' }"></sidebar-item>
-          <sidebar-item :link="{ name: 'Shared2', path: '/alternative' }"></sidebar-item>
-        </sidebar-item>
+        <template slot-scope="props" slot="links">
+          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
+          <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }"></sidebar-item>
+          <sidebar-item :link="{ name: '공유된 노트', path: '/list', icon: 'ni ni-send' }"></sidebar-item>
+          <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }"></sidebar-item>
 
-        <sidebar-item :link="{name: '폴더',icon: 'ni ni-folder-17'}">
-          <sidebar-item :link="{ name: '폴더1', path: '/components/icons' }"/>
-          <sidebar-item :link="{ name: '폴더2', path: '/components/typography' }"/>
-
-          <!-- <sidebar-item :link="{ name: 'Multi Folder' }">
-            <sidebar-item :link="{ name: 'Folder3', path:'#!' }"/>
-            <sidebar-item :link="{ name: 'Folder4', path:'#a' }"/>
+          <!-- <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
+            <sidebar-item :link="{ name: '폴더1', path: '/components/icons' }"/>
+            <sidebar-item :link="{ name: '폴더2', path: '/components/typography' }"/>
           </sidebar-item> -->
-        </sidebar-item>
-      </template>
+        </template>
 
-      <template slot="links-after">
-        <hr class="my-3">
-        <!-- <h6 class="navbar-heading p-0 text-muted">Documentation</h6> -->
+        <template slot="links-after">
+          <hr class="my-3">
+          <!-- <h6 class="navbar-heading p-0 text-muted">Documentation</h6> -->
 
-        <ul class="navbar-nav mb-md-3">
-          <li class="nav-item">
-            <div class="nav-link">
-              <i class="fas fa-trash"></i>
-              <span class="nav-link-text">휴지통</span>
-            </div>
-          </li>
-        </ul>
-      </template>
-      <div class="menus2">
-        </div>
+          <ul class="navbar-nav mb-md-3">
+            <li class="nav-item">
+              <div class="nav-link">
+                <i class="fas fa-trash"></i>
+                <span class="nav-link-text">휴지통</span>
+              </div>
+            </li>
+          </ul>
+        </template>
     </side-bar>
     <div class="main-content">
       <!-- <base-header></base-header> -->
-      <board-navbar :type="$route.meta.navbarType"></board-navbar>
+      <list-navbar :type="$route.meta.navbarType"></list-navbar>
 
 
       <div @click="$sidebar.displaySidebar(false)">
           <div class="lisn-home-comp">
-            <!-- <div class="lisn-home-comp-container"> -->
                 <div class="notes-container" style="margin-bottom:30px">
-
-                    <!-- <paginated-tables></paginated-tables> -->
-                    <!-- <board-table title="All Notes"></board-table> -->
-                    <!-- <card body-classes="px-0 pb-0 pt-0" class="mb-0"> -->
-                        <!-- <template slot="header"> -->
-                          <div style="padding: 0;display: flex;justify-content: space-between;align-items: center;">
-                            <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
-                            <div class="create-bar">
-                                <button class="create-btn" @click="newPage()">
-                                  <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
-                                    + 새 노트
-                                  </div>
-                                </button>
+                    <div style="padding: 0;display: flex;justify-content: space-between;align-items: center;">
+                      <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
+                      <div class="create-bar">
+                          <button class="create-btn" @click="newPage()">
+                            <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
+                              + 새 노트
                             </div>
-
-                          </div>
-                        <!-- </template> -->
-                      <!-- <div>
-                          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-                            <div style="max-width: 300px;">
-                              <base-input v-model="searchQuery" prepend-icon="fas fa-search" placeholder="Search..."></base-input>
-                            </div>
-                          </div>
-                      </div> -->
-                    <!-- <div slot="footer" class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-                      <div class="flex-con" style="display: flex;align-items: center;justify-content: center;">
-                        <base-pagination
-                          class="pagination-no-border"
-                          v-model="pagination.currentPage"
-                          :per-page="pagination.perPage"
-                          :total="total">
-                        </base-pagination>
+                          </button>
                       </div>
-                      <div class="flex-con"></div>
-                    </div> -->
-                  <!-- </card>  -->
-                    
+                    </div>
                 </div>
-            <!-- </div> -->
           <div class="row">
             <div class="col-xl-3 col-md-6"  v-for="p in this.$store.state.noteList" :key="p.no">
               <stats-card :title="p.title"
@@ -112,20 +73,20 @@
 <script>
 // import Sidebar from '../components/Sidebar.vue'
 import StatsCard from '../components/Cards/StatsCard'
-import BoardNavbar from '../layout/BoardNavbar'
+import ListNavbar from '../layout/ListNavbar'
 import axios from 'axios'
 import { noteList } from '../api/api.js'
 import swal from 'sweetalert2';
 
 // import { FadeTransition } from 'vue2-transitions';
 // import BoardTable from './Tables/BoardTable'
-import PaginatedTables from './Tables/PaginatedTables'
+// import PaginatedTables from './Tables/PaginatedTables'
 
 export default {
   components: {
     // Sidebar,
-    PaginatedTables,
-    BoardNavbar,
+    // PaginatedTables,
+    ListNavbar,
     StatsCard
     // FadeTransition
     // BoardTable
@@ -136,6 +97,16 @@ export default {
     }
   },
   created() {
+    let self = this;
+    gapi.load('auth2', function () {
+      gapi.auth2.init().then(function () {
+        var auth2 = gapi.auth2.getAuthInstance();
+        if (auth2.isSignedIn.get() == false) {
+          self.$router.push('/home');
+        }
+      });
+    });
+
     this.$store.commit('setUserId', 'glisn_user_id');
     this.user_id = this.$store.state.user_id;
     this.$store.commit('getNoteList');
@@ -149,10 +120,9 @@ export default {
         .then((res) => {
           var note_id = res.data.note_id;
           self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
-          self.$router.push('/write');
+          self.$router.push('/note');
         })
-        .catch((ex) => { 
-          console.log('실패'); 
+        .catch((ex) => {
         });
     }
   },
