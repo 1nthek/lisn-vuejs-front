@@ -1,5 +1,5 @@
 <template>
-<div class="stt-container stt-show" style="overflow: hidden;" ref="container">
+<div class="stt-container stt-hidden" style="overflow: hidden;" ref="container">
   <div style="display: flex;margin-left: 8px;;font-size: 18px;">
     <div class="bar-icon" @click="minimizeSTT"><i class="fas fa-bars"></i></div>
   </div>
@@ -34,7 +34,7 @@ export default {
   data(){
     return{
       audioId: -1,
-      isMinimized: false,
+      isMinimized: true,
     }
   },
   watch:{

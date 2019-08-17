@@ -1,7 +1,7 @@
 <template>
   <vuescroll>
     <div class="lisn-note-container">
-      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -74,14 +74,14 @@
                 </div>
             </div>
         </template>
-        <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
+        <!-- <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
             <div style="display: block; fill: rgba(55, 53, 47, 0.3); flex-shrink: 0; backface-visibility: hidden; margin-right: 11px; margin-top: 1px;">
                 <i class="fas fa-plus"></i>
             </div>
             <div @click="addCell">
                 Add a Property
             </div>
-        </div>
+        </div> -->
     </div>
     <editor ref="saveNote" :content="content"></editor>
     </vuescroll>
