@@ -1,6 +1,6 @@
 
-<p align="center"><br><br><br><br>
-<img width="400" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/LISN_Logo(0818)-2.png" alt="Vue logo"><br></p>
+<p align="center"><br><br>
+<img width="400" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/LISN_Logo(0818)-2.png" alt="Vue logo"><br><br></p>
 
 ## Introduction
 `Listen Carefully` is the easiest way to ~~

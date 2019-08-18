@@ -184,6 +184,9 @@ export default {
 </script>
 
 <style>
+.swal2-container{
+  font-family: 'Noto Sans KR', sans-serif;
+}
 .tiptap{
   height: 100px;
 }

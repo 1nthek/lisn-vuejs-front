@@ -2,7 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // import { noteList } from '../api/api.js'
 import axios from 'axios'
-import { log } from 'util';
+// import { log } from 'util';
+import swal from 'sweetalert2';
+
 
 const UNAUTHORIZED = 401
 
@@ -36,12 +38,16 @@ export const store = new Vuex.Store({
   },
   mutations: {
     playSound(state) {
+      
       state.isPlay = true;
       state.audio.currentTime = state.timeOffset;
+      console.log('state.timeOffset', state.timeOffset);
       state.audio.play();
+      console.log('play');
+      
       state.timerId = setInterval(() => {
         var curTime = state.audio.currentTime;
-
+        console.log('curTime', curTime);
         state.hour = Math.floor(curTime / 3600);
         state.hour = (state.hour >= 10) ? state.hour : "0" + state.hour;
         state.minute = Math.floor((curTime / 60) % 60);
@@ -57,7 +63,18 @@ export const store = new Vuex.Store({
       formData.append('content', content);
       axios.put(state.domain + '/record/note', formData)
         .then((res) => {
-          // console.log('title and content are saved!');
+          const Toast = swal.mixin({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            // backdrop: `rgba(0,0,123,0.4)`,
+            timer: 1500
+          })
+
+          Toast.fire({
+            type: 'success',
+            title: '저장 완료'
+          })
         })
         .catch((ex) => {
           // console.log('저장 실패');

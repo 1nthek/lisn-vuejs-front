@@ -186,7 +186,7 @@ export default {
           setTimeout(() => {
               self.chunks.push(e.data);
               self.sendRecording();
-          }, 1000);  //delay loading
+          }, 3000);  //delay loading
         };
 
         recorder.onstop = function(e) {
@@ -262,7 +262,18 @@ export default {
       }
     },  
     playSound() {
-      this.$store.commit('playSound');
+      var audioId = JSON.parse(JSON.stringify(this.$store.state.sttText))[0].audioId;
+      axios.get(this.$store.state.domain + "/record/audio?audio_id=" + audioId)
+        .then((res) => {
+          this.$store.state.audio.src = res.data.data_url;
+          // this.$store.commit('setCurrentTime', {begin:0});
+          this.$store.commit('playSound');
+          this.$store.state.audio.play();
+        })
+        .catch((ex) => {
+        })
+      
+      // this.$store.commit('playSound');
 
       // this.$store.state.audio.currentTime = this.$store.state.timeOffset;
       // this.$store.state.audio.play();
