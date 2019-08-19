@@ -137,7 +137,7 @@ export default {
                 formData2.append('index', element.id);
                 formData2.append('audio_id', self.audio_id);
                 formData2.append('started_at', element.begin);
-                formData2.append('ended_at', 99999);
+                formData2.append('ended_at', 99999); 
                 formData2.append('content', element.content);
                 
                 axios.post(this.$store.state.domain + '/record/sentence', formData2)
