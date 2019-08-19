@@ -678,7 +678,7 @@ export default {
         gapi.auth2.init().then(function () {
           var auth2 = gapi.auth2.getAuthInstance();
           if (auth2.isSignedIn.get() == true) {
-            location.href = "/#/list";
+            location.href = "/list";
           }
         });
       });
