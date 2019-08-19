@@ -163,7 +163,7 @@ export default {
           self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
           auth2.signOut();
           auth2.disconnect();
-          self.$router.push('/home');
+          self.$router.push('/');
         })
         .catch((ex)=> {
         })

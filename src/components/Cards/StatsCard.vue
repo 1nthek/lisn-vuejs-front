@@ -54,15 +54,18 @@ export default {
         showCancelButton: true,
         confirmButtonClass: 'btn btn-success btn-fill',
         cancelButtonClass: 'btn btn-danger btn-fill',
-        confirmButtonText: '삭제!',
+        confirmButtonText: '삭제',
         cancelButtonText: '취소',
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
           this.deleteRow(note_id);
+          console.log('title');
+          console.log(title);
+          
           swal.fire({
-            title: '삭제!',
-            text: `You deleted ${title}`,
+            title: '삭제',
+            text: `노트 '${title}'를 삭제 하였습니다.`,
             type: 'success',
             confirmButtonClass: 'btn btn-success btn-fill',
             buttonsStyling: false

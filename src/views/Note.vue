@@ -46,6 +46,7 @@ export default {
     this.$store.state.second = '00';
     this.$store.state.audio.src = "";
     this.$store.state.timeOffset =  0.000;
+    this.$store.state.isRecordable =  true;
     
     // let self = this;
     axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
@@ -55,6 +56,8 @@ export default {
         self.$store.state.content = res.data.content;
 
         res.data.audios.forEach(element => {
+          this.$store.state.isRecordable = false;
+          
           var audio_id = element.audio_id;
           var sentences = element.sentences;
           var idx=0;

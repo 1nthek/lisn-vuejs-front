@@ -1,9 +1,20 @@
-# lisn
 
-> A Vue.js project
+<p align="center"><br><br>
+<img width="400" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/LISN_Logo(0818)-2.png" alt="Vue logo"><br><br></p>
 
-## Build Setup
+## Introduction
+`Listen Carefully` is the easiest way to ~~
 
+#### Browser Compatibility
+Vue.js supports all browsers that are [ES5-compliant](http://kangax.github.io/compat-table/es5/) (IE8 and below are not supported).
+
+## Key Features
+
+* aaa
+  - bbb
+* ccc :tada:
+
+## How To Use
 ``` bash
 # install dependencies
 npm install

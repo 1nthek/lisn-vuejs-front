@@ -77,7 +77,6 @@ export default {
           this.$store.state.audio.play();
         })
         .catch((ex) => {
-
         })
     },
   }

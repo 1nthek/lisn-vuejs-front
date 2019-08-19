@@ -2,22 +2,26 @@
   <div class="player-container">
     <div class="player">
       <div class="btn-container">
-        <div class="btn-record">
-          <template v-if="is_record">
-              <i class="far fa-stop-circle" @click="recBtnPressed()"></i>
-          </template>
-          <template v-else>
-            <i class="far fa-dot-circle" @click="recBtnPressed()"></i>
-          </template>
-        </div>
-        <div class="btn-play">
-          <template v-if="this.$store.state.isPlay">
-            <i class="far fa-pause-circle" @click.prevent="pauseSound()"></i>        
-          </template>
-          <template v-else>
-            <i class="far fa-play-circle" @click.prevent="playSound()"></i>
-          </template>
-        </div>
+        <template v-if="this.$store.state.isRecordable">
+          <div class="btn-record">
+            <template v-if="is_record">
+                <i class="far fa-stop-circle" @click="recBtnPressed()"></i>
+            </template>
+            <template v-else>
+              <i class="far fa-dot-circle" @click="recBtnPressed()"></i>
+            </template>
+          </div>
+        </template>
+        <template v-if="!this.$store.state.isRecordable">
+          <div class="btn-play">
+            <template v-if="this.$store.state.isPlay">
+              <i class="far fa-pause-circle" @click.prevent="pauseSound()"></i>        
+            </template>
+            <template v-else>
+              <i class="far fa-play-circle" @click.prevent="playSound()"></i>
+            </template>
+          </div>
+        </template>
       </div>
       <div class="time oswald">
         {{this.$store.state.hour}}:{{this.$store.state.minute}}:{{this.$store.state.second}}
@@ -40,6 +44,7 @@
 
 <script>
 import axios from 'axios'
+import swal from 'sweetalert2';
 
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -132,7 +137,7 @@ export default {
                 formData2.append('index', element.id);
                 formData2.append('audio_id', self.audio_id);
                 formData2.append('started_at', element.begin);
-                formData2.append('ended_at', 99999);
+                formData2.append('ended_at', 99999); 
                 formData2.append('content', element.content);
                 
                 axios.post(this.$store.state.domain + '/record/sentence', formData2)
@@ -164,6 +169,14 @@ export default {
           })
     },
     startRecording(stream) {
+        swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          type: 'warning',
+          title: '녹음 시작'
+        })
         this.is_record = true;  
         // this.isRec = true;
         var self = this;
@@ -186,7 +199,35 @@ export default {
           setTimeout(() => {
               self.chunks.push(e.data);
               self.sendRecording();
-          }, 1000);  //delay loading
+          }, 2500);  //delay loading
+
+          let timerInterval;
+          swal.fire({
+            title: '녹음 파일 저장중',
+            html: '<strong></strong>',
+            timer: 3000,
+            onBeforeOpen: () => {
+              swal.showLoading()
+              timerInterval = setInterval(() => {
+                swal.getContent().querySelector('strong')
+                  .textContent = swal.getTimerLeft()
+              }, 100)
+            },
+            onClose: () => {
+              clearInterval(timerInterval)
+            }
+          }).then((result) => {
+            if (
+              /* Read more about handling dismissals below */
+              result.dismiss === swal.DismissReason.timer
+            ) {
+              // console.log('I was closed by the timer')
+            }
+          })
+          setTimeout(() => {
+              self.chunks.push(e.data);
+              self.sendRecording();
+          }, 2500);  //delay loading
         };
 
         recorder.onstop = function(e) {
@@ -246,7 +287,17 @@ export default {
     },
     recBtnPressed(){
       if(this.is_record){
+        swal.fire({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1400,
+          type: 'success',
+          title: '녹음 종료'
+        })
+        
         this.is_record = false;
+        this.$store.state.isRecordable = false;
 
         recognition.stop();
         recorder.stop();
@@ -257,12 +308,30 @@ export default {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false })
           .then(this.startRecording)
           .catch((ex) => {
-            console.log('마이크가 연결되어 있지 않음'); 
+            swal.fire({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              type: 'error',
+              title: '마이크가 연결되어 있지 않습니다.'
+            })
         });
       }
     },  
     playSound() {
-      this.$store.commit('playSound');
+      var audioId = JSON.parse(JSON.stringify(this.$store.state.sttText))[0].audioId;
+      axios.get(this.$store.state.domain + "/record/audio?audio_id=" + audioId)
+        .then((res) => {
+          this.$store.state.audio.src = res.data.data_url;
+          // this.$store.commit('setCurrentTime', {begin:0});
+          this.$store.commit('playSound');
+          this.$store.state.audio.play();
+        })
+        .catch((ex) => {
+        })
+      
+      // this.$store.commit('playSound');
 
       // this.$store.state.audio.currentTime = this.$store.state.timeOffset;
       // this.$store.state.audio.play();
@@ -274,7 +343,7 @@ export default {
       this.$store.state.isPlay = false;
       this.$store.state.audio.pause();
       this.$store.state.timeOffset = this.$store.state.audio.currentTime;
-      clearInterval(this.timerId);
+      this.$store.commit('clearInter');
     },
     printTime() {
       var curTime = this.$store.state.audio.currentTime;
@@ -300,7 +369,7 @@ export default {
     }
 
     this.$store.state.isPlay = false;
-    clearInterval(this.timerId)
+    this.$store.commit('clearInter');
     this.$store.state.audio.pause();
   },
 }

@@ -144,7 +144,7 @@ export default {
     }
   },
   beforeDestroy(){
-    this.$refs.saveNote.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+    this.$refs.saveNote.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
   },
   created(){
     let self = this;

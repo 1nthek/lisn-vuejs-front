@@ -121,7 +121,7 @@ export default {
 </script>
 <style>
 .sidenav:hover {
-    max-width: 61px;
+    max-width: 61px !important;
 }
 #sidenav-logo g.logo-color1{
   fill: #000;
