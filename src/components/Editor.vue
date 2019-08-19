@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import swal from 'sweetalert2';
 import axios from 'axios'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
@@ -176,9 +177,39 @@ export default {
     this.editor.destroy()
   },
   methods: {
-    saveNote(note_id, noteTitle){
-      this.$store.commit('saveNote', { note_id: note_id, title: noteTitle, content: this.editor.getHTML()} );
-    }
+    saveNoteAuto(note_id, title){
+      var content = this.editor.getHTML();
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('title', title);
+      formData.append('content', content);
+      axios.put(this.$store.state.domain + '/record/note', formData)
+        .then((res) => {
+        })
+        .catch((ex) => {
+          console.log('저장 실패');
+        })
+    },
+    saveNote(note_id, title){
+      var content = this.editor.getHTML();
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('title', title);
+      formData.append('content', content);
+      axios.put(this.$store.state.domain + '/record/note', formData)
+        .then((res) => {
+          swal.fire({
+            position: 'center',
+            type: 'success',
+            title: '저장 완료',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        })
+        .catch((ex) => {
+          console.log('저장 실패');
+        })
+    },
   }
 }
 </script>

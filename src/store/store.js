@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
     noteList: [],
     noteTitle: "",
     content: "",
+    isRecordable: true,
     
     user_id: -1,
     note_id: -1,
@@ -37,17 +38,16 @@ export const store = new Vuex.Store({
     domain: 'https://li-sn.io/v1/api'
   },
   mutations: {
+    clearInter(state){
+      clearInterval(state.timerId);
+    },
     playSound(state) {
-      
       state.isPlay = true;
       state.audio.currentTime = state.timeOffset;
-      console.log('state.timeOffset', state.timeOffset);
       state.audio.play();
-      console.log('play');
       
       state.timerId = setInterval(() => {
         var curTime = state.audio.currentTime;
-        console.log('curTime', curTime);
         state.hour = Math.floor(curTime / 3600);
         state.hour = (state.hour >= 10) ? state.hour : "0" + state.hour;
         state.minute = Math.floor((curTime / 60) % 60);
@@ -55,30 +55,6 @@ export const store = new Vuex.Store({
         state.second = Math.floor(curTime % 60);
         state.second = (state.second >= 10) ? state.second : "0" + state.second;
       }, 1000)
-    },
-    saveNote(state, { note_id, title, content }){
-      var formData = new FormData();
-      formData.append('note_id', note_id);
-      formData.append('title', title);
-      formData.append('content', content);
-      axios.put(state.domain + '/record/note', formData)
-        .then((res) => {
-          const Toast = swal.mixin({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            // backdrop: `rgba(0,0,123,0.4)`,
-            timer: 1500
-          })
-
-          Toast.fire({
-            type: 'success',
-            title: '저장 완료'
-          })
-        })
-        .catch((ex) => {
-          // console.log('저장 실패');
-        })
     },
     setCookie(state, { name, value, exp }) {
       var date = new Date();
