@@ -1,14 +1,12 @@
 <template>
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
-      <player v-on:scrollSTT="scrollSTT"></player>
-      <div class="lisn-workspace-container workspace-width show">
-          <!-- <div class="stt-container"> -->
-            <s-t-t ref="scrollSTT"></s-t-t>
-          <!-- </div> -->
+      <!-- <player v-on:scrollSTT="scrollSTT"></player> -->
+      <div class="lisn-workspace-container workspace-width">
+          <s-t-t ref="stt"></s-t-t>
           <div class="divider"></div>
           <div class="note-container">
-            <Note ref="saveNote"></Note>
+              <Note ref="note"></Note>
           </div>
       </div>
     </div>
@@ -18,21 +16,27 @@
 <script>
 import Note from './Note.vue'
 import STT from './STT.vue'
-import Player from './Player.vue'
+// import Player from './Player.vue'
 
 
 export default {
   components: {
     Note,
     STT,
-    Player
+    // Player
   },
   methods:{
+    isRecording(para){
+      this.$refs.stt.isRecording(para);
+    },
+    openSTT(){
+      this.$refs.stt.openSTT();
+    },
     saveNote(){
-      this.$refs.saveNote.saveNote();
+      this.$refs.note.saveNote();
     },
     scrollSTT(){
-      this.$refs.scrollSTT.scrollSTT();
+      this.$refs.stt.scrollSTT();
     }
   }
 }
@@ -88,11 +92,9 @@ export default {
     height: 100vh;
     width: 100vw;
     margin: -7.4rem 0;
-    padding: 7.4rem 0 2.2rem 0;
+    padding: 9rem 0 0rem 0;
 }
 .note-container, .stt-container{
-    /* width: 100%; max-width: 700px; */
-    /* flex: 1; */
     height: auto;
     overflow: auto;
     background: white;
@@ -102,10 +104,14 @@ export default {
 .note-container{
     border-radius: 0 1rem  1rem 0;
     padding: 1rem 1rem 1rem 1rem;
-    flex: 1 1 auto;
+    flex: 1;
 }
 .stt-container{
     border-radius: 0.8rem 0 0 0.8rem;
     padding: 1rem 0rem 1rem 1rem;
+    flex: 0 !important;
+    overflow: hidden;
+    transition: all 0.6s ease;
+    min-width: 110px;
 }
 </style>

@@ -1,18 +1,17 @@
 <template>
-    <div id="home">
-      <side-bar>
+    <div style="background:white;height: inherit;">
+      <side-bar style="border: none;">
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
-          <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }"></sidebar-item>
-          <sidebar-item :link="{ name: '공유된 노트', path: '/list', icon: 'ni ni-send' }"></sidebar-item>
-          <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }"></sidebar-item>
+          <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item>
+          <sidebar-item :link="{ name: '공유된 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
+          <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
 
-          <!-- <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
-            <sidebar-item :link="{ name: '폴더1', path: '/components/icons' }"/>
-            <sidebar-item :link="{ name: '폴더2', path: '/components/typography' }"/>
-          </sidebar-item> -->
+          <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
+            <sidebar-item :link="{ name: '폴더1', path: '/list' }"/>
+            <sidebar-item :link="{ name: '폴더2', path: '/list' }"/>
+          </sidebar-item>
         </template>
-
         <template slot="links-after">
           <hr class="my-3">
           <!-- <h6 class="navbar-heading p-0 text-muted">Documentation</h6> -->
@@ -27,43 +26,46 @@
           </ul>
         </template>
     </side-bar>
+
     <div class="main-content">
       <!-- <base-header></base-header> -->
-      <list-navbar :type="$route.meta.navbarType"></list-navbar>
-
-
-      <div @click="$sidebar.displaySidebar(false)">
-          <div class="lisn-home-comp">
-                <div class="notes-container" style="margin-bottom:30px">
-                    <div style="padding: 0;display: flex;justify-content: space-between;align-items: center;">
-                      <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
-                      <div class="create-bar">
-                          <button class="create-btn" @click="newPage()">
-                            <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
-                              + 새 노트
-                            </div>
-                          </button>
+      <list-navbar ref="navbar" :type="$route.meta.navbarType"></list-navbar>
+      <div class="lisn-home-comp" @click="$sidebar.displaySidebar(false)">
+        <div class="notes-container">
+            <vuescroll>
+              <div style="margin-bottom:30px;width: 100%;background: white;">
+                  <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
+                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
+                    <button class="create-btn" @click="newPage()">
+                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
+                        + 새 노트
                       </div>
-                    </div>
-                </div>
-          <div class="row">
-            <div class="col-xl-3 col-md-6"  v-for="p in this.$store.state.noteList" :key="p.no">
-              <stats-card :title="p.title"
-                          :note_id="p.note_id"
-                          :summery="p.summery"
-                          type="gradient-orange"
-                          id="noteList"
-                          icon="fas fa-trash">
-
-                <template slot="footer">
-                  <div class="note-date ns-kr" style="font-weight: bold;">
-                    <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
-                    <span class="text-nowrap">{{ p.created_at }}</span>
+                    </button>
                   </div>
-                </template>
-              </stats-card>
+              </div>
+              <div class="cont-loader" ref="loader">
+                <div class="list-loader"></div>
+              </div>
+              <div class="row" style="visibility:hidden;margin:0" ref="contents">
+                  <div class="col-xl-3 col-md-6 ani-card"  v-for="p in this.$store.state.noteList" :key="p.no" >
+                    <stats-card :title="p.title"
+                                :note_id="p.note_id"
+                                :summery="p.summery"
+                                type="gradient-orange"
+                                id="noteList"
+                                icon="fas fa-trash"
+                                v-on:openNote="openNote()">
+
+                      <template slot="footer">
+                        <div class="note-date ns-kr" style="font-weight: bold;">
+                          <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
+                          <span class="text-nowrap">{{ p.created_at }}</span>
+                        </div>
+                      </template>
+                    </stats-card>
+                  </div>
             </div>
-          </div>
+           </vuescroll>
         </div>
       </div>
     </div>
@@ -76,7 +78,7 @@ import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
 import axios from 'axios'
 import { noteList } from '../api/api.js'
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 // import { FadeTransition } from 'vue2-transitions';
 // import BoardTable from './Tables/BoardTable'
@@ -87,7 +89,7 @@ export default {
     // Sidebar,
     // PaginatedTables,
     ListNavbar,
-    StatsCard
+    StatsCard,
     // FadeTransition
     // BoardTable
   },
@@ -98,25 +100,62 @@ export default {
   },
   created() {
     let self = this;
-    gapi.load('auth2', function () {
-      gapi.auth2.init().then(function () {
-        var auth2 = gapi.auth2.getAuthInstance();
-        if (auth2.isSignedIn.get() == false) {
-          self.$router.push('/home');
-        }
-      });
-    });
+    self.user_id = null;
+    self.$store.state.user_id = null;
+    setTimeout(() => {
+      gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          var auth2 = gapi.auth2.getAuthInstance();
+          if (auth2.isSignedIn.get() == true) {
+            self.$store.commit('setUserId', 'glisn_user_id');
+            self.user_id = self.$store.state.user_id;
+            if(self.$store.state.user_id == null){
+              axios.delete(self.$store.state.domain + '/signin/token')
+                .then((res) => {
+                    var auth2 = gapi.auth2.getAuthInstance();
+                    self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
+                    self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+                    auth2.signOut();
+                    auth2.disconnect();
+                    self.$router.push('/');
+                })
+                .catch((ex)=> {
+                })
+              self.$router.push('/');
+            }
+            else{
+              let ref = self.$refs['contents'];
+              ref.style.visibility = "visible";
+              ref = self.$refs['loader'];
+              ref.style.display = "none";
+              self.$store.commit('getNoteList');
+              if(self.$store.state.error){
+                  self.$router.push('/');
+              }
+            }
+          }
+          else{
+            self.$router.push('/home');
+          }
+        });
+      })
+    }, 300);  //delay loading
 
-    this.$store.commit('setUserId', 'glisn_user_id');
-    this.user_id = this.$store.state.user_id;
-    this.$store.commit('getNoteList');
+    // setTimeout(() => {
+    //   let ref = this.$refs['contents'];
+    //   ref.style.visibility = "visible";
+    //   ref = this.$refs['loader'];
+    //   ref.style.display = "none";
+    // }, 300);  //delay loading
+
+
   },
   methods: {
     newPage() {
       let self = this;
       var formData = new FormData();
       formData.append('user_id', this.$store.state.user_id);
-      axios.post( this.$store.state.domain + '/record/note', formData)
+      axios.post( this.$store.state.domain + '/note', formData)
         .then((res) => {
           var note_id = res.data.note_id;
           self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
@@ -130,6 +169,87 @@ export default {
 </script>
 
 <style>
+@media (min-width: 992px) { 
+  .notes-container{
+    padding-right: 2rem !important;
+    padding-left: 2rem !important;
+  }
+}
+
+@media (min-width: 1200px) { 
+  .notes-container{
+    padding-right: 2rem !important;
+    padding-left: 2rem !important;
+  }
+}
+
+.list-loader,
+.list-loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.list-loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid #e1207920;
+  border-right: 1.1em solid #e1207920;
+  border-bottom: 1.1em solid #e1207920;
+  border-left: 1.1em solid #e12079;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+div.ani-card{
+  animation-duration: 1s;
+  animation-delay: 0.3s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+  animation-name: listSlide;
+  animation-fill-mode: forwards;
+  opacity: 0;
+
+}
+@keyframes listSlide {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+}
+.cont-loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+div{
+  -ms-user-select: none; 
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
 .nav-link-text{
   font-weight: bold;
   font-size: 14px;
@@ -138,31 +258,25 @@ a {
     text-decoration: none !important;
 }
 #noteList:hover{
-    color: white;
-    background: #246c8f;
+    /* border: 1px solid navajowhite; */
+    background: navajowhite;
+    background: #EFEFEF;
+    /* box-shadow: 0px 6px 10px 4px rgba(0, 0, 0, 0.16); */
 }
 #noteList{
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    /* background: #098db3; */
+    /* border: 1px solid rgba(0, 0, 0, 0.03); */
+    background: #fafafa;
     /* background: #098db3a1; */
+    /* box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.04); */
     color: black;
     font-size: 20px;
-    transition: all .4s ease 0s;
-    border-radius: 0.5rem;
+    transition: background 300ms ease-in 0s;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
+    border-radius: 3px;
+    background: white;
 }
 #noteList .note-date{
     color: #525f7f;
-}
-#noteList:hover .note-date{
-    color: white;
-}
-#noteList H5{
-    color: #617386;
-    transition: all .4s ease 0s;
-}
-
-#noteList:hover H5{
-    color: rgb(167, 197, 229);
 }
 
 @media (min-width: 1200px){
@@ -192,14 +306,10 @@ a {
     display: flex;
     justify-content: space-between;
 }
-.create-bar{
-    padding: 12px;
-    margin-bottom: 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
+
 .create-btn{
-    background-color: #1867c0 !important;
-    border-color: #1867c0 !important;
+    background-color: #f1404b !important;
+    border-color: #f1404b !important;
     color: #fff !important;
     border-radius: 0.2rem;
 }
@@ -214,15 +324,25 @@ a {
     background: linear-gradient(to left,#281483,#83157b 60%,#bc158a);
 }
 @media (min-width: 1200px){
-  .g-sidenav-pinned .sidenav.fixed-left + .main-content {
-    margin-left: 250px;
+  .main-content {
+    margin-left: 250px !important;
+  }
+  .sidenav{
+    margin-left: 0px !important;
   }
 }
+.sidenav{
+    margin-left: -250px;
+}
+.g-sidenav-open .sidenav{
+    margin-left: 0px !important;
+}
 .lisn-home-comp{
-    padding-left: 2rem;
+    /* padding-left: 2rem;
     padding-top: 2rem;
     padding-bottom: 2rem;
-    padding-right: 2rem;
+    padding-right: 2rem; */
+    background: white;
 }
 .lisn-home-comp-container{
     display: flex;
@@ -234,12 +354,16 @@ a {
     padding: 6.5rem 0 0.9rem 0;
 }
 .notes-container{
-    /* flex: 1; */
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    height: 100vh;
     width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.5rem;
-    box-shadow: 0 0 1rem 0rem rgba(0,0,0,.05)!important;
+    margin: -5rem 0;
+    padding: 8rem 0 0rem 0;
     background: white;
+    position: absolute;
 }
 
 </style>

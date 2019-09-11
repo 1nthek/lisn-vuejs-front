@@ -24,6 +24,18 @@ Vue.use(vuescroll, {
       sizeStrategy: 'percent',
       detectResize: true
     },
+    bar: {
+      showDelay: 500,
+      onlyShowBarOnScroll: true,
+      keepShow: false,
+      background: '#c1c1c1',
+      opacity: 1,
+      hoverStyle: false,
+      specifyBorderRadius: false,
+      minSize: 0,
+      size: '6px',
+      disable: false
+    }
   },
   name: 'vuescroll' // customize component name, default -> vueScroll
 })

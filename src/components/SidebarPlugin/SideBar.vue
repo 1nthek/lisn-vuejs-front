@@ -1,15 +1,14 @@
 <template>
-  <div class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" style="overflow-x: hidden;" :data="backgroundColor">
+  <div class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" style="overflow-x: hidden;padding:0" :data="backgroundColor">
     <!-- @mouseenter="$sidebar.onMouseEnter()"@mouseleave="$sidebar.onMouseLeave()" -->
-    <div class="scrollbar-inner ns-kr" ref="sidebarScrollArea">
-      <div class="sidenav-header d-flex align-items-center">
+    <div class="scrollbar-inner ns-kr" style="padding: 24px 20px;background:#f0f0f0" ref="sidebarScrollArea">
+      <div style="padding-bottom: 20px;">
           <router-link to="/list">
-            <div id="sidenav-logo" class="navbar-brand" style="margin-left: -1rem;">
+            <div id="sidenav-logo" class="navbar-brand" style="padding: 0">
               <logo></logo>
             </div>
           </router-link>
-        <div class="ml-auto">
-          <!-- Sidenav toggler -->
+        <!-- <div class="ml-auto">
           <div class="sidenav-toggler d-none d-xl-block"
                :class="{'active': !$sidebar.isMinimized }"
                @click="minimizeSidebar">
@@ -19,10 +18,10 @@
               <i class="sidenav-toggler-line"></i>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
       <slot></slot>
-      <div class="navbar-inner">
+      <div class="navbar-inner" style="padding: 0 16px;">
         <ul class="navbar-nav">
           <slot name="links">
             <sidebar-item
@@ -103,8 +102,10 @@ export default {
   },
   methods: {
     minimizeSidebar() {
+      let docClasses = document.body.classList
       if (this.$sidebar) {
-        this.$sidebar.toggleMinimize();
+        docClasses.add('g-sidenav-pinned')
+        docClasses.add('g-sidenav-show')
       }
     }
   },
@@ -120,13 +121,13 @@ export default {
 };
 </script>
 <style>
-.sidenav:hover {
+.g-sidenav-hidden .sidenav:hover {
     max-width: 61px !important;
 }
 #sidenav-logo g.logo-color1{
   fill: #000;
 }
 #sidenav-logo g.logo-color2{
-  fill: #09b3af;
+  fill: black;
 }
 </style>

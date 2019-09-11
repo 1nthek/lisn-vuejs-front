@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import axios from 'axios'
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
@@ -166,7 +166,7 @@ export default {
   },
   created(){
     let self = this;
-    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
+    axios.get( this.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
       .then((res) => {
         self.editor.setContent(res.data.content)
       })
@@ -183,7 +183,9 @@ export default {
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
-      axios.put(this.$store.state.domain + '/record/note', formData)
+      formData.append('started_at', '2019/09/06/01/02/00');
+      formData.append('ended_at', '2019/09/06/01/03/00');
+      axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
         })
         .catch((ex) => {
@@ -196,14 +198,16 @@ export default {
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
-      axios.put(this.$store.state.domain + '/record/note', formData)
+      formData.append('started_at', '2019/09/06/01/02/00');
+      formData.append('ended_at', '2019/09/06/01/03/00');
+      axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
-          swal.fire({
+          Swal.fire({
             position: 'center',
             type: 'success',
             title: '저장 완료',
             showConfirmButton: false,
-            timer: 1500
+            timer: 1000
           })
         })
         .catch((ex) => {
@@ -215,7 +219,7 @@ export default {
 </script>
 
 <style>
-.swal2-container{
+.Swal2-container{
   font-family: 'Noto Sans KR', sans-serif;
 }
 .tiptap{

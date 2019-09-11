@@ -20,7 +20,6 @@
                 </dic>
             </div>
             <audio id="audio" controls></audio>
-        <!-- </transition> -->
     </div>
 </template>
 

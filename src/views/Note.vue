@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div style="background:#f0f0f0;height: 100vh;">
       <!-- <RecSidebar></RecSidebar> -->
       <!-- <base-header></base-header> -->
-      <note-navbar v-on:saveNote="saveNote"></note-navbar>
-      <Workspace ref="saveNote"></Workspace>
+      <note-navbar @scrollSTT="scrollSTT" @saveNote="saveNote" @openSTT="openSTT" @isRecording="isRecording"></note-navbar>
+      <Workspace ref="workspace"></Workspace>
     </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   data(){
     return{
       user_id: -1,
-      note_id: -1,
+      note_id: -1, 
     }
   },
   created() {
@@ -49,7 +49,7 @@ export default {
     this.$store.state.isRecordable =  true;
     
     // let self = this;
-    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.note_id)
+    axios.get( this.$store.state.domain + '/note?note_id=' + this.note_id)
       .then((res) => {
         self.$store.state.sttText = [];
         self.$store.state.noteTitle = res.data.title;
@@ -73,8 +73,17 @@ export default {
     
   },
   methods: {
+    isRecording(para){
+      this.$refs.workspace.isRecording(para);
+    },
+    openSTT(){
+      this.$refs.workspace.openSTT();
+    },
+    scrollSTT(){
+      this.$refs.workspace.scrollSTT();
+    },
     saveNote(){
-      this.$refs.saveNote.saveNote();
+      this.$refs.workspace.saveNote();
     }
   }
 }

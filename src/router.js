@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import List from '../src/views/List'
 import Note from '../src/views/Note'
 import NotFound from '../src/views/PageNotFound'
-import Home from '../src/views/Home'
+import Home2 from '../src/views/Home2'
 Vue.use(Router)
 
 export default new Router({
@@ -15,7 +15,7 @@ export default new Router({
     // },
     {
       path: '/',
-      component: Home
+      component: Home2
     },
     {
       path: '/list',

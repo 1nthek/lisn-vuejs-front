@@ -8,38 +8,24 @@ const SidebarStore = {
   breakpoint: 1200,
   hovered: false,
   displaySidebar(value) {
-    // console.log('displaySidebar');
-    
     if (window.innerWidth > this.breakpoint) {
       return;
     }
     this.showSidebar = value;
     let docClasses = document.body.classList
     if (value) {
-      docClasses.add('g-sidenav-pinned')
-      docClasses.add('g-sidenav-show')
-      docClasses.remove('g-sidenav-hidden')
+      docClasses.add('g-sidenav-open')
+
+      // docClasses.add('g-sidenav-pinned')
+      // docClasses.add('g-sidenav-show')
+      // docClasses.remove('g-sidenav-hidden')
     } else {
-      docClasses.add('g-sidenav-hidden')
-      docClasses.remove('g-sidenav-pinned')
-      docClasses.remove('g-sidenav-show')
+      docClasses.remove('g-sidenav-open')
+
+      // docClasses.add('g-sidenav-hidden')
+      // docClasses.remove('g-sidenav-pinned')
+      // docClasses.remove('g-sidenav-show')
     }
-  },
-  toggleMinimize() {
-    this.isMinimized = !this.isMinimized;
-    let docClasses = document.body.classList
-    if (this.isMinimized) {
-      docClasses.add('g-sidenav-hidden')
-      docClasses.remove('g-sidenav-pinned')
-      docClasses.remove('g-sidenav-show')
-    } else {
-      docClasses.add('g-sidenav-pinned')
-      docClasses.add('g-sidenav-show')
-      docClasses.remove('g-sidenav-hidden')
-    }
-    // if (this.hovered) {
-    //   docClasses.add('g-sidenav-show')
-    // }
   },
   // onMouseEnter() {
   //   this.hovered = true

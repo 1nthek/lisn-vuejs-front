@@ -24,13 +24,22 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
   export default {
     name: "card",
     methods: {
       openNote(note_id) {
+        this.$store.commit('initData');
         this.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
         this.$router.push('/note');
       },
+    },
+    data(){
+      return{
+        user_id: -1,
+        my_note_id: -1, 
+      }
     },
     props: {
       note_id: "",

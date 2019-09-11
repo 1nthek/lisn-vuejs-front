@@ -1,10 +1,10 @@
 <template>
-  <card class="card-stats" :show-footer-line="true" :note_id="note_id">
+  <card class="card-stats" :show-footer-line="true" :note_id="note_id" v-on:openNote="$emit('openNote')">
     <div class="row">
       <div class="col">
         <slot>
           <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
-          <h5 class="mb-0 ns-kr" v-if="summery">{{summery}}</h5>
+          <div class="mb-0 ns-kr summery">{{summery}}</div>
         </slot>
       </div>
 
@@ -26,7 +26,7 @@
 </template>
 <script>
 import Card from './Card.vue';
-import swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 import axios from 'axios'
 
 export default {
@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     handleDelete(note_id, title) {   
-      swal.fire({
+      Swal.fire({
         title: '휴지통으로 이동',
         text: `휴지통에서 완전히 삭제할 수 있습니다`,
         // type: 'warning',
@@ -59,34 +59,55 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          this.deleteRow(note_id);
-          console.log('title');
-          console.log(title);
-          
-          swal.fire({
+          this.deleteRow(note_id, title);
+        }
+      });
+    },
+    deleteRow(note_id, title) {
+      let self = this;
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      xhr.open('DELETE', this.$store.state.domain + '/note');
+      xhr.send(formData);
+      xhr.onload = function() {
+        if(xhr.status == 200){
+          Swal.fire({
             title: '삭제',
             text: `노트 '${title}'를 삭제 하였습니다.`,
             type: 'success',
             confirmButtonClass: 'btn btn-success btn-fill',
             buttonsStyling: false
           });
+          self.$store.commit('getNoteList');
         }
-      });
-    },
-    deleteRow(note_id) {
-      let self = this;
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append('note_id', note_id);
-      xhr.open('DELETE', this.$store.state.domain + '/record/note');
-      xhr.send(formData);
-      xhr.onload = function() {
-        self.$store.commit('getNoteList');
+        else{
+          Swal.fire({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            type: 'error',
+            title: '노트 삭제 실패',
+          });
+        }
       }
     }
   }
 }
 </script>
 <style scoped>
+/* .icon.icon-shape {
+  transition: background 300ms ease-in 0s;
+}
+.icon.icon-shape:hover {
+  background: #fb6340 !important;
+} */
+.summery{
+  font-weight:600;font-size: 12px;height: 17px;color: #617386;transition: all .4s ease 0s;
+}
 
+/* .summery:hover{
+    color: rgb(167, 197, 229);
+} */
 </style>

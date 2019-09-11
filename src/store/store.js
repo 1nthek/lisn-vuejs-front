@@ -1,10 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import { noteList } from '../api/api.js'
 import axios from 'axios'
-// import { log } from 'util';
-import swal from 'sweetalert2';
-
 
 const UNAUTHORIZED = 401
 
@@ -19,12 +15,13 @@ export const store = new Vuex.Store({
     timerId: null,
     audio: new Audio(),
     timeOffset: 0.000,
-    isPlay: false,
+    isPlaying: false,
 
     noteList: [],
     noteTitle: "",
     content: "",
     isRecordable: true,
+    error: false,
     
     user_id: -1,
     note_id: -1,
@@ -35,21 +32,53 @@ export const store = new Vuex.Store({
       end: "",
       audioId: "",
     }],
-    domain: 'https://li-sn.io/v1/api'
+    //staging server
+    // domain: 'http://54.180.117.235/v1/api'
+    //dev server
+    domain: 'http://54.180.86.133/api'
+    //real server
+    // domain: 'https://li-sn.io/v1/api'
   },
   mutations: {
+    initData(state){
+      if (state.timerId != null){
+        clearInterval(state.timerId);
+      }
+      state.audio.pause();
+      state.hour = '0';
+      state.minute = '00';
+      state.second = '00';
+
+      // state.timerId = null;
+      state.audio = new Audio();
+      state.timeOffset = 0.000;
+      state.isPlaying = false;
+
+      state.noteTitle = "";
+      state.content = "";
+      state.isRecordable = true;
+
+      state.note_id = -1;
+      state.sttText = [{
+        id: null,
+        content: "none",
+        begin: "",
+        end: "",
+        audioId: "",
+      }];
+    },
     clearInter(state){
       clearInterval(state.timerId);
     },
     playSound(state) {
-      state.isPlay = true;
+      state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
       
       state.timerId = setInterval(() => {
         var curTime = state.audio.currentTime;
         state.hour = Math.floor(curTime / 3600);
-        state.hour = (state.hour >= 10) ? state.hour : "0" + state.hour;
+        state.hour = (state.hour >= 10) ? state.hour :  state.hour;
         state.minute = Math.floor((curTime / 60) % 60);
         state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
         state.second = Math.floor(curTime % 60);
@@ -70,11 +99,13 @@ export const store = new Vuex.Store({
       state.note_id = value ? value[2] : null;
     },
     getNoteList(state) {
+      let self = this;
+      state.error = false;
       setTimeout(() => {
-        axios.get(state.domain + '/record/list?user_id=' + state.user_id)
+        axios.get(state.domain + '/list/note/all?user_id=' + state.user_id)
           .then(res => {
             res.data.notes.forEach(element => {
-              if(element.title==""){
+              if(element.title == ""){
                 element.title = "untitled";
               }
               var date1 = new Date(Date.parse(element.created_at));
@@ -84,10 +115,32 @@ export const store = new Vuex.Store({
             });
             state.noteList = res.data.notes;
           })
-          .catch(({ response }) => {
-            throw Error(response)
+          .catch((ex) => {
+            axios.delete(state.domain + '/signin/token')
+              .then((res) => {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                auth2.disconnect();
+                
+                state.error = true;
+              })
+              .catch((ex) => {
+              })
           })
         }, 300);  //delay loading
+    },
+    startCountingTimer(state){
+      state.timeOffset = 0;
+      state.timerId = setInterval(() => {
+        state.timeOffset = state.timeOffset + 1;
+        var curTime = state.timeOffset;
+        state.hour = Math.floor(curTime / 3600);
+        state.hour = (state.hour >= 10) ? state.hour :  state.hour;
+        state.minute = Math.floor((curTime / 60) % 60);
+        state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
+        state.second = Math.floor(curTime % 60);
+        state.second = (state.second >= 10) ? state.second : "0" + state.second;
+      }, 1000)
     },
     setCurrentTime(state, item) {
       var stamp = parseFloat(item.begin) / 1000;
@@ -97,7 +150,7 @@ export const store = new Vuex.Store({
       
       var curTime = stamp;
       state.hour = Math.floor(curTime / 3600);
-      state.hour = (state.hour >= 10) ? state.hour : "0" + state.hour;
+      state.hour = (state.hour >= 10) ? state.hour :  state.hour;
       state.minute = Math.floor((curTime / 60) % 60);
       state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
       state.second = Math.floor(curTime % 60);

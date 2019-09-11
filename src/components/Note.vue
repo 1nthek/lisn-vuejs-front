@@ -1,7 +1,9 @@
 <template>
   <vuescroll>
     <div class="lisn-note-container">
-      <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+      <div style="display: flex;justify-content: space-between;">
+        <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+      </div>
         <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -83,7 +85,7 @@
             </div>
         </div> -->
     </div>
-    <editor ref="saveNote" :content="content"></editor>
+    <Editor ref="editor" :content="content"></Editor>
     </vuescroll>
 </template>
 
@@ -138,13 +140,13 @@ export default {
       },
     ]
   }),
-   watch: {
-    title: function (newtitle) {
-      this.title = newtitle;
-    }
-  },
+  //  watch: {
+  //   title: function (newtitle) {
+  //     this.title = newtitle;
+  //   }
+  // },
   beforeDestroy(){
-    this.$refs.saveNote.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+    this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
   },
   created(){
     let self = this;
@@ -197,8 +199,12 @@ export default {
     }
   },
   methods: {
+    setEditer(){
+      // this.$refs.noteTitle.innerHTML = this.$store.state.noteTitle =="untitled"?"":this.$store.state.noteTitle;
+      // this.$refs.editor.setEditer();
+    },
     saveNote(){
-      this.$refs.saveNote.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+      this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
     },
     typing(e) {
     	this.title = e.target.value

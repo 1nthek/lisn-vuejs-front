@@ -5,10 +5,8 @@
     class="nav-item"
     :class="{ active: isActive }"
     tag="li">
-    <a
-      v-if="isMenu"
+    <a v-if="isMenu"
       class="sidebar-menu-item nav-link"
-      :class="{ active: isActive }"
       :aria-expanded="!collapsed"
       data-toggle="collapse"
       @click.prevent="collapseMenu">
@@ -18,8 +16,17 @@
         </span>
       </template>
       <template v-else>
-        <i :class="link.icon"></i>
-        <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
+        <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding-right: 10px;">
+          <div>
+            <i :class="link.icon" style="min-width: 2rem;"></i>
+            <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
+          </div>
+          <div id="add-folder-cont" style="visibility:hidden;opacity:0">
+            <div id="add-folder-btn" style="display: flex;align-items: center;justify-content:center;width: 20px;height: 20px;border: 1px solid rgba(55, 53, 57, 0.15);">
+              <i class="fas fa-plus" style="font-size: 14px;"></i>
+            </div>
+          </div>
+        </div>
       </template>
     </a>
 
@@ -27,8 +34,7 @@
       <div
         v-if="$slots.default || this.isMenu"
         v-show="!collapsed"
-        class="collapse show"
-      >
+        class="collapse show">
         <ul class="nav nav-sm flex-column">
           <slot></slot>
         </ul>
@@ -36,18 +42,16 @@
     </collapse-transition>
 
     <slot
-      name="title"
-      v-if="children.length === 0 && !$slots.default && link.path"
-    >
+      name="title" 
+      v-if="children.length === 0 && !$slots.default && link.path">
       <component
-        :to="link.path"
+        :to="link.path" 
         @click.native="linkClick"
         :is="elementType(link, false)"
         class="nav-link"
         :class="{ active: link.active }"
         :target="link.target"
-        :href="link.path"
-      >
+        :href="link.path">
         <template v-if="addLink">
           <span class="nav-link-text">{{ link.name }}</span>
         </template>
@@ -131,7 +135,7 @@ export default {
       return false;
     }
   },
-  methods: {
+    methods: {
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);
       this.children.splice(index, 0, item);
@@ -153,6 +157,7 @@ export default {
       return matches.join('');
     },
     linkClick() {
+      this.$emit('closeNote')
       if (
         this.autoClose &&
         this.$sidebar &&
@@ -192,5 +197,16 @@ export default {
 <style>
 .sidebar-menu-item {
   cursor: pointer;
+}
+.sidebar-menu-item,.nav-link{
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+#add-folder-cont{
+  transition: all 200ms ease-in 0s;
+}
+.nav-item.active:hover #add-folder-cont{
+  visibility: visible !important;
+  opacity:1 !important;
+  width: 20px;
 }
 </style>
