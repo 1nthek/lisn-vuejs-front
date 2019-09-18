@@ -21,10 +21,8 @@
             <i :class="link.icon" style="min-width: 2rem;"></i>
             <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
           </div>
-          <div id="add-folder-cont" style="visibility:hidden;opacity:0">
-            <div id="add-folder-btn" style="display: flex;align-items: center;justify-content:center;width: 20px;height: 20px;border: 1px solid rgba(55, 53, 57, 0.15);">
-              <i class="fas fa-plus" style="font-size: 14px;"></i>
-            </div>
+          <div id="add-folder-btn" @click.stop="addFolder()">
+            <i class="fas fa-plus" style="font-size: 14px;"></i>
           </div>
         </div>
       </template>
@@ -45,15 +43,40 @@
       name="title" 
       v-if="children.length === 0 && !$slots.default && link.path">
       <component
+        id="cont-folder"
         :to="link.path" 
-        @click.native="linkClick"
+        @click.self="linkClick"
         :is="elementType(link, false)"
         class="nav-link"
         :class="{ active: link.active }"
         :target="link.target"
         :href="link.path">
         <template v-if="addLink">
-          <span class="nav-link-text">{{ link.name }}</span>
+          <div  style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding-right: 10px;">
+            <div>
+              <span class="nav-link-text">{{ link.name }}</span>            
+            </div>
+            <div id="modify-folder-btn" @click="modifyFolder()" @mouseover="folderModify = true">
+              <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
+            </div>
+                      <div style="position: absolute;left: 150px;" v-show="folderModify">
+                      <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
+                      <div style="padding: 0;">
+                        <ul>
+                            <div class="dropdown-item" @mouseleave="folderModify = false" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
+                              <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
+                                <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
+                                  <i class="fas fa-edit"></i>
+                                </div>
+                                <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
+                                 <i class="fas fa-trash"></i>
+                                </div>
+                              </div>
+                            </div>
+                        </ul>
+                      </div>
+                    </div>
+          </div>
         </template>
         <template v-else>
           <i :class="link.icon"></i>
@@ -65,6 +88,10 @@
 </template>
 <script>
 import { CollapseTransition } from 'vue2-transitions';
+
+import axios from 'axios'
+import Swal from 'sweetalert2';
+
 
 export default {
   name: 'sidebar-item',
@@ -89,6 +116,14 @@ export default {
       },
       description:
         'Sidebar link. Can contain name, path, icon and other attributes. See examples for more info'
+    },
+    directory_id:{
+      type: Number,
+      default: -1,
+    },
+    directory_name:{
+      type: String,
+      default: "null",
     }
   },
   provide() {
@@ -107,7 +142,9 @@ export default {
   data() {
     return {
       children: [],
-      collapsed: true
+      collapsed: false,
+      folderModify: false,
+      // visibility: 'collapse',
     };
   },
   computed: {
@@ -135,7 +172,51 @@ export default {
       return false;
     }
   },
-    methods: {
+  methods: {
+    addFolder(){
+      console.log('add');
+      let self = this;
+      var formData = new FormData();
+      formData.append('user_id', this.$store.state.user_id);
+      axios.post( this.$store.state.domain + '/directory', formData)
+        .then((res) => {
+          console.log('res', res);
+          self.$store.commit('getDirectoryList');
+          // self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
+          // self.$router.push('/list');
+        })
+        .catch((ex) => {
+        });
+    },
+    modifyFolder(){
+      console.log('modi');
+      this.folderModify = true;
+      // this.visibility = 'visible';
+    },
+    deleteFolder(){
+      console.log('delete');
+      console.log(this.directory_id, this.directory_name);
+      
+      
+    },
+    renameFolder(){
+      console.log('rename');
+            const { value: ipAddress } = Swal.fire({
+              title: '변경할 폴더 이름',
+              input: 'text',
+              inputValue: this.directory_name,
+              showCancelButton: true,
+              inputValidator: (value) => {
+                if (!value) {
+                  return '폴더명을 작성해 합니다.'
+                }
+              }
+            })
+
+            if (ipAddress) {
+              Swal.fire(`Your IP address is ${ipAddress}`)
+            }
+    },
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);
       this.children.splice(index, 0, item);
@@ -195,18 +276,42 @@ export default {
 };
 </script>
 <style>
+.fold-icon{
+  transition: all 200ms ease-in 0s;
+}
+.fold-icon:hover{
+  background: lightgray;
+}
 .sidebar-menu-item {
   cursor: pointer;
 }
 .sidebar-menu-item,.nav-link{
   color: rgba(0, 0, 0, 0.6) !important;
 }
-#add-folder-cont{
-  transition: all 200ms ease-in 0s;
-}
-.nav-item.active:hover #add-folder-cont{
+.nav-item.active:hover #add-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
+}
+#add-folder-btn,#modify-folder-btn{
+  transition: all 200ms ease-in 0s;
+  display: flex;
+  align-items: center;
+  justify-content:center;
   width: 20px;
+  height: 20px;
+  border: 1px solid rgba(55, 53, 57, 0.15);
+  border-radius: 2px;
+  visibility:hidden;
+  opacity:0
+}
+#add-folder-btn:hover{
+  background: #DAD9D6;
+}
+#modify-folder-btn:hover{
+  background: #DAD9D6;
+}
+#cont-folder:hover #modify-folder-btn{
+  visibility: visible !important;
+  opacity:1 !important;
 }
 </style>

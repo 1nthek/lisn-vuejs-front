@@ -1,15 +1,20 @@
 <template>
     <div style="background:white;height: inherit;">
+      <div>appal</div>
       <side-bar style="border: none;">
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
           <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item>
-          <sidebar-item :link="{ name: '공유된 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
+          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
           <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
-            <sidebar-item :link="{ name: '폴더1', path: '/list' }"/>
-            <sidebar-item :link="{ name: '폴더2', path: '/list' }"/>
+            <template>
+              <div v-for="dir in $store.state.directories" :key="dir.directory_id">
+                <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
+              </div>
+            </template>
+            <!-- <sidebar-item :link="{ name: '폴더1', path: '/list' }"/> -->
           </sidebar-item>
         </template>
         <template slot="links-after">
@@ -26,7 +31,6 @@
           </ul>
         </template>
     </side-bar>
-
     <div class="main-content">
       <!-- <base-header></base-header> -->
       <list-navbar ref="navbar" :type="$route.meta.navbarType"></list-navbar>
@@ -110,17 +114,11 @@ export default {
             self.$store.commit('setUserId', 'glisn_user_id');
             self.user_id = self.$store.state.user_id;
             if(self.$store.state.user_id == null){
-              axios.delete(self.$store.state.domain + '/signin/token')
-                .then((res) => {
-                    var auth2 = gapi.auth2.getAuthInstance();
-                    self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
-                    self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
-                    auth2.signOut();
-                    auth2.disconnect();
-                    self.$router.push('/');
-                })
-                .catch((ex)=> {
-                })
+              var auth2 = gapi.auth2.getAuthInstance();
+              self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
+              self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+              auth2.signOut();
+              auth2.disconnect();
               self.$router.push('/');
             }
             else{
@@ -132,6 +130,7 @@ export default {
               if(self.$store.state.error){
                   self.$router.push('/');
               }
+              self.$store.commit('getDirectoryList');
             }
           }
           else{
@@ -158,7 +157,7 @@ export default {
       axios.post( this.$store.state.domain + '/note', formData)
         .then((res) => {
           var note_id = res.data.note_id;
-          self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
+          // self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
           self.$router.push('/note');
         })
         .catch((ex) => {

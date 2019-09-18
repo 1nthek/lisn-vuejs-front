@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
     content: "",
     isRecordable: true,
     error: false,
+    directories: [],
     
     user_id: -1,
     note_id: -1,
@@ -85,11 +86,11 @@ export const store = new Vuex.Store({
         state.second = (state.second >= 10) ? state.second : "0" + state.second;
       }, 1000)
     },
-    setCookie(state, { name, value, exp }) {
-      var date = new Date();
-      date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
-      document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-    },
+    // setCookie(state, { name, value, exp }) {
+    //   var date = new Date();
+    //   date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+    //   document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    // },
     setUserId(state, name) {
       var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
       state.user_id = value ? value[2] : null;
@@ -121,13 +122,22 @@ export const store = new Vuex.Store({
                 var auth2 = gapi.auth2.getAuthInstance();
                 auth2.signOut();
                 auth2.disconnect();
-                
                 state.error = true;
               })
               .catch((ex) => {
               })
           })
         }, 300);  //delay loading
+    },
+    getDirectoryList(state){
+      axios.get(state.domain + '/list/directory?user_id=' + state.user_id)
+        .then(res => {
+          console.log('디렉토리 리스트', res.data.directories);
+          state.directories = res.data.directories;
+        })
+        .catch((ex) => {
+          
+        })
     },
     startCountingTimer(state){
       state.timeOffset = 0;
