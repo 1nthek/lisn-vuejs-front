@@ -174,7 +174,6 @@ export default {
   },
   methods: {
     addFolder(){
-      console.log('add');
       let self = this;
       var formData = new FormData();
       formData.append('user_id', this.$store.state.user_id);
@@ -194,28 +193,41 @@ export default {
       // this.visibility = 'visible';
     },
     deleteFolder(){
-      console.log('delete');
-      console.log(this.directory_id, this.directory_name);
-      
-      
+      let self = this;
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+      formData.append('directory_id', this.directory_id);
+      xhr.open('DELETE', this.$store.state.domain + '/directory');
+      xhr.send(formData);
+      xhr.onload = function() {
+        self.$store.commit('getDirectoryList');        
+      }
     },
     renameFolder(){
-      console.log('rename');
-            const { value: ipAddress } = Swal.fire({
-              title: '변경할 폴더 이름',
-              input: 'text',
-              inputValue: this.directory_name,
-              showCancelButton: true,
-              inputValidator: (value) => {
-                if (!value) {
-                  return '폴더명을 작성해 합니다.'
-                }
-              }
-            })
+      Swal.fire({
+        title: '변경할 폴더 이름',
+        input: 'text',
+        inputValue: this.directory_name,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return '폴더명을 작성해 합니다.'
+          }
+          else{
+            let self = this;
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData();
+            formData.append('directory_id', this.directory_id);
+            formData.append('name', value);
 
-            if (ipAddress) {
-              Swal.fire(`Your IP address is ${ipAddress}`)
+            xhr.open('PUT', this.$store.state.domain + '/directory');
+            xhr.send(formData);
+            xhr.onload = function() {
+              self.$store.commit('getDirectoryList');                    
             }
+          }
+        }
+      })
     },
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);
