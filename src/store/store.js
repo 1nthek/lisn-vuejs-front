@@ -91,13 +91,13 @@ export const store = new Vuex.Store({
     //   date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
     //   document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
     // },
-    setUserId(state, name) {
-      var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      state.user_id = value ? value[2] : null;
+    setUserId(state) {
+      // var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      state.user_id = localStorage.getItem('glisn_user_id');
     },
-    setNoteId(state, name) {
-      var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      state.note_id = value ? value[2] : null;
+    setNoteId(state) {
+      // var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      state.note_id = localStorage.getItem('glisn_note_id');
     },
     getNoteList(state) {
       let self = this;

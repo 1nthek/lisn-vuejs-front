@@ -157,7 +157,6 @@ export default {
   },
   created(){
     let self = this;
-    this.$store.commit('setUserId', 'glisn_user_id');
     axios.get( this.$store.state.domain + '/profile?user_id=' + this.$store.state.user_id)
       .then((res) => {
         self.user_name = res.data.user_name;
@@ -170,8 +169,8 @@ export default {
   methods: {
     signOut(){
       var auth2 = gapi.auth2.getAuthInstance();
-      this.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
-      this.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+      localStorage.removeItem('glisn_user_id');
+      localStorage.removeItem('glisn_note_id');
       auth2.signOut();
       auth2.disconnect();
       this.$router.push('/');

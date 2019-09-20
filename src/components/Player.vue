@@ -137,15 +137,6 @@ export default {
     //   this.$store.commit('clearInter');
     //   this.$store.state.audio.pause();
     // },
-    setCookie(name, value, exp) {
-        var date = new Date();
-        date.setTime(date.getTime() + exp*24*60*60*1000);
-        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-    },
-    getCookie(name) {
-        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return value? value[2] : null;
-    },
     update_sentence_text(event_object_list) {
         // var sentence_tag = document.getElementById(tmp_sentence_id);
         var transcript = "";

@@ -179,18 +179,13 @@ export default {
       formData.append('user_id', this.$store.state.user_id);
       axios.post( this.$store.state.domain + '/directory', formData)
         .then((res) => {
-          console.log('res', res);
           self.$store.commit('getDirectoryList');
-          // self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
-          // self.$router.push('/list');
         })
         .catch((ex) => {
         });
     },
     modifyFolder(){
-      console.log('modi');
       this.folderModify = true;
-      // this.visibility = 'visible';
     },
     deleteFolder(){
       let self = this;

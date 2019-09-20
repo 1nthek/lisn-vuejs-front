@@ -111,12 +111,12 @@ export default {
         gapi.auth2.init().then(function () {
           var auth2 = gapi.auth2.getAuthInstance();
           if (auth2.isSignedIn.get() == true) {
-            self.$store.commit('setUserId', 'glisn_user_id');
+            self.$store.commit('setUserId');
             self.user_id = self.$store.state.user_id;
             if(self.$store.state.user_id == null){
               var auth2 = gapi.auth2.getAuthInstance();
-              self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
-              self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
+              localStorage.removeItem('glisn_user_id');
+              localStorage.removeItem('glisn_note_id');
               auth2.signOut();
               auth2.disconnect();
               self.$router.push('/');
@@ -156,8 +156,9 @@ export default {
       formData.append('user_id', this.$store.state.user_id);
       axios.post( this.$store.state.domain + '/note', formData)
         .then((res) => {
-          var note_id = res.data.note_id;
-          // self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
+          var note_id = res.data.note_id;          
+          localStorage.setItem('glisn_note_id', note_id);
+          self.$store.commit('setNoteId');
           self.$router.push('/note');
         })
         .catch((ex) => {

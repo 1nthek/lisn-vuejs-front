@@ -31,7 +31,8 @@ import axios from 'axios'
     methods: {
       openNote(note_id) {
         this.$store.commit('initData');
-        this.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
+        localStorage.setItem('glisn_note_id', note_id);
+        this.$store.commit('setNoteId');
         this.$router.push('/note');
       },
     },

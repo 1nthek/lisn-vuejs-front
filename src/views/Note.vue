@@ -30,44 +30,69 @@ export default {
     gapi.load('auth2', function () {
         gapi.auth2.init().then(function () {
           var auth2 = gapi.auth2.getAuthInstance();
-          if (auth2.isSignedIn.get() == false) {
-            self.$router.push('/home');
+          if (auth2.isSignedIn.get() == true) {            
+            self.$store.commit('setUserId');
+            self.user_id = self.$store.state.user_id;
+            
+            if(self.user_id == null){
+              var auth2 = gapi.auth2.getAuthInstance();
+              localStorage.removeItem('glisn_user_id');
+              localStorage.removeItem('glisn_note_id');
+              auth2.signOut();
+              auth2.disconnect();
+              self.$router.push('/');
+            }
+            else{
+              self.$store.commit('setNoteId');
+              self.note_id = self.$store.state.note_id;
+
+              if(self.note_id == null)
+                self.$router.push('/list');
+              else{
+                self.$store.state.hour = '0';
+                self.$store.state.minute = '00';
+                self.$store.state.second = '00';
+                self.$store.state.audio.src = "";
+                self.$store.state.timeOffset =  0.000;
+                self.$store.state.isRecordable =  true;
+                
+                axios.get( self.$store.state.domain + '/note?note_id=' + self.note_id)
+                  .then((res) => {
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    //여기!!!!!!!!!!!!
+                    // console.log(res.data);
+                    
+                    self.$store.state.sttText = [];
+                    self.$store.state.noteTitle = res.data.title;
+                    self.$store.state.content = res.data.content;
+
+                    res.data.audios.forEach(element => {
+                      self.$store.state.isRecordable = false;
+                      
+                      var audio_id = element.audio_id;
+                      var sentences = element.sentences;
+                      var idx=0;
+                      sentences.forEach(ele => {
+                        self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
+                      })
+                    });
+                  })
+                  .catch((ex) => { 
+                  });
+                }
+            }
+          }
+          else{
+            self.$router.push('/');
           }
         });
     });
 
-    this.$store.commit('setUserId', 'glisn_user_id');
-    this.user_id = this.$store.state.user_id;
-    this.$store.commit('setNoteId', 'glisn_note_id');
-    this.note_id = this.$store.state.note_id;
-
-    this.$store.state.hour = '0';
-    this.$store.state.minute = '00';
-    this.$store.state.second = '00';
-    this.$store.state.audio.src = "";
-    this.$store.state.timeOffset =  0.000;
-    this.$store.state.isRecordable =  true;
-    
-    // let self = this;
-    axios.get( this.$store.state.domain + '/note?note_id=' + this.note_id)
-      .then((res) => {
-        self.$store.state.sttText = [];
-        self.$store.state.noteTitle = res.data.title;
-        self.$store.state.content = res.data.content;
-
-        res.data.audios.forEach(element => {
-          this.$store.state.isRecordable = false;
-          
-          var audio_id = element.audio_id;
-          var sentences = element.sentences;
-          var idx=0;
-          sentences.forEach(ele => {
-            self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
-          })
-        });
-      })
-      .catch((ex) => { 
-      });
   },
   beforeDestroy() {
     

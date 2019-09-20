@@ -152,7 +152,7 @@ export default {
       axios.post( this.$store.state.domain + '/token/google', formData)
         .then((res) => {
           var user_id = res.data.user_id
-          self.$store.commit('setCookie', {name: 'glisn_user_id', value: user_id, exp: 365});
+          localStorage.setItem('glisn_user_id', user_id);
           self.$router.push('/list');
         })
         .catch((ex) => {
