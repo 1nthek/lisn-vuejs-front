@@ -81,7 +81,6 @@
 import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
 import axios from 'axios'
-import { noteList } from '../api/api.js'
 import Swal from 'sweetalert2';
 
 // import { FadeTransition } from 'vue2-transitions';

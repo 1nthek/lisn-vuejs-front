@@ -132,11 +132,9 @@ export const store = new Vuex.Store({
     getDirectoryList(state){
       axios.get(state.domain + '/list/directory?user_id=' + state.user_id)
         .then(res => {
-          console.log('디렉토리 리스트', res.data.directories);
           state.directories = res.data.directories;
         })
         .catch((ex) => {
-          
         })
     },
     startCountingTimer(state){

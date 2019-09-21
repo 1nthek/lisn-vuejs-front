@@ -157,6 +157,7 @@ export default {
   },
   created(){
     let self = this;
+    self.$store.commit('setUserId');
     axios.get( this.$store.state.domain + '/profile?user_id=' + this.$store.state.user_id)
       .then((res) => {
         self.user_name = res.data.user_name;

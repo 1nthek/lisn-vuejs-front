@@ -65,7 +65,6 @@ export default {
                     //여기!!!!!!!!!!!!
                     //여기!!!!!!!!!!!!
                     //여기!!!!!!!!!!!!
-                    // console.log(res.data);
                     
                     self.$store.state.sttText = [];
                     self.$store.state.noteTitle = res.data.title;
