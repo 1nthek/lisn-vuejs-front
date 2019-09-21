@@ -90,9 +90,15 @@ export default {
       xhr.open('PUT', this.$store.state.domain + '/note/directory');
       xhr.send(formData);
       xhr.onload = function() {
-        
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 1600,
+          type: 'success',
+          title: '폴더가 이동 되었습니다.'
+        })
       }
-      console.log(note_id, directory_id);
     },
     handleDelete(note_id, title) {   
       Swal.fire({

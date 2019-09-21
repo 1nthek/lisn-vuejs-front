@@ -26,6 +26,8 @@ export const store = new Vuex.Store({
     
     user_id: -1,
     note_id: -1,
+    directory_id: -1,
+    directory_name: "모든 노트",
     sttText: [{
       id: null,
       content: "none",
@@ -99,6 +101,9 @@ export const store = new Vuex.Store({
       // var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
       state.note_id = localStorage.getItem('glisn_note_id');
     },
+    setDirectoryName(state, directory_name){
+      state.directory_name = directory_name;
+    },
     getNoteList(state) {
       let self = this;
       state.error = false;
@@ -128,6 +133,36 @@ export const store = new Vuex.Store({
               })
           })
         }, 300);  //delay loading
+    },
+    getDirectoryNoteList(state, directory_id, directory_name) {
+      let self = this;
+      state.error = false;
+      setTimeout(() => {
+        axios.get(state.domain + '/list/note?directory_id=' + directory_id)
+          .then(res => {
+            res.data.notes.forEach(element => {
+              if (element.title == "") {
+                element.title = "untitled";
+              }
+              var date1 = new Date(Date.parse(element.created_at));
+              var date2 = new Date(Date.parse(element.updated_at));
+              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+            });
+            state.noteList = res.data.notes;
+          })
+          .catch((ex) => {
+            axios.delete(state.domain + '/signin/token')
+              .then((res) => {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                auth2.disconnect();
+                state.error = true;
+              })
+              .catch((ex) => {
+              })
+          })
+      }, 300);  //delay loading
     },
     getDirectoryList(state){
       axios.get(state.domain + '/list/directory?user_id=' + state.user_id)

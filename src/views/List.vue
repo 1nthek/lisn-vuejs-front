@@ -4,8 +4,8 @@
       <side-bar style="border: none;">
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
-          <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item>
-          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
+          <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
+          <!-- <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item> -->
           <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
@@ -39,7 +39,7 @@
             <vuescroll>
               <div style="margin-bottom:30px;width: 100%;background: white;">
                   <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
-                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
+                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{this.$store.state.directory_name}}</div>
                     <button class="create-btn" @click="newPage()">
                       <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
                         + 새 노트
@@ -99,6 +99,7 @@ export default {
   data() {
     return {
       user_id: -1,
+      list_title: 'null',
     }
   },
   created() {

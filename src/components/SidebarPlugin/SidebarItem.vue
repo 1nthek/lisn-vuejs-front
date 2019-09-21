@@ -51,31 +51,33 @@
         :class="{ active: link.active }"
         :target="link.target"
         :href="link.path">
-        <template v-if="addLink">
-          <div  style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding-right: 10px;">
-            <div>
-              <span class="nav-link-text">{{ link.name }}</span>            
-            </div>
-            <div id="modify-folder-btn" @click="modifyFolder()" @mouseover="folderModify = true">
-              <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
-            </div>
-                      <div style="position: absolute;left: 150px;" v-show="folderModify">
-                      <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
-                      <div style="padding: 0;">
-                        <ul>
-                            <div class="dropdown-item" @mouseleave="folderModify = false" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
-                              <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
-                                <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
-                                  <i class="fas fa-edit"></i>
-                                </div>
-                                <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
-                                 <i class="fas fa-trash"></i>
-                                </div>
-                              </div>
-                            </div>
-                        </ul>
+        <template v-if="addLink" >
+          <div id="folder-cont" @click="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
+            <div  style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 8px 38px 8px 54px">
+              <div>
+                <span class="nav-link-text" >{{ link.name }}</span>            
+              </div>
+              <div id="modify-folder-btn" @click="modifyFolder()" @mouseover="folderModify = true">
+                <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
+              </div>
+              <div style="position: absolute;left: 150px;" v-show="folderModify">
+                <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
+                <div style="padding: 0;">
+                  <ul>
+                    <div class="dropdown-item" @mouseleave="folderModify = false" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
+                      <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
+                        <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
+                          <i class="fas fa-edit"></i>
+                        </div>
+                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
+                          <i class="fas fa-trash"></i>
+                        </div>
                       </div>
                     </div>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </template>
         <template v-else>
@@ -173,6 +175,10 @@ export default {
     }
   },
   methods: {
+    getFolderList(){
+      this.$store.commit('getDirectoryNoteList', this.directory_id);
+      this.$store.commit('setDirectoryName', this.directory_name);
+    },
     addFolder(){
       let self = this;
       var formData = new FormData();
@@ -320,5 +326,11 @@ export default {
 #cont-folder:hover #modify-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
+}
+.nav.nav-sm.flex-column #cont-folder{
+  padding: 0 !important;
+}
+#folder-cont:hover{
+  background: rgb(233, 233, 233);
 }
 </style>
