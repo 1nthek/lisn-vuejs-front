@@ -58,6 +58,41 @@ export default {
   },
   methods: {
     moveDirectory(note_id){
+      var directory = {};
+      for (var i = 0; i < this.$store.state.directories.length; i++) {
+        directory[this.$store.state.directories[i].directory_id] = this.$store.state.directories[i].name;
+      }
+      
+      Swal.fire({
+        title: '해당 폴더로 이동',
+        input: 'select',
+        inputOptions: directory,
+        inputPlaceholder: '폴더 선택',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value === '') {
+              resolve('폴더를 선택해야 합니다')
+            } else {
+              this.moveDirectoryAPI(note_id, value);
+              resolve();
+            }
+          })
+        }
+      })
+    },
+    moveDirectoryAPI(note_id, directory_id){
+      let self = this;
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('directory_id', directory_id);
+      xhr.open('PUT', this.$store.state.domain + '/note/directory');
+      xhr.send(formData);
+      xhr.onload = function() {
+        
+      }
+      console.log(note_id, directory_id);
     },
     handleDelete(note_id, title) {   
       Swal.fire({
