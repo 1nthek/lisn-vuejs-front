@@ -19,6 +19,8 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+    note_started_at: "",
+    note_ended_at: "",
     content: "",
     isRecordable: true,
     error: false,
@@ -107,6 +109,8 @@ export const store = new Vuex.Store({
     getNoteList(state) {
       let self = this;
       state.error = false;
+      
+      state.directory_id = -1;
       setTimeout(() => {
         axios.get(state.domain + '/list/note/all?user_id=' + state.user_id)
           .then(res => {
@@ -137,9 +141,12 @@ export const store = new Vuex.Store({
     getDirectoryNoteList(state, directory_id, directory_name) {
       let self = this;
       state.error = false;
+      state.directory_id = directory_id;
       setTimeout(() => {
         axios.get(state.domain + '/list/note?directory_id=' + directory_id)
           .then(res => {
+            console.log(res);
+            
             res.data.notes.forEach(element => {
               if (element.title == "") {
                 element.title = "untitled";

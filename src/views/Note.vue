@@ -58,17 +58,11 @@ export default {
                 
                 axios.get( self.$store.state.domain + '/note?note_id=' + self.note_id)
                   .then((res) => {
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    //여기!!!!!!!!!!!!
-                    
                     self.$store.state.sttText = [];
                     self.$store.state.noteTitle = res.data.title;
                     self.$store.state.content = res.data.content;
+                    self.$store.state.note_started_at = res.data.started_at;
+                    self.$store.state.note_ended_at = res.data.ended_at;
 
                     res.data.audios.forEach(element => {
                       self.$store.state.isRecordable = false;

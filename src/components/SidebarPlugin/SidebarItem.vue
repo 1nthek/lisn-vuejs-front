@@ -43,7 +43,7 @@
       name="title" 
       v-if="children.length === 0 && !$slots.default && link.path">
       <component
-        id="cont-folder"
+      style="padding:0"
         :to="link.path" 
         @click.self="linkClick"
         :is="elementType(link, false)"
@@ -52,37 +52,37 @@
         :target="link.target"
         :href="link.path">
         <template v-if="addLink" >
-          <div id="folder-cont" @click="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
-            <div  style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 8px 38px 8px 54px">
+          <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
+            <div @click.self="getFolderList()" @mouseover.self="folderModify = false" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 4px 16px 4px 52px">
               <div>
-                <span class="nav-link-text" >{{ link.name }}</span>            
+                <span class="nav-link-text" @click.self="getFolderList()" >{{ link.name }}</span>            
               </div>
-              <div id="modify-folder-btn" @click="modifyFolder()" @mouseover="folderModify = true">
+              <div id="modify-folder-btn" @mouseover="folderModify = true">
                 <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
               </div>
-              <div style="position: absolute;left: 150px;" v-show="folderModify">
+              <div style="position: absolute;left: 150px;" v-show="folderModify" >
                 <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
-                <div style="padding: 0;">
-                  <ul>
-                    <div class="dropdown-item" @mouseleave="folderModify = false" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
+                <div style="margin-left: 30px;" @mouseleave="folderModify = false">
+                    <div class="dropdown-item" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
                       <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
                         <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
-                          <i class="fas fa-edit"></i>
+                          <i class="fas fa-edit" @click="renameFolder()"></i>
                         </div>
                         <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
-                          <i class="fas fa-trash"></i>
+                          <i class="fas fa-trash" @click="deleteFolder()"></i>
                         </div>
                       </div>
                     </div>
-                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </template>
         <template v-else>
-          <i :class="link.icon"></i>
-          <span class="nav-link-text">{{ link.name }}</span>
+          <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="tmptmp">
+            <i :class="link.icon" ></i>
+            <span class="nav-link-text" style="padding-left: 18px;" @click="tmptmp">{{ link.name }}</span>
+          </div>
         </template>
       </component>
     </slot>
@@ -175,6 +175,10 @@ export default {
     }
   },
   methods: {
+    tmptmp(){
+      this.$store.commit('getNoteList');
+      this.$store.commit('setDirectoryName', "모든 노트");
+    },
     getFolderList(){
       this.$store.commit('getDirectoryNoteList', this.directory_id);
       this.$store.commit('setDirectoryName', this.directory_name);
@@ -189,9 +193,6 @@ export default {
         })
         .catch((ex) => {
         });
-    },
-    modifyFolder(){
-      this.folderModify = true;
     },
     deleteFolder(){
       let self = this;
@@ -224,7 +225,9 @@ export default {
             xhr.open('PUT', this.$store.state.domain + '/directory');
             xhr.send(formData);
             xhr.onload = function() {
-              self.$store.commit('getDirectoryList');                    
+              self.$store.commit('getDirectoryList');
+              self.$store.commit('getDirectoryNoteList', self.directory_id);
+              self.$store.commit('setDirectoryName', value);
             }
           }
         }
@@ -317,18 +320,27 @@ export default {
   visibility:hidden;
   opacity:0
 }
+.cont2{
+  transition: all 200ms ease-in 0s;
+}
+.cont2:hover{
+  background: rgb(233, 233, 233);
+}
 #add-folder-btn:hover{
   background: #DAD9D6;
 }
 #modify-folder-btn:hover{
   background: #DAD9D6;
 }
-#cont-folder:hover #modify-folder-btn{
+#folder-cont:hover #modify-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
 }
-.nav.nav-sm.flex-column #cont-folder{
+/* .nav.nav-sm.flex-column #cont-folder{
   padding: 0 !important;
+} */
+#folder-cont{
+  transition: all 200ms ease-in 0s;
 }
 #folder-cont:hover{
   background: rgb(233, 233, 233);

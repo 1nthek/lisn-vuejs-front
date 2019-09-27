@@ -4,7 +4,45 @@
       <div style="display: flex;justify-content: space-between;">
         <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
       </div>
-        <template v-for="item in cellData" v-if="item.cellType === 'date'">
+              <div class="cell">
+                <div class="date-cell">
+                    <div class="cell-title-container">
+                        <div class="cell-title">
+                            <div class="cell-title-inner">
+                                <div class="cell-title-img">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                                <div contenteditable="true" class="cell-title-text"> 시작 시간 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell-data-container">
+                        <div class="cell-data">
+                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="cell">
+                <div class="date-cell">
+                    <div class="cell-title-container">
+                        <div class="cell-title">
+                            <div class="cell-title-inner">
+                                <div class="cell-title-img">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                                <div contenteditable="true" class="cell-title-text"> 종료 시간 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell-data-container">
+                        <div class="cell-data">
+                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                        </div>
+                    </div>
+                </div>
+              </div>
+        <!-- <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
                     <div class="cell-title-container">
@@ -20,7 +58,7 @@
                     <div class="cell-data-container">
                         <div class="cell-data">
                             <date-pick v-model="item.cellContent" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange" :format="format"></date-pick>
-                            <!-- <date-pick v-model="item.cellContent" :pickTime="pickTime" :key="id" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange" :format="format"></date-pick> -->
+                            <date-pick v-model="item.cellContent" :pickTime="pickTime" :key="id" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange" :format="format"></date-pick>
                         </div>
                     </div>
                 </div>
@@ -75,7 +113,7 @@
                     </div>
                 </div>
             </div>
-        </template>
+        </template> -->
         <!-- <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
             <div style="display: block; fill: rgba(55, 53, 47, 0.3); flex-shrink: 0; backface-visibility: hidden; margin-right: 11px; margin-top: 1px;">
                 <i class="fas fa-plus"></i>
@@ -114,7 +152,7 @@ export default {
     Editor,
   },
   data: () => ({
-    format: 'YYYY.MM.DD ddd A h:mm',
+    format: 'YYYY.MM.DD ddd A hh:mm',
     date: fecha.format(new Date(), this.format),
     popUp: false,
     flag: false,
@@ -123,22 +161,24 @@ export default {
 
     user_id: -1,
     note_id: -1,
+    note_started_at: "",
+    note_ended_at: "",
     content: "",
 
     title: "제목",
-    data: [],
-    cellData: [
-      {
-        cellType: 'date',
-        cellTitle: '시작 시간',
-        cellContent: '2019.07.16 화 오후 1:00'
-      },
-      {
-        cellType: 'date',
-        cellTitle: '종료 시간',
-        cellContent: '2019.07.16 화 오후 3:30'
-      },
-    ]
+    // data: [],
+    // cellData: [
+    //   {
+    //     cellType: 'date',
+    //     cellTitle: '시작 시간',
+    //     cellContent: '2019.07.16 화 오후 1:00'
+    //   },
+    //   {
+    //     cellType: 'date',
+    //     cellTitle: '종료 시간',
+    //     cellContent: '2019.07.16 화 오후 3:30'
+    //   },
+    // ]
   }),
   //  watch: {
   //   title: function (newtitle) {
@@ -146,10 +186,42 @@ export default {
   //   }
   // },
   beforeDestroy(){
-    this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+    var year = this.note_started_at.substr(0,4);
+    var month = this.note_started_at.substr(5,2);
+    var day = this.note_started_at.substr(8,2);
+    var ampm = this.note_started_at.substr(13,2);
+    var hour = this.note_started_at.substr(16,2);
+    var minute = this.note_started_at.substr(19,2);
+    if(ampm=="오후")
+      hour= parseInt(hour)+12;
+    var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+    
+    year = this.note_ended_at.substr(0,4);
+    month = this.note_ended_at.substr(5,2);
+    day = this.note_ended_at.substr(8,2);
+    ampm = this.note_ended_at.substr(13,2);
+    hour = this.note_ended_at.substr(16,2);
+    minute = this.note_ended_at.substr(19,2);
+    if(ampm=="오후")
+      hour= parseInt(hour)+12;
+    var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+
+    this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
   },
   created(){
     let self = this;
+    this.$store.commit('setNoteId');
+    axios.get( self.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
+      .then((res) => {
+        self.$store.state.note_started_at = res.data.started_at;
+        self.$store.state.note_ended_at = res.data.ended_at;
+
+        self.note_started_at = fecha.format(new Date(res.data.started_at), 'YYYY.MM.DD ddd A hh:mm');
+        self.note_ended_at = fecha.format(new Date(res.data.ended_at), 'YYYY.MM.DD ddd A hh:mm');
+      })
+      .catch((ex) => { 
+      });
+    // this.note_ended_at = this.$store.state.note_ended_at;
     // window.addEventListener('beforeunload', function (event) {
     // })
   },
@@ -204,7 +276,27 @@ export default {
       // this.$refs.editor.setEditer();
     },
     saveNote(){
-      this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML);
+      var year = this.note_started_at.substr(0,4);
+      var month = this.note_started_at.substr(5,2);
+      var day = this.note_started_at.substr(8,2);
+      var ampm = this.note_started_at.substr(13,2);
+      var hour = this.note_started_at.substr(16,2);
+      var minute = this.note_started_at.substr(19,2);
+      if(ampm=="오후")
+        hour= parseInt(hour)+12;
+      var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+      
+      year = this.note_ended_at.substr(0,4);
+      month = this.note_ended_at.substr(5,2);
+      day = this.note_ended_at.substr(8,2);
+      ampm = this.note_ended_at.substr(13,2);
+      hour = this.note_ended_at.substr(16,2);
+      minute = this.note_ended_at.substr(19,2);
+      if(ampm=="오후")
+        hour= parseInt(hour)+12;
+      var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+
+      this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
     },
     typing(e) {
     	this.title = e.target.value
@@ -261,6 +353,8 @@ div.vdpComponent.vdpWithInput :focus{
     display: inline-block;
     font-size: 14px;
     color: #303030;
+    width: 110%;
+    padding: 0px;
 }
 .vdpComponent.vdpWithInput>button{
     display: none;

@@ -1,6 +1,5 @@
 <template>
     <div style="background:white;height: inherit;">
-      <div>appal</div>
       <side-bar style="border: none;">
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>

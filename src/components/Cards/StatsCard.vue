@@ -98,7 +98,14 @@ export default {
           type: 'success',
           title: '폴더가 이동 되었습니다.'
         })
+        console.log(self.$store.state.directory_id);
+        if(self.$store.state.directory_id==-1){
+          
+        }else{
+          self.$store.commit('getDirectoryNoteList', self.$store.state.directory_id);
+        }
       }
+
     },
     handleDelete(note_id, title) {   
       Swal.fire({

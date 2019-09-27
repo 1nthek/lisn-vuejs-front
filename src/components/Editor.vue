@@ -177,14 +177,14 @@ export default {
     this.editor.destroy()
   },
   methods: {
-    saveNoteAuto(note_id, title){
+    saveNoteAuto(note_id, title, started_at, ended_at){
       var content = this.editor.getHTML();
       var formData = new FormData();
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('started_at', '2019/09/06/01/02/00');
-      formData.append('ended_at', '2019/09/06/01/03/00');
+      formData.append('started_at', started_at);
+      formData.append('ended_at', ended_at);
       axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
         })
@@ -192,14 +192,14 @@ export default {
           console.log('저장 실패');
         })
     },
-    saveNote(note_id, title){
+    saveNote(note_id, title, started_at, ended_at){
       var content = this.editor.getHTML();
       var formData = new FormData();
       formData.append('note_id', note_id);
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('started_at', '2019/09/06/01/02/00');
-      formData.append('ended_at', '2019/09/06/01/03/00');
+      formData.append('started_at', started_at);
+      formData.append('ended_at', ended_at);
       axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
           Swal.fire({
@@ -246,6 +246,7 @@ div.tiptap strong{
   font-weight: bold;
 }
 .ProseMirror{
-  min-height: 600px;
+  min-height: 500px;
+  position: inherit;
 }
 </style>
