@@ -185,6 +185,11 @@ export default {
       formData.append('content', content);
       formData.append('started_at', started_at);
       formData.append('ended_at', ended_at);
+
+      console.log("started_at", started_at);
+      console.log("ended_at", ended_at);
+
+      
       axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
         })
@@ -200,6 +205,10 @@ export default {
       formData.append('content', content);
       formData.append('started_at', started_at);
       formData.append('ended_at', ended_at);
+
+      console.log("started_at", started_at);
+      console.log("ended_at", ended_at);
+      
       axios.put(this.$store.state.domain + '/note', formData)
         .then((res) => {
           Swal.fire({

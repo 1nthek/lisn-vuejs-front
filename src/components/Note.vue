@@ -187,24 +187,26 @@ export default {
   // },
   beforeDestroy(){
     var year = this.note_started_at.substr(0,4);
-    var month = this.note_started_at.substr(5,2);
+    var month = parseInt(this.note_started_at.substr(5,2))-1;
     var day = this.note_started_at.substr(8,2);
     var ampm = this.note_started_at.substr(13,2);
     var hour = this.note_started_at.substr(16,2);
     var minute = this.note_started_at.substr(19,2);
-    if(ampm=="오후")
+    if(ampm=="오후"){
       hour= parseInt(hour)+12;
+    }
+      
     var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
     
     year = this.note_ended_at.substr(0,4);
-    month = this.note_ended_at.substr(5,2);
+    month = parseInt(this.note_ended_at.substr(5,2))-1;
     day = this.note_ended_at.substr(8,2);
     ampm = this.note_ended_at.substr(13,2);
     hour = this.note_ended_at.substr(16,2);
     minute = this.note_ended_at.substr(19,2);
-    if(ampm=="오후")
+    if(ampm == "오후")
       hour= parseInt(hour)+12;
-    var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+    var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
 
     this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
   },
@@ -215,6 +217,8 @@ export default {
       .then((res) => {
         self.$store.state.note_started_at = res.data.started_at;
         self.$store.state.note_ended_at = res.data.ended_at;
+        console.log('res.data.started_at', res.data.started_at);
+        
 
         self.note_started_at = fecha.format(new Date(res.data.started_at), 'YYYY.MM.DD ddd A hh:mm');
         self.note_ended_at = fecha.format(new Date(res.data.ended_at), 'YYYY.MM.DD ddd A hh:mm');
@@ -277,24 +281,26 @@ export default {
     },
     saveNote(){
       var year = this.note_started_at.substr(0,4);
-      var month = this.note_started_at.substr(5,2);
+      var month = parseInt(this.note_started_at.substr(5,2))-1;
       var day = this.note_started_at.substr(8,2);
       var ampm = this.note_started_at.substr(13,2);
       var hour = this.note_started_at.substr(16,2);
       var minute = this.note_started_at.substr(19,2);
-      if(ampm=="오후")
+      if(ampm=="오후"){
         hour= parseInt(hour)+12;
+      }
+        
       var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
       
       year = this.note_ended_at.substr(0,4);
-      month = this.note_ended_at.substr(5,2);
+      month = parseInt(this.note_ended_at.substr(5,2))-1;
       day = this.note_ended_at.substr(8,2);
       ampm = this.note_ended_at.substr(13,2);
       hour = this.note_ended_at.substr(16,2);
       minute = this.note_ended_at.substr(19,2);
-      if(ampm=="오후")
+      if(ampm == "오후")
         hour= parseInt(hour)+12;
-      var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+      var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
 
       this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
     },
