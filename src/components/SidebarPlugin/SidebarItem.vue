@@ -79,10 +79,18 @@
           </div>
         </template>
         <template v-else>
-          <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="tmptmp">
-            <i :class="link.icon" ></i>
-            <span class="nav-link-text" style="padding-left: 18px;" @click="tmptmp">{{ link.name }}</span>
-          </div>
+          <template v-if="category == 'all'">
+            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getAllNote">
+              <i :class="link.icon" ></i>
+              <span class="nav-link-text" style="padding-left: 18px;" @click="getAllNote">{{ link.name }}</span>
+            </div>
+          </template>
+          <template v-if="category == 'shared'">
+            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getSharedNote">
+              <i :class="link.icon" ></i>
+              <span class="nav-link-text" style="padding-left: 18px;" @click="getSharedNote">{{ link.name }}</span>
+            </div>
+          </template>
         </template>
       </component>
     </slot>
@@ -126,7 +134,11 @@ export default {
     directory_name:{
       type: String,
       default: "null",
-    }
+    },
+    category:{
+      type: String,
+      default: "",
+    },
   },
   provide() {
     return {
@@ -175,9 +187,13 @@ export default {
     }
   },
   methods: {
-    tmptmp(){
+    getAllNote(){
       this.$store.commit('getNoteList');
       this.$store.commit('setDirectoryName', "모든 노트");
+    },
+    getSharedNote(){
+      this.$store.commit('getSharedNoteList');
+      this.$store.commit('setDirectoryName', "공유 받은 노트");
     },
     getFolderList(){
       this.$store.commit('getDirectoryNoteList', this.directory_id);

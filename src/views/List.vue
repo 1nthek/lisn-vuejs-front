@@ -1,10 +1,10 @@
 <template>
     <div style="background:white;height: inherit;">
       <side-bar style="border: none;">
-        <template slot-scope="props" slot="links">
-          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
+        <template slot="links">
+          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }" :category="'all'"></sidebar-item>
+          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" :category="'shared'"></sidebar-item>
           <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
-          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
             <template>

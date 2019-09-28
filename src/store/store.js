@@ -109,13 +109,13 @@ export const store = new Vuex.Store({
     getNoteList(state) {
       let self = this;
       state.error = false;
-      
+
       state.directory_id = -1;
       setTimeout(() => {
         axios.get(state.domain + '/list/note/all?user_id=' + state.user_id)
           .then(res => {
             res.data.notes.forEach(element => {
-              if(element.title == ""){
+              if (element.title == "") {
                 element.title = "untitled";
               }
               var date1 = new Date(Date.parse(element.created_at));
@@ -136,7 +136,39 @@ export const store = new Vuex.Store({
               .catch((ex) => {
               })
           })
-        }, 300);  //delay loading
+      }, 300);  //delay loading
+    },
+    getSharedNoteList(state) {
+      let self = this;
+      state.error = false;
+
+      state.directory_id = -1;
+      setTimeout(() => {
+        axios.get(state.domain + '/list/note/shared?user_id=' + state.user_id)
+          .then(res => {
+            res.data.notes.forEach(element => {
+              if (element.title == "") {
+                element.title = "untitled";
+              }
+              var date1 = new Date(Date.parse(element.created_at));
+              var date2 = new Date(Date.parse(element.updated_at));
+              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+            });
+            state.noteList = res.data.notes;
+          })
+          .catch((ex) => {
+            axios.delete(state.domain + '/signin/token')
+              .then((res) => {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                auth2.disconnect();
+                state.error = true;
+              })
+              .catch((ex) => {
+              })
+          })
+      }, 300);  //delay loading
     },
     getDirectoryNoteList(state, directory_id, directory_name) {
       let self = this;
