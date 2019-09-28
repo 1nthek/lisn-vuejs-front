@@ -19,12 +19,17 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+    note_started_at: "",
+    note_ended_at: "",
     content: "",
     isRecordable: true,
     error: false,
+    directories: [],
     
     user_id: -1,
     note_id: -1,
+    directory_id: -1,
+    directory_name: "모든 노트",
     sttText: [{
       id: null,
       content: "none",
@@ -85,22 +90,27 @@ export const store = new Vuex.Store({
         state.second = (state.second >= 10) ? state.second : "0" + state.second;
       }, 1000)
     },
-    setCookie(state, { name, value, exp }) {
-      var date = new Date();
-      date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
-      document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    // setCookie(state, { name, value, exp }) {
+    //   var date = new Date();
+    //   date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000);
+    //   document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
+    // },
+    setUserId(state) {
+      // var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      state.user_id = localStorage.getItem('glisn_user_id');
     },
-    setUserId(state, name) {
-      var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      state.user_id = value ? value[2] : null;
+    setNoteId(state) {
+      // var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+      state.note_id = localStorage.getItem('glisn_note_id');
     },
-    setNoteId(state, name) {
-      var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-      state.note_id = value ? value[2] : null;
+    setDirectoryName(state, directory_name){
+      state.directory_name = directory_name;
     },
     getNoteList(state) {
       let self = this;
       state.error = false;
+      
+      state.directory_id = -1;
       setTimeout(() => {
         axios.get(state.domain + '/list/note/all?user_id=' + state.user_id)
           .then(res => {
@@ -121,13 +131,53 @@ export const store = new Vuex.Store({
                 var auth2 = gapi.auth2.getAuthInstance();
                 auth2.signOut();
                 auth2.disconnect();
-                
                 state.error = true;
               })
               .catch((ex) => {
               })
           })
         }, 300);  //delay loading
+    },
+    getDirectoryNoteList(state, directory_id, directory_name) {
+      let self = this;
+      state.error = false;
+      state.directory_id = directory_id;
+      setTimeout(() => {
+        axios.get(state.domain + '/list/note?directory_id=' + directory_id)
+          .then(res => {
+            console.log(res);
+            
+            res.data.notes.forEach(element => {
+              if (element.title == "") {
+                element.title = "untitled";
+              }
+              var date1 = new Date(Date.parse(element.created_at));
+              var date2 = new Date(Date.parse(element.updated_at));
+              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+            });
+            state.noteList = res.data.notes;
+          })
+          .catch((ex) => {
+            axios.delete(state.domain + '/signin/token')
+              .then((res) => {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut();
+                auth2.disconnect();
+                state.error = true;
+              })
+              .catch((ex) => {
+              })
+          })
+      }, 300);  //delay loading
+    },
+    getDirectoryList(state){
+      axios.get(state.domain + '/list/directory?user_id=' + state.user_id)
+        .then(res => {
+          state.directories = res.data.directories;
+        })
+        .catch((ex) => {
+        })
     },
     startCountingTimer(state){
       state.timeOffset = 0;

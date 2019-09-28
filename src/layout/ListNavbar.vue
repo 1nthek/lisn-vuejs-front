@@ -79,7 +79,6 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
             <img :src="user_picture_url" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
-            <!-- <span class="mb-0 text-sm font-weight-bold" style="padding-left: 10px;">IN DUCK</span> -->
         </a>
         <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
             <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;">
@@ -158,7 +157,7 @@ export default {
   },
   created(){
     let self = this;
-    this.$store.commit('setUserId', 'glisn_user_id');
+    self.$store.commit('setUserId');
     axios.get( this.$store.state.domain + '/profile?user_id=' + this.$store.state.user_id)
       .then((res) => {
         self.user_name = res.data.user_name;
@@ -170,18 +169,12 @@ export default {
   },
   methods: {
     signOut(){
-      let self = this;
-      axios.delete(this.$store.state.domain + '/signin/token')
-        .then((res) => {
-          var auth2 = gapi.auth2.getAuthInstance();
-          self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
-          self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
-          auth2.signOut();
-          auth2.disconnect();
-          self.$router.push('/');
-        })
-        .catch((ex)=> {
-        })
+      var auth2 = gapi.auth2.getAuthInstance();
+      localStorage.removeItem('glisn_user_id');
+      localStorage.removeItem('glisn_note_id');
+      auth2.signOut();
+      auth2.disconnect();
+      this.$router.push('/');
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);

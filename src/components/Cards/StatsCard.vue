@@ -1,27 +1,38 @@
 <template>
   <card class="card-stats" :show-footer-line="true" :note_id="note_id" v-on:openNote="$emit('openNote')">
-    <div class="row">
-      <div class="col">
-        <slot>
-          <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
-          <div class="mb-0 ns-kr summery">{{summery}}</div>
-        </slot>
-      </div>
-
-      <div class="col-auto" v-if="$slots.icon || icon">
-        <slot name="icon">
-          <div class="icon icon-shape text-white rounded-circle shadow" @click.stop="handleDelete(note_id, title)" style="cursor: pointer;"
-               :class="[`bg-${type}`, iconClasses]">
-            <i :class="icon"></i>
+    <div style="display:flex;flex-basis: auto;">
+      <div style="flex: auto;">
+        <div class="row">
+          <div class="col">
+            <slot>
+              <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
+              <div class="mb-0 ns-kr summery">{{summery}}</div>
+            </slot>
           </div>
-        </slot>
+        </div>
+
+        <p class="mt-3 mb-0 text-sm">
+          <slot name="footer">
+          </slot>
+        </p>
+      </div>
+      <div>
+        <div v-if="$slots.icon || icon">
+          <slot name="icon">
+            <div id="trash" class="icon-shape text-white rounded-circle shadow" @click.stop="handleDelete(note_id, title)" style="cursor: pointer;width: 37px;height: 37px;"
+                :class="[`bg-${type}`, iconClasses]">
+              <i :class="icon"></i>
+            </div>
+          </slot>
+        </div>
+        <div>
+          <div id="ellipsis" class="icon-shape rounded-circle" @click.stop="moveDirectory(note_id)" style="cursor: pointer;width: 37px;height: 37px;margin-top: 8px;">
+          <i class="fas fa-ellipsis-h"></i>
+              <!-- <i :class="icon"></i> -->
+            </div>
+        </div>
       </div>
     </div>
-
-    <p class="mt-3 mb-0 text-sm">
-      <slot name="footer">
-      </slot>
-    </p>
   </card>
 </template>
 <script>
@@ -46,6 +57,56 @@ export default {
     iconClasses: [String, Array]
   },
   methods: {
+    moveDirectory(note_id){
+      var directory = {};
+      for (var i = 0; i < this.$store.state.directories.length; i++) {
+        directory[this.$store.state.directories[i].directory_id] = this.$store.state.directories[i].name;
+      }
+      
+      Swal.fire({
+        title: '해당 폴더로 이동',
+        input: 'select',
+        inputOptions: directory,
+        inputPlaceholder: '폴더 선택',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value === '') {
+              resolve('폴더를 선택해야 합니다')
+            } else {
+              this.moveDirectoryAPI(note_id, value);
+              resolve();
+            }
+          })
+        }
+      })
+    },
+    moveDirectoryAPI(note_id, directory_id){
+      let self = this;
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('directory_id', directory_id);
+      xhr.open('PUT', this.$store.state.domain + '/note/directory');
+      xhr.send(formData);
+      xhr.onload = function() {
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 1600,
+          type: 'success',
+          title: '폴더가 이동 되었습니다.'
+        })
+        console.log(self.$store.state.directory_id);
+        if(self.$store.state.directory_id==-1){
+          
+        }else{
+          self.$store.commit('getDirectoryNoteList', self.$store.state.directory_id);
+        }
+      }
+
+    },
     handleDelete(note_id, title) {   
       Swal.fire({
         title: '휴지통으로 이동',
@@ -96,7 +157,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 /* .icon.icon-shape {
   transition: background 300ms ease-in 0s;
 }
@@ -106,8 +167,21 @@ export default {
 .summery{
   font-weight:600;font-size: 12px;height: 17px;color: #617386;transition: all .4s ease 0s;
 }
-
+#ellipsis:hover{
+  background: lightgray;
+}
+#trash:hover{
+  color:lightgray !important;
+}
+.card-stats .card-body {
+    padding: 14px 20px !important; 
+}
 /* .summery:hover{
     color: rgb(167, 197, 229);
 } */
+.swal2-content select {
+    -moz-appearance: menulist !important;
+    -webkit-appearance: menulist !important;
+    border-style: solid !important;
+}
 </style>

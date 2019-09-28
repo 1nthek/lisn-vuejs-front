@@ -21,10 +21,8 @@
             <i :class="link.icon" style="min-width: 2rem;"></i>
             <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
           </div>
-          <div id="add-folder-cont" style="visibility:hidden;opacity:0">
-            <div id="add-folder-btn" style="display: flex;align-items: center;justify-content:center;width: 20px;height: 20px;border: 1px solid rgba(55, 53, 57, 0.15);">
-              <i class="fas fa-plus" style="font-size: 14px;"></i>
-            </div>
+          <div id="add-folder-btn" @click.stop="addFolder()">
+            <i class="fas fa-plus" style="font-size: 14px;"></i>
           </div>
         </div>
       </template>
@@ -45,19 +43,46 @@
       name="title" 
       v-if="children.length === 0 && !$slots.default && link.path">
       <component
+      style="padding:0"
         :to="link.path" 
-        @click.native="linkClick"
+        @click.self="linkClick"
         :is="elementType(link, false)"
         class="nav-link"
         :class="{ active: link.active }"
         :target="link.target"
         :href="link.path">
-        <template v-if="addLink">
-          <span class="nav-link-text">{{ link.name }}</span>
+        <template v-if="addLink" >
+          <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
+            <div @click.self="getFolderList()" @mouseover.self="folderModify = false" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 4px 16px 4px 52px">
+              <div>
+                <span class="nav-link-text" @click.self="getFolderList()" >{{ link.name }}</span>            
+              </div>
+              <div id="modify-folder-btn" @mouseover="folderModify = true">
+                <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
+              </div>
+              <div style="position: absolute;left: 150px;" v-show="folderModify" >
+                <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
+                <div style="margin-left: 30px;" @mouseleave="folderModify = false">
+                    <div class="dropdown-item" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
+                      <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
+                        <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
+                          <i class="fas fa-edit" @click="renameFolder()"></i>
+                        </div>
+                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
+                          <i class="fas fa-trash" @click="deleteFolder()"></i>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </template>
         <template v-else>
-          <i :class="link.icon"></i>
-          <span class="nav-link-text">{{ link.name }}</span>
+          <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="tmptmp">
+            <i :class="link.icon" ></i>
+            <span class="nav-link-text" style="padding-left: 18px;" @click="tmptmp">{{ link.name }}</span>
+          </div>
         </template>
       </component>
     </slot>
@@ -65,6 +90,10 @@
 </template>
 <script>
 import { CollapseTransition } from 'vue2-transitions';
+
+import axios from 'axios'
+import Swal from 'sweetalert2';
+
 
 export default {
   name: 'sidebar-item',
@@ -89,6 +118,14 @@ export default {
       },
       description:
         'Sidebar link. Can contain name, path, icon and other attributes. See examples for more info'
+    },
+    directory_id:{
+      type: Number,
+      default: -1,
+    },
+    directory_name:{
+      type: String,
+      default: "null",
     }
   },
   provide() {
@@ -107,7 +144,9 @@ export default {
   data() {
     return {
       children: [],
-      collapsed: true
+      collapsed: false,
+      folderModify: false,
+      // visibility: 'collapse',
     };
   },
   computed: {
@@ -135,7 +174,65 @@ export default {
       return false;
     }
   },
-    methods: {
+  methods: {
+    tmptmp(){
+      this.$store.commit('getNoteList');
+      this.$store.commit('setDirectoryName', "모든 노트");
+    },
+    getFolderList(){
+      this.$store.commit('getDirectoryNoteList', this.directory_id);
+      this.$store.commit('setDirectoryName', this.directory_name);
+    },
+    addFolder(){
+      let self = this;
+      var formData = new FormData();
+      formData.append('user_id', this.$store.state.user_id);
+      axios.post( this.$store.state.domain + '/directory', formData)
+        .then((res) => {
+          self.$store.commit('getDirectoryList');
+        })
+        .catch((ex) => {
+        });
+    },
+    deleteFolder(){
+      let self = this;
+      var xhr = new XMLHttpRequest();
+      var formData = new FormData();
+      formData.append('directory_id', this.directory_id);
+      xhr.open('DELETE', this.$store.state.domain + '/directory');
+      xhr.send(formData);
+      xhr.onload = function() {
+        self.$store.commit('getDirectoryList');        
+      }
+    },
+    renameFolder(){
+      Swal.fire({
+        title: '변경할 폴더 이름',
+        input: 'text',
+        inputValue: this.directory_name,
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return '폴더명을 작성해 합니다.'
+          }
+          else{
+            let self = this;
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData();
+            formData.append('directory_id', this.directory_id);
+            formData.append('name', value);
+
+            xhr.open('PUT', this.$store.state.domain + '/directory');
+            xhr.send(formData);
+            xhr.onload = function() {
+              self.$store.commit('getDirectoryList');
+              self.$store.commit('getDirectoryNoteList', self.directory_id);
+              self.$store.commit('setDirectoryName', value);
+            }
+          }
+        }
+      })
+    },
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);
       this.children.splice(index, 0, item);
@@ -195,18 +292,57 @@ export default {
 };
 </script>
 <style>
+.fold-icon{
+  transition: all 200ms ease-in 0s;
+}
+.fold-icon:hover{
+  background: lightgray;
+}
 .sidebar-menu-item {
   cursor: pointer;
 }
 .sidebar-menu-item,.nav-link{
   color: rgba(0, 0, 0, 0.6) !important;
 }
-#add-folder-cont{
-  transition: all 200ms ease-in 0s;
-}
-.nav-item.active:hover #add-folder-cont{
+.nav-item.active:hover #add-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
+}
+#add-folder-btn,#modify-folder-btn{
+  transition: all 200ms ease-in 0s;
+  display: flex;
+  align-items: center;
+  justify-content:center;
   width: 20px;
+  height: 20px;
+  border: 1px solid rgba(55, 53, 57, 0.15);
+  border-radius: 2px;
+  visibility:hidden;
+  opacity:0
+}
+.cont2{
+  transition: all 200ms ease-in 0s;
+}
+.cont2:hover{
+  background: rgb(233, 233, 233);
+}
+#add-folder-btn:hover{
+  background: #DAD9D6;
+}
+#modify-folder-btn:hover{
+  background: #DAD9D6;
+}
+#folder-cont:hover #modify-folder-btn{
+  visibility: visible !important;
+  opacity:1 !important;
+}
+/* .nav.nav-sm.flex-column #cont-folder{
+  padding: 0 !important;
+} */
+#folder-cont{
+  transition: all 200ms ease-in 0s;
+}
+#folder-cont:hover{
+  background: rgb(233, 233, 233);
 }
 </style>

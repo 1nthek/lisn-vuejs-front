@@ -3,13 +3,17 @@
       <side-bar style="border: none;">
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
-          <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item>
-          <sidebar-item :link="{ name: '공유된 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
+          <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
+          <!-- <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item> -->
           <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
-            <sidebar-item :link="{ name: '폴더1', path: '/list' }"/>
-            <sidebar-item :link="{ name: '폴더2', path: '/list' }"/>
+            <template>
+              <div v-for="dir in $store.state.directories" :key="dir.directory_id">
+                <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
+              </div>
+            </template>
+            <!-- <sidebar-item :link="{ name: '폴더1', path: '/list' }"/> -->
           </sidebar-item>
         </template>
         <template slot="links-after">
@@ -26,7 +30,6 @@
           </ul>
         </template>
     </side-bar>
-
     <div class="main-content">
       <!-- <base-header></base-header> -->
       <list-navbar ref="navbar" :type="$route.meta.navbarType"></list-navbar>
@@ -35,7 +38,7 @@
             <vuescroll>
               <div style="margin-bottom:30px;width: 100%;background: white;">
                   <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
-                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">모든 노트</div>
+                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{this.$store.state.directory_name}}</div>
                     <button class="create-btn" @click="newPage()">
                       <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
                         + 새 노트
@@ -77,7 +80,6 @@
 import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
 import axios from 'axios'
-import { noteList } from '../api/api.js'
 import Swal from 'sweetalert2';
 
 // import { FadeTransition } from 'vue2-transitions';
@@ -96,6 +98,7 @@ export default {
   data() {
     return {
       user_id: -1,
+      list_title: 'null',
     }
   },
   created() {
@@ -107,20 +110,14 @@ export default {
         gapi.auth2.init().then(function () {
           var auth2 = gapi.auth2.getAuthInstance();
           if (auth2.isSignedIn.get() == true) {
-            self.$store.commit('setUserId', 'glisn_user_id');
+            self.$store.commit('setUserId');
             self.user_id = self.$store.state.user_id;
             if(self.$store.state.user_id == null){
-              axios.delete(self.$store.state.domain + '/signin/token')
-                .then((res) => {
-                    var auth2 = gapi.auth2.getAuthInstance();
-                    self.$store.commit('setCookie', {name: 'glisn_user_id', value: -1, exp: 0});
-                    self.$store.commit('setCookie', {name: 'glisn_note_id', value: -1, exp: 0});
-                    auth2.signOut();
-                    auth2.disconnect();
-                    self.$router.push('/');
-                })
-                .catch((ex)=> {
-                })
+              var auth2 = gapi.auth2.getAuthInstance();
+              localStorage.removeItem('glisn_user_id');
+              localStorage.removeItem('glisn_note_id');
+              auth2.signOut();
+              auth2.disconnect();
               self.$router.push('/');
             }
             else{
@@ -132,6 +129,7 @@ export default {
               if(self.$store.state.error){
                   self.$router.push('/');
               }
+              self.$store.commit('getDirectoryList');
             }
           }
           else{
@@ -157,8 +155,9 @@ export default {
       formData.append('user_id', this.$store.state.user_id);
       axios.post( this.$store.state.domain + '/note', formData)
         .then((res) => {
-          var note_id = res.data.note_id;
-          self.$store.commit('setCookie', {name: 'glisn_note_id', value: note_id, exp: 365});
+          var note_id = res.data.note_id;          
+          localStorage.setItem('glisn_note_id', note_id);
+          self.$store.commit('setNoteId');
           self.$router.push('/note');
         })
         .catch((ex) => {

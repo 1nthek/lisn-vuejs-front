@@ -137,15 +137,6 @@ export default {
     //   this.$store.commit('clearInter');
     //   this.$store.state.audio.pause();
     // },
-    setCookie(name, value, exp) {
-        var date = new Date();
-        date.setTime(date.getTime() + exp*24*60*60*1000);
-        document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-    },
-    getCookie(name) {
-        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return value? value[2] : null;
-    },
     update_sentence_text(event_object_list) {
         // var sentence_tag = document.getElementById(tmp_sentence_id);
         var transcript = "";
@@ -192,9 +183,8 @@ export default {
         formData.append('audio_data', blob, 'filename');
         formData.append('note_id', this.$store.state.note_id);
 
-        axios.post(this.$store.state.domain + '/record/audio', formData)
+        axios.post(this.$store.state.domain + '/note/audio', formData)
           .then((res) => {
-
             self.audio_id = res.data.audio_id;
             self.audio_timestamp = [];
 
@@ -206,10 +196,10 @@ export default {
                 formData2.append('ended_at', 99999); 
                 formData2.append('content', element.content);
                 
-                axios.post(this.$store.state.domain + '/record/sentence', formData2)
+                axios.post(this.$store.state.domain + '/note/sentence', formData2)
                   .then((res) => {
                     let self = this;
-                    axios.get( this.$store.state.domain + '/record/note?note_id=' + this.$store.state.note_id)
+                    axios.get( this.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
                       .then((res) => {
                         self.$store.state.sttText = [];
                         self.title = res.data.title;
