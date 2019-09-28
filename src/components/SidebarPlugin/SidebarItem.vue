@@ -68,8 +68,8 @@
                         <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
                           <i class="fas fa-edit" @click="renameFolder()"></i>
                         </div>
-                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
-                          <i class="fas fa-trash" @click="deleteFolder()"></i>
+                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolderSwal()">
+                          <i class="fas fa-trash" @click="deleteFolderSwal()"></i>
                         </div>
                       </div>
                     </div>
@@ -193,6 +193,23 @@ export default {
         })
         .catch((ex) => {
         });
+    },
+    deleteFolderSwal(){
+      Swal.fire({
+        title: '폴더 삭제',
+        text: '포함된 노트는 삭제 되지 않습니다.',
+        // type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success btn-fill',
+        cancelButtonClass: 'btn btn-danger btn-fill',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.deleteFolder();
+        }
+      });
     },
     deleteFolder(){
       let self = this;
