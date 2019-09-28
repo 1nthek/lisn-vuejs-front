@@ -18,7 +18,7 @@
                     </div>
                     <div class="cell-data-container">
                         <div class="cell-data">
-                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="cell-data-container">
                         <div class="cell-data">
-                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
                 </div>
@@ -217,9 +217,6 @@ export default {
       .then((res) => {
         self.$store.state.note_started_at = res.data.started_at;
         self.$store.state.note_ended_at = res.data.ended_at;
-        console.log('res.data.started_at', res.data.started_at);
-        
-
         self.note_started_at = fecha.format(new Date(res.data.started_at), 'YYYY.MM.DD ddd A hh:mm');
         self.note_ended_at = fecha.format(new Date(res.data.ended_at), 'YYYY.MM.DD ddd A hh:mm');
       })

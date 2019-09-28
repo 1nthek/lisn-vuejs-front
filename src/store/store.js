@@ -145,8 +145,6 @@ export const store = new Vuex.Store({
       setTimeout(() => {
         axios.get(state.domain + '/list/note?directory_id=' + directory_id)
           .then(res => {
-            console.log(res);
-            
             res.data.notes.forEach(element => {
               if (element.title == "") {
                 element.title = "untitled";

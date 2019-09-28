@@ -211,6 +211,8 @@ export default {
                             self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
                           })
                         });
+                        console.log('가');
+                        
                       })
                       .then(() => {
                         this.$store.state.hour = '0';
@@ -218,9 +220,12 @@ export default {
                         this.$store.state.second = '00';
                         this.$store.state.timeOffset = 0;
 
-                        self.swal_saveingRec.close();
-                        self.swal_saveingRec = null;
+                        // self.swal_saveingRec = null;
                         setTimeout(() => {
+                          if(self.swal_saveingRec)
+                            self.swal_saveingRec.close();
+                          console.log('몇번');
+                          
                           Swal.fire({
                             toast: true,
                             position: 'center',
@@ -229,18 +234,23 @@ export default {
                             type: 'warning',
                             title: '녹음 파일 저장 완료'
                           })
-                        }, 300);  //delay loading
+                        }, 600);  //delay loading
+                        console.log('나');
+
                       })
                       .catch((ex) => {
                         Toast_save_fail.fire();
+                        console.log('11', ex);
                       });
                   })
                   .catch((ex) => {
                     Toast_save_fail.fire();
+                        console.log('22', ex);
                   })
               })
           })
           .catch((ex) => {
+            console.log('33', ex);
             Swal.fire({
               toast: true,
               position: 'center',
