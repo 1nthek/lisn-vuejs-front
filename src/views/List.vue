@@ -4,8 +4,7 @@
         <template slot-scope="props" slot="links">
           <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
           <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
-          <!-- <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item> -->
-          <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
+          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item>
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
             <template>
@@ -158,7 +157,7 @@ export default {
           var note_id = res.data.note_id;          
           localStorage.setItem('glisn_note_id', note_id);
           self.$store.commit('setNoteId');
-          self.$router.push('/note');
+          self.$router.push('/noteEdit');
         })
         .catch((ex) => {
         });
@@ -364,5 +363,8 @@ a {
     background: white;
     position: absolute;
 }
-
+.row {
+    margin-right: 0px;
+    margin-left: -15px;
+}
 </style>

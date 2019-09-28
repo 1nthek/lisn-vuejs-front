@@ -2,7 +2,6 @@ import BaseInput from '../components/Inputs/BaseInput.vue';
 import BaseHeader from '../components/BaseHeader'
 import BaseTable from '../components/BaseTable'
 import BaseProgress from '../components/BaseProgress'
-import Badge from '../components/Badge'
 import BaseDropdown from '../components/BaseDropdown'
 import BasePagination from '../components/BasePagination'
 import BaseButton from '../components/BaseButton'
@@ -31,7 +30,6 @@ export default {
     Vue.component(BaseHeader.name, BaseHeader)
     Vue.component(BaseTable.name, BaseTable)
     Vue.component(BaseProgress.name, BaseProgress)
-    Vue.component(Badge.name, Badge)
     Vue.component(BaseDropdown.name, BaseDropdown)
     Vue.component(BasePagination.name, BasePagination)
     Vue.component(BaseButton.name, BaseButton)

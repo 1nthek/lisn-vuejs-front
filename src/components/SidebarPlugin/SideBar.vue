@@ -4,7 +4,7 @@
     <div class="scrollbar-inner ns-kr" style="padding: 24px 12px;background:#f0f0f0" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
           <router-link to="/list">
-            <div id="sidenav-logo" class="navbar-brand" style="padding: 0">
+            <div id="sidenav-logo" class="navbar-brand" style="padding: 0px 14px">
               <logo></logo>
             </div>
           </router-link>

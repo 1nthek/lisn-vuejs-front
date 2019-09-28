@@ -64,7 +64,7 @@ export default {
             })
       }else{
         this.audioId = JSON.parse(JSON.stringify(item.audioId))
-        axios.get(this.$store.state.domain + "/record/audio?audio_id=" + this.audioId)
+        axios.get(this.$store.state.domain + "/note/audio?audio_id=" + this.audioId)
           .then((res) => {
             this.$store.state.audio.src = res.data.data_url;
             this.$store.commit('setCurrentTime', item);

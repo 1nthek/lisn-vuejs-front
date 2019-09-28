@@ -1,20 +1,20 @@
 <template>
     <div style="background:#f0f0f0;height: 100vh;">
-      <NoteNavbarRead @scrollSTT="scrollSTT" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarRead>
-      <WorkspaceRead ref="workspace"></WorkspaceRead>
+      <NoteNavbarEdit @scrollSTT="scrollSTT" @saveNote="saveNote" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarEdit>
+      <WorkspaceEdit ref="workspace"></WorkspaceEdit>
     </div>
 </template>
 
 <script>
-import WorkspaceRead from './../components/WorkspaceRead.vue'
-import NoteNavbarRead from '../layout/NoteNavbarRead'
+import WorkspaceEdit from './../components/WorkspaceEdit.vue'
+import NoteNavbarEdit from '../layout/NoteNavbarEdit'
 import axios from 'axios'
 
 export default {
   components: {
     // RecSidebar,
-    WorkspaceRead,
-    NoteNavbarRead,
+    WorkspaceEdit,
+    NoteNavbarEdit,
   },
   data(){
     return{
@@ -97,6 +97,9 @@ export default {
     scrollSTT(){
       this.$refs.workspace.scrollSTT();
     },
+    saveNote(){
+      this.$refs.workspace.saveNote();
+    }
   }
 }
 </script>

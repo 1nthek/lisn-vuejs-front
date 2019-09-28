@@ -343,68 +343,15 @@ export default {
         
     },
     recBtnPressed(){
-      if(this.isRecording){
-        // Swal.fire({
-        //   toast: true,
-        //   position: 'top',
-        //   showConfirmButton: false,
-        //   timer: 1000,
-        //   type: 'success',
-        //   title: '녹음 종료'
-        // })
-        
-        this.isRecording = false;
-        this.$store.state.isRecordable = false;
-
-        recognition.stop();
-        recorder.stop();
-
-        if (!localstream) return;
-
-        localstream.getTracks().forEach((track) => {
-          track.stop();
-        });
-        
-        // localstream = null;
-        // localstream.getTracks().forEach((track) => {
-        //   track.stop();
-        // });
-      }else{
-        let self = this;
-        // navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        //   .then((stream) => {
-        //     localstream = stream;
-        //     self.startRecording(stream);
-        //   })
-        //   .catch((ex) => {
-        //     Swal.fire({
-        //       toast: true,
-        //       position: 'center',
-        //       showConfirmButton: false,
-        //       timer: 3000,
-        //       type: 'error',
-        //       title: '마이크가 연결되어 있지 않습니다.'
-        //     })
-        // });
-
-        navigator.getUserMedia({ audio: true, video: false },
-            function(stream) {
-              localstream = stream;
-              self.startRecording(stream);
-            },
-            function(ex) {
-              Swal.fire({
-                toast: true,
-                position: 'center',
-                showConfirmButton: false,
-                timer: 3000,
-                type: 'error',
-                title: '마이크가 연결되어 있지 않습니다.'
-              })
-            }
-        );
-      }
-    },  
+        Swal.fire({
+        toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 3000,
+        type: 'error',
+        title: '녹음은 Edit 모드에서만 가능합니다.'
+        })
+    },
     playSound() {
       var audioId = JSON.parse(JSON.stringify(this.$store.state.sttText))[0].audioId;
       axios.get(this.$store.state.domain + "/note/audio?audio_id=" + audioId)
