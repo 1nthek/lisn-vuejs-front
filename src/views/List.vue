@@ -6,7 +6,7 @@
           <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" :category="'shared'"></sidebar-item>
           <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
 
-          <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
+          <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>
             <template>
               <div v-for="dir in $store.state.directories" :key="dir.directory_id">
                 <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
@@ -39,7 +39,7 @@
                   <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
                     <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{this.$store.state.directory_name}}</div>
                     <button class="create-btn" @click="newPage()">
-                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
+                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold;">
                         + 새 노트
                       </div>
                     </button>
@@ -129,6 +129,7 @@ export default {
                   self.$router.push('/');
               }
               self.$store.commit('getDirectoryList');
+              self.$store.commit('setDirectoryName', "모든 노트");
             }
           }
           else{

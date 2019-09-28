@@ -22,4 +22,7 @@ body::-webkit-scrollbar {
 .ns-kr{
   font-family: 'Noto Sans KR', sans-serif;
 }
+.swal2-title, .swal2-input{
+  font-family: 'Noto Sans KR', sans-serif;
+}
 </style>

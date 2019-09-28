@@ -1,6 +1,6 @@
 <template>
   <div class="ns-kr">
-    <editor-content class="tiptap" :editor="editor" style="user-select: none; padding-top:20px;" />
+    <editor-content class="tiptap" :editor="editor" style="user-select: none;" />
   </div>
 </template>
 

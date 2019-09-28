@@ -337,7 +337,7 @@ export default {
 .sidebar-menu-item,.nav-link{
   color: rgba(0, 0, 0, 0.6) !important;
 }
-.nav-item.active:hover #add-folder-btn{
+.nav-item:hover #add-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
 }

@@ -12,12 +12,12 @@
                           <div class="cell-title-img">
                               <i class="far fa-clock"></i>
                           </div>
-                          <div  class="cell-title-text"> 시작 시간 </div>
+                          <div class="cell-title-text ns-kr"> 시작 시간 </div>
                       </div>
                   </div>
               </div>
               <div class="cell-data-container">
-                  <div class="cell-data" style="cursor: default;">
+                  <div class="cell-data ns-kr" style="cursor: default;">
                     <div style="color:black">{{note_started_at}}</div>
                   </div>
               </div>
@@ -31,18 +31,19 @@
                           <div class="cell-title-img">
                               <i class="far fa-clock"></i>
                           </div>
-                          <div  class="cell-title-text"> 종료 시간 </div>
+                          <div class="cell-title-text ns-kr"> 종료 시간 </div>
                       </div>
                   </div>
               </div>
               <div class="cell-data-container">
-                  <div class="cell-data" style="cursor: default;">
+                  <div class="cell-data ns-kr" style="cursor: default;">
                     <div style="color:black">{{note_ended_at}}</div>
                   </div>
               </div>
           </div>
         </div>
     </div>
+    <hr>
     <EditorRead ref="editor" :content="content"></EditorRead>
     </vuescroll>
 </template>

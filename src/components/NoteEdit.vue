@@ -12,12 +12,12 @@
                                 <div class="cell-title-img">
                                     <i class="far fa-clock"></i>
                                 </div>
-                                <div contenteditable="true" class="cell-title-text"> 시작 시간 </div>
+                                <div contenteditable="true" class="cell-title-text ns-kr"> 시작 시간 </div>
                             </div>
                         </div>
                     </div>
                     <div class="cell-data-container">
-                        <div class="cell-data">
+                        <div class="cell-data ns-kr">
                             <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
@@ -31,12 +31,12 @@
                                 <div class="cell-title-img">
                                     <i class="far fa-clock"></i>
                                 </div>
-                                <div contenteditable="true" class="cell-title-text"> 종료 시간 </div>
+                                <div contenteditable="true" class="cell-title-text ns-kr"> 종료 시간 </div>
                             </div>
                         </div>
                     </div>
                     <div class="cell-data-container">
-                        <div class="cell-data">
+                        <div class="cell-data ns-kr">
                             <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
