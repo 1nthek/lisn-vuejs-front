@@ -1,12 +1,12 @@
 <template>
 <div>
-  <div class="home-loader" ref="loader">
-    <div class="ani-loader">
+  <div v-show="isLoading" class="home-isLoading">
+    <div class="ani-isLoading">
       <logo style="fill:black"></logo>
     </div>
     <div class="ns-kr ani-loader2" style="color: black;font-size: 20px;font-weight: 400;padding-top: 30px;">불러오는중...</div>
   </div>
-  <div @click="closebar()" style="visibility:hidden;" ref="contents">
+  <div v-show="!isLoading" @click="closebar()" ref="contents">
       <div class="header" id="home-header">
           <div class="home-nav">
               <logo style="fill:white"></logo>
@@ -34,7 +34,8 @@
       </transition>
         <div class="home-cont-1">
           <div style="max-width: 1200px;margin: 0 auto;padding: 26px 25px;display: flex;justify-content: flex-end;">
-            <div class="ani-slide-in">
+            <!-- <div class="ani-slide-in"> -->
+            <div>
               <div class="wave__h ns-kr " style="color: white;font-size: 36px;font-weight: bold;padding-bottom: 30px;"> 대화를 쉽고 빠르게 정리하세요 </div>
               <div style="display: flex;justify-content: flex-end;">
                 <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
@@ -57,6 +58,9 @@
 import AppFooter from '../layout/AppFooter'
 import Logo from '../assets/Logo'
 import axios from 'axios'
+import api from '../api/api'
+import { mapState, mapMutations } from 'vuex'
+
 
 export default {
   components: {
@@ -67,51 +71,43 @@ export default {
     return {
       // scrolled: false,
       navOpen: false,
+      isLoading: true,
     }
   },
+  computed: {
+    ...mapState([
+      'user_id',
+      'token',
+    ]),
+  },
   created(){
-    setTimeout(() => {
-      let self = this;
-      gapi.load('auth2', function () {
-        gapi.auth2.init().then(function () {
-          var auth2 = gapi.auth2.getAuthInstance();
-          if (auth2.isSignedIn.get() == true) {
-            location.href = "/list";
-          }else{
-            setTimeout(() => {
-              gapi.load('auth2', function(){
-                var auth2 = gapi.auth2.init({
-                  client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
+    let self = this;
+    gapi.load('auth2', function () {
+      gapi.auth2.init().then(function () {
+        var auth2 = gapi.auth2.getAuthInstance();
+        if (auth2.isSignedIn.get() && self.user_id && self.token && localStorage.token && localStorage.user_id) {
+            self.$router.replace('/list');
+        }
+        else{
+          gapi.load('auth2', function(){
+            var auth2 = gapi.auth2.init({
+              client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
+            });
+            auth2.attachClickHandler(document.getElementById('customBtn0'), {},
+              function(googleUser) {
+                self.onSignIn(googleUser);
+              }, function(error) {
                 });
-
-                auth2.attachClickHandler(document.getElementById('customBtn0'), {},
-                  function(googleUser) {
-                    self.onSignIn(googleUser);
-                  }, function(error) {
-                });
-                
-                auth2.attachClickHandler(document.getElementById('customBtn1'), {},
-                  function(googleUser) {
-                    self.onSignIn(googleUser);
-                  }, function(error) {
-                });
-
-                auth2.attachClickHandler(document.getElementById('customBtn2'), {},
-                  function(googleUser) {
-                    self.onSignIn(googleUser);
-                  }, function(error) {
-                });
-              });
-
-              let ref = self.$refs['contents'];
-              ref.style.visibility = "visible";
-              ref = self.$refs['loader'];
-              ref.style.display = "none";
-              }, 400);
-          }
-        });
+            auth2.attachClickHandler(document.getElementById('customBtn1'), {},
+              function(googleUser) {
+                self.onSignIn(googleUser);
+              }, function(error) {
+            });
+          });
+          self.isLoading = false;
+        }
       });
-    }, 300);  //delay loading
+    });
   },
   mounted() {
     // window.addEventListener('scroll', this.handleScroll);
@@ -120,49 +116,54 @@ export default {
     // window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
-    openbar(){
-      this.navOpen = true;
-    },
-    closebar(){
-      if (window.innerWidth > 1000) {
-        return;
-      }
-      this.navOpen = false;
-      let docClasses = document.body.classList
-      if (value) {
-        docClasses.add('g-sidenav-pinned')
-        docClasses.add('g-sidenav-show')
-        docClasses.remove('g-sidenav-hidden')
-      } else {
-        docClasses.add('g-sidenav-hidden')
-        docClasses.remove('g-sidenav-pinned')
-        docClasses.remove('g-sidenav-show')
-      }
-    },
-    handleScroll () {
-      this.scrolled = window.scrollY > 80;
-    },
-    onSignInError (error) {
-      // console.log('OH NOES', error)
-    },
-    onSignIn(googleUser){
-      let self = this;
-      var formData = new FormData();
-      formData.append('google_token', googleUser.getAuthResponse().id_token);
-      axios.post( this.$store.state.domain + '/token/google', formData)
-        .then((res) => {
-          var user_id = res.data.user_id
-          localStorage.setItem('glisn_user_id', user_id);
-          self.$router.push('/list');
-        })
-        .catch((ex) => {
-        });
+  ...mapMutations([
+    'setUserId',
+    'setAccessToken',
+  ]),
+  openbar(){
+    this.navOpen = true;
+  },
+  closebar(){
+    if (window.innerWidth > 1000) {
+      return;
+    }
+    this.navOpen = false;
+    let docClasses = document.body.classList
+    // if (value) {
+    //   docClasses.add('g-sidenav-pinned')
+    //   docClasses.add('g-sidenav-show')
+    //   docClasses.remove('g-sidenav-hidden')
+    // } else {
+    //   docClasses.add('g-sidenav-hidden')
+    //   docClasses.remove('g-sidenav-pinned')
+    //   docClasses.remove('g-sidenav-show')
+    // }
+  },
+  handleScroll () {
+    this.scrolled = window.scrollY > 80;
+  },
+  onSignInError (error) {
+  },
+  onSignIn(googleUser){
+    let self = this;
+    var formData = new FormData();
+    formData.append('google_token', googleUser.getAuthResponse().id_token);
+    axios.post( this.$store.state.domain + '/token/google', formData)
+      .then((res) => {
+        localStorage.setItem('token', res.data.access_token);
+        localStorage.setItem('user_id', res.data.user_id);
+        self.setAccessToken();
+        self.setUserId();
+        self.$router.push('/list');
+      })
+      .catch((ex) => {
+      });
     }
   }
 }
 </script>
 <style scoped>
-.ani-loader{
+.ani-isLoading{
     animation: slide 2s linear infinite;
     animation-direction: alternate;
 }
@@ -170,7 +171,7 @@ export default {
     animation: go 2s linear;
     animation-direction: alternate;
 }
-.home-loader {
+.home-isLoading {
     display: flex;
     flex-direction: column;
     align-items: center;

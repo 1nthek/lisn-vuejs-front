@@ -216,8 +216,8 @@ export default {
         text: '포함된 노트는 삭제 되지 않습니다.',
         // type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: 'btn btn-success btn-fill',
-        cancelButtonClass: 'btn btn-danger btn-fill',
+        confirmButtonClass: 'btn btn-danger btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
         confirmButtonText: '삭제',
         cancelButtonText: '취소',
         buttonsStyling: false
@@ -244,6 +244,11 @@ export default {
         input: 'text',
         inputValue: this.directory_name,
         showCancelButton: true,
+        confirmButtonClass: 'btn btn-success btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '변경',
+        cancelButtonText: '취소',
+        buttonsStyling: false,
         inputValidator: (value) => {
           if (!value) {
             return '폴더명을 작성해 합니다.'

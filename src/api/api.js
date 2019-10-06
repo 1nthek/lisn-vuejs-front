@@ -1,82 +1,66 @@
 import axios from 'axios'
-// import router from '../router'
+import router from '../router'
+// import {store} from '../store/store'
 
-// const domain  = 'http://localhost:8000'
-const UNAUTHORIZED = 401
-
-const request = {
-  get(path) {
-    return axios.get(domain + path)
-      .catch(({ response }) => {
-        const { status } = response
-
-        if (status === Unauthorized)
-          return console.log('권한 없음');
-        throw Error(response)
-      })
-  },
+const domain = "http://54.180.86.133/api";
+const Unauthorized = 401
+const onUnauthorized = () => {
+  // store.state.token = null;
+  // store.state.user_id = null;
+  delete localStorage.token;
+  delete localStorage.user_id;
+  router.replace('/');
 }
 
-export const noteList = {
+const request = (method, url, data) => {
+  return axios({
+    method,
+    url: domain + url,
+    data
+  }).then(result => result.data)
+    .catch(result => {
+      const { status } = result.response
+      if (status == Unauthorized) onUnauthorized()
+      throw result.response
+    })
+}
+
+export const setTokenInHeader = token => {
+  axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null;
+}
+
+export const list = {
   fetch(user_id) {
-    if (user_id) {
-      return axios.get(domain + '/record/list?user_id=' + user_id)
-        .then(({ data }) => data.notes)
-        .catch(({ response }) => {
-          const { status } = response
-
-          if (status === Unauthorized)
-            return console.log('권한 없음');
-          throw Error(response)
-        })
-      // return request.get('/record/list?user_id=' + user_id)
-      //   .then(({ data }) => data.notes)
-    }
+    return request('get', `/list/note/all?user_id=${user_id}`)
   },
-  destroy(note_id) {
-    // return axios.delete(domain + '/record/note', { params: { note_id: note_id } })
-    // return axios.delete(domain + '/record/note'+note_id);
-    // return request.delete(`/lists/${id}`).then(({ data }) => data)
-    var formData = new FormData();
-    formData.append('note_id', note_id);
-    console.log(formData);
-    
-    var data = new FormData();
-    data.append('photo', 'tmptmp');
-    axios.delete(domain + '/record/note', data)
-      .then((res) => { this.result = res.data; })
-      .catch((ex) => { console.log('사진업로드 실패', ex); });
+  // create(title) {
+  //   return request('post', '/boards', { title })
+  // },
+  // update(id, payload) {
+  //   return request('put', `/boards/${id}`, payload)
+  // },
+  // destroy(id) {
+  //   return request('delete', `/boards/${id}`)
+  // }
+}
 
-    // return axios.delete(domain + '/record/note', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // })
-    //   .then((response) => {
-    //     console.log("성공적");
-        
-    //     // 응답 처리
-    //   })
-    //   .catch((error) => {
-    //     console.log('실폐');
-        
-    //     // 예외 처리
-    //   })
-    
+export const note = {
+  fetch(note_id){
+    return request('get', `/note?note_id=${note_id}`)
+  },
+  create(formData){
+    return request('post', `/note`, formData);
   }
 }
 
-// axios.delete(URL, { params: { note_id: target.id } })
+export const directory = {
+  fetch(user_id) {
+    return request('get', `/list/directory?user_id=${user_id}`)
+  },
+}
 
-// export const setAuthInHeader = token => {
-//   axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
-// }
-
-// const { token } = localStorage
-// if (token) setAuthInHeader(token)
-
-// export const auth = {
-//   login (email, password) {
-//     return request('post', '/login', { email, password })
-//   }
-// }
+export const auth = {
+  login(google_token) {
+    return request.post('/login', google_token)
+  }
+}

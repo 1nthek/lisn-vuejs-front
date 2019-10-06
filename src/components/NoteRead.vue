@@ -2,7 +2,7 @@
   <vuescroll>
     <div class="lisn-note-container">
       <div style="display: flex;justify-content: space-between;">
-        <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="false" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+        <div class="ns-kr" ref="noteTitle" contenteditable="false" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{noteTitle=="untitled"?"":noteTitle}}</div>
       </div>
         <div class="cell">
           <div class="date-cell">
@@ -55,6 +55,8 @@ import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
 import EditorRead from './EditorRead'
+import { mapState, mapMutations } from 'vuex'
+
 
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
@@ -77,84 +79,22 @@ export default {
     date: fecha.format(new Date(), this.format),
     popUp: false,
     flag: false,
-    dX: '9px',
-    dY: '9px',
 
-    user_id: -1,
-    note_id: -1,
-    note_started_at: "",
-    note_ended_at: "",
     content: "",
-
     title: "제목",
-    // data: [],
-    // cellData: [
-    //   {
-    //     cellType: 'date',
-    //     cellTitle: '시작 시간',
-    //     cellContent: '2019.07.16 화 오후 1:00'
-    //   },
-    //   {
-    //     cellType: 'date',
-    //     cellTitle: '종료 시간',
-    //     cellContent: '2019.07.16 화 오후 3:30'
-    //   },
-    // ]
   }),
-  //  watch: {
-  //   title: function (newtitle) {
-  //     this.title = newtitle;
-  //   }
-  // },
-  beforeDestroy(){
-    var year = this.note_started_at.substr(0,4);
-    var month = parseInt(this.note_started_at.substr(5,2))-1;
-    var day = this.note_started_at.substr(8,2);
-    var ampm = this.note_started_at.substr(13,2);
-    var hour = this.note_started_at.substr(16,2);
-    var minute = this.note_started_at.substr(19,2);
-    if(ampm=="오후"){
-      hour= parseInt(hour)+12;
-    }
-      
-    var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-    
-    year = this.note_ended_at.substr(0,4);
-    month = parseInt(this.note_ended_at.substr(5,2))-1;
-    day = this.note_ended_at.substr(8,2);
-    ampm = this.note_ended_at.substr(13,2);
-    hour = this.note_ended_at.substr(16,2);
-    minute = this.note_ended_at.substr(19,2);
-    if(ampm == "오후")
-      hour= parseInt(hour)+12;
-    var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-
-    this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
+  computed: {
+    ...mapState([
+      'user_id',
+      'note_id',
+      'token',
+      'domain',
+      'noteTitle',
+      'note_started_at',
+      'note_ended_at',
+    ]),
   },
   created(){
-    let self = this;
-    this.$store.commit('setNoteId');
-    axios.get( self.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
-      .then((res) => {
-        self.$store.state.note_started_at = res.data.started_at;
-        self.$store.state.note_ended_at = res.data.ended_at;
-        self.note_started_at = fecha.format(new Date(res.data.started_at), 'YYYY.MM.DD ddd A hh:mm');
-        self.note_ended_at = fecha.format(new Date(res.data.ended_at), 'YYYY.MM.DD ddd A hh:mm');
-      })
-      .catch((ex) => { 
-      });
-    // this.note_ended_at = this.$store.state.note_ended_at;
-    // window.addEventListener('beforeunload', function (event) {
-    // })
-  },
-  computed: {
-    styleObject () {
-      return {
-        left: this.dX + 'px',
-        top: this.dY + 'px',
-        position: 'fixed'
-      }
-    }
   },
   props: {
     // value: {type: String, default: ''},
@@ -187,51 +127,7 @@ export default {
     },
     startWeekOnSunday: {type: Boolean, default: true}
   },
-  watch: {
-    popUp() {
-      // console.log(this.$refs.date)
-    }
-  },
   methods: {
-    setEditer(){
-      // this.$refs.noteTitle.innerHTML = this.$store.state.noteTitle =="untitled"?"":this.$store.state.noteTitle;
-      // this.$refs.editor.setEditer();
-    },
-    saveNote(){
-      var year = this.note_started_at.substr(0,4);
-      var month = parseInt(this.note_started_at.substr(5,2))-1;
-      var day = this.note_started_at.substr(8,2);
-      var ampm = this.note_started_at.substr(13,2);
-      var hour = this.note_started_at.substr(16,2);
-      var minute = this.note_started_at.substr(19,2);
-      if(ampm=="오후"){
-        hour= parseInt(hour)+12;
-      }
-        
-      var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-      
-      year = this.note_ended_at.substr(0,4);
-      month = parseInt(this.note_ended_at.substr(5,2))-1;
-      day = this.note_ended_at.substr(8,2);
-      ampm = this.note_ended_at.substr(13,2);
-      hour = this.note_ended_at.substr(16,2);
-      minute = this.note_ended_at.substr(19,2);
-      if(ampm == "오후")
-        hour= parseInt(hour)+12;
-      var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-
-      this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
-    },
-    typing(e) {
-    	this.title = e.target.value
-    },
-    addCell () {
-      this.cellData.push({
-        cellType: 'text',
-        cellTitle: '제목',
-        cellContent: ''
-      })
-    },
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)
     },

@@ -31,15 +31,11 @@ import axios from 'axios'
     methods: {
       openNote(note_id) {
         this.$store.commit('initData');
-        localStorage.setItem('glisn_note_id', note_id);
-        this.$store.commit('setNoteId');
-        this.$router.push('/note');
+        this.$router.push('/note/'+ note_id);
       },
     },
     data(){
       return{
-        user_id: -1,
-        my_note_id: -1, 
       }
     },
     props: {

@@ -54,6 +54,8 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2';
+import { mapState, mapMutations } from 'vuex'
+
 
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -77,7 +79,6 @@ const Toast_save_fail = Swal.mixin({
 export default {
   data() {
     return {
-      user_id: -1,
       audio_id:-1,
 
       isPlaying: false,
@@ -94,6 +95,12 @@ export default {
       swal_saveingRec: null,
     }
   },
+  computed: {
+    ...mapState([
+      'note_id',
+      'domain',
+    ]), 
+  },
   watch: {
     isRecording: function (newVal) {
       this.$emit('isRecording', newVal);
@@ -101,8 +108,6 @@ export default {
   },
   created() {
     let self = this;
-    this.$store.commit('setUserId', 'glisn_user_id');
-    this.user_id = this.$store.state.user_id;
     window.addEventListener('keydown', function (e) {
       if (e.keyCode == 32) {
         if(self.$store.state.isPlaying){
@@ -112,7 +117,7 @@ export default {
           self.$store.commit('clearInter');
         } else{
           var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
-          axios.get(self.$store.state.domain + "/note/audio?audio_id=" + audioId)
+          axios.get(self.domain + "/note/audio?audio_id=" + audioId)
             .then((res) => {
               self.$store.state.audio.src = res.data.data_url;
               // self.$store.commit('setCurrentTime', {begin:0});
@@ -181,9 +186,9 @@ export default {
         var self = this;
         var formData = new FormData();
         formData.append('audio_data', blob, 'filename');
-        formData.append('note_id', this.$store.state.note_id);
+        formData.append('note_id', this.note_id);
 
-        axios.post(this.$store.state.domain + '/note/audio', formData)
+        axios.post(this.domain + '/note/audio', formData)
           .then((res) => {
             self.audio_id = res.data.audio_id;
             self.audio_timestamp = [];
@@ -196,10 +201,10 @@ export default {
                 formData2.append('ended_at', 99999); 
                 formData2.append('content', element.content);
                 
-                axios.post(this.$store.state.domain + '/note/sentence', formData2)
+                axios.post(this.domain + '/note/sentence', formData2)
                   .then((res) => {
                     let self = this;
-                    axios.get( this.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
+                    axios.get( this.domain + '/note?note_id=' + this.note_id)
                       .then((res) => {
                         self.$store.state.sttText = [];
                         self.title = res.data.title;
@@ -211,7 +216,6 @@ export default {
                             self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
                           })
                         });
-                        
                       })
                       .then(() => {
                         this.$store.state.hour = '0';
@@ -406,25 +410,7 @@ export default {
       }
     },  
     playSound() {
-      var audioId = JSON.parse(JSON.stringify(this.$store.state.sttText))[0].audioId;
-      axios.get(this.$store.state.domain + "/note/audio?audio_id=" + audioId)
-        .then((res) => {
-          this.$store.state.audio.src = res.data.data_url;
-          // this.$store.commit('setCurrentTime', {begin:0});
-          this.$store.commit('playSound');
-          this.$store.state.audio.play();
-
-        })
-        .catch((ex) => {
-        })
-      
-      // this.$store.commit('playSound');
-
-      // this.$store.state.audio.currentTime = this.$store.state.timeOffset;
-      // this.$store.state.audio.play();
-      // this.timerId = setInterval(() => {
-      //   this.printTime();
-		  // }, 1000)
+      this.$store.commit('playSound');
     },
     pauseSound() {
       this.$store.state.isPlaying = false;

@@ -77,7 +77,6 @@ const Toast_save_fail = Swal.mixin({
 export default {
   data() {
     return {
-      user_id: -1,
       audio_id:-1,
 
       isPlaying: false,
@@ -101,8 +100,6 @@ export default {
   },
   created() {
     let self = this;
-    this.$store.commit('setUserId', 'glisn_user_id');
-    this.user_id = this.$store.state.user_id;
     window.addEventListener('keydown', function (e) {
       if (e.keyCode == 32) {
         if(self.$store.state.isPlaying){
@@ -199,7 +196,7 @@ export default {
                 axios.post(this.$store.state.domain + '/note/sentence', formData2)
                   .then((res) => {
                     let self = this;
-                    axios.get( this.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
+                    axios.get( this.$store.state.domain + '/note?note_id=' + self.$store.state.note_id)
                       .then((res) => {
                         self.$store.state.sttText = [];
                         self.title = res.data.title;
@@ -353,25 +350,7 @@ export default {
         })
     },
     playSound() {
-      var audioId = JSON.parse(JSON.stringify(this.$store.state.sttText))[0].audioId;
-      axios.get(this.$store.state.domain + "/note/audio?audio_id=" + audioId)
-        .then((res) => {
-          this.$store.state.audio.src = res.data.data_url;
-          // this.$store.commit('setCurrentTime', {begin:0});
-          this.$store.commit('playSound');
-          this.$store.state.audio.play();
-
-        })
-        .catch((ex) => {
-        })
-      
-      // this.$store.commit('playSound');
-
-      // this.$store.state.audio.currentTime = this.$store.state.timeOffset;
-      // this.$store.state.audio.play();
-      // this.timerId = setInterval(() => {
-      //   this.printTime();
-		  // }, 1000)
+      this.$store.commit('playSound');
     },
     pauseSound() {
       this.$store.state.isPlaying = false;

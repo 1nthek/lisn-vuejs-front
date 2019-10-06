@@ -1,10 +1,6 @@
-import BaseInput from '../components/Inputs/BaseInput.vue';
-import BaseHeader from '../components/BaseHeader'
-import BaseTable from '../components/BaseTable'
-import BaseProgress from '../components/BaseProgress'
-import BaseDropdown from '../components/BaseDropdown'
-import BasePagination from '../components/BasePagination'
-import BaseButton from '../components/BaseButton'
+// import BaseInput from '../components/Inputs/BaseInput.vue';
+// import BaseDropdown from '../components/BaseDropdown'
+// import BaseButton from '../components/BaseButton'
 import SideBar from '../components/SidebarPlugin/SideBar';
 import SidebarItem from '../components/SidebarPlugin/SidebarItem';
 import SidebarPlugin from '../components/SidebarPlugin/index.js';
@@ -26,13 +22,9 @@ import '../assets/sass/argon.scss';
 
 export default {
   install (Vue) {
-    Vue.component(BaseInput.name, BaseInput);
-    Vue.component(BaseHeader.name, BaseHeader)
-    Vue.component(BaseTable.name, BaseTable)
-    Vue.component(BaseProgress.name, BaseProgress)
-    Vue.component(BaseDropdown.name, BaseDropdown)
-    Vue.component(BasePagination.name, BasePagination)
-    Vue.component(BaseButton.name, BaseButton)
+    // Vue.component(BaseInput.name, BaseInput);
+    // Vue.component(BaseDropdown.name, BaseDropdown)
+    // Vue.component(BaseButton.name, BaseButton)
     Vue.use(ElementUI, { locale })
     Vue.use(VueMaterial);
     Vue.use(Transitions);

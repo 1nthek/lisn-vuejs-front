@@ -9,6 +9,9 @@
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
 
     <div>
+      <button class="share-pelple-btn" style="position: relative;" @click="sharePeople()">
+        <div class="ns-kr" style="font-size: 16px; margin: 8px 10px;font-weight: bold;"><i class="fas fa-users"></i>&nbsp;</div>
+      </button>
       <button class="share-btn" style="position: relative;" @click="shareNote()">
         <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;"><i class="fas fa-share"></i>&nbsp;공유</div>
       </button>
@@ -24,17 +27,24 @@
 import PlayerRead from '../components/PlayerRead'
 import Swal from 'sweetalert2';
 import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
+
 
 export default {
   components: {
     PlayerRead,
+  },
+  computed: {
+    ...mapState([
+      'note_id',
+    ]),
   },
    methods: {
     isRecording(para){
       this.$emit('isRecording', para);
     },
     editNote(){
-      this.$router.push('/noteEdit');
+      this.$router.push('/noteEdit/'+ this.note_id);
     },
     async shareNote(){
       const { value: email } = await Swal.fire({
@@ -42,8 +52,8 @@ export default {
         input: 'email',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-success btn-fill',
-        cancelButtonClass: 'btn btn-danger btn-fill',
-        confirmButtonText: '확인',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '공유',
         cancelButtonText: '취소',
         buttonsStyling: false,
         inputPlaceholder: '공유할 사용자의 이메일을 적으세요',
@@ -67,6 +77,9 @@ export default {
           .catch((ex) => {
           })
       }
+    },
+    sharePeople(){
+      
     },
    }
 };
@@ -101,6 +114,7 @@ export default {
     border-color: #f1404b !important;
     color: white !important;
     border-radius: 0.2rem;
+    outline: 0
 }
 .share-btn{
     background-color: #40A1D3 !important;
@@ -108,6 +122,15 @@ export default {
     border-color: #40A1D3 !important;
     color: white !important;
     border-radius: 0.2rem;
+    outline: 0
+}
+.share-pelple-btn{
+    background-color: #F0F0F0 !important;
+    border: 1px solid black;
+    border-color: #F0F0F0 !important;
+    color: black !important;
+    border-radius: 0.2rem;
+    outline: 0
 }
 a {
     text-decoration: none !important;
