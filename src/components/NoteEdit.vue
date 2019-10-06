@@ -12,13 +12,13 @@
                                 <div class="cell-title-img">
                                     <i class="far fa-clock"></i>
                                 </div>
-                                <div contenteditable="true" class="cell-title-text"> 시작 시간 </div>
+                                <div contenteditable="true" class="cell-title-text ns-kr"> 시작 시간 </div>
                             </div>
                         </div>
                     </div>
                     <div class="cell-data-container">
-                        <div class="cell-data">
-                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                        <div class="cell-data ns-kr">
+                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
                 </div>
@@ -31,13 +31,13 @@
                                 <div class="cell-title-img">
                                     <i class="far fa-clock"></i>
                                 </div>
-                                <div contenteditable="true" class="cell-title-text"> 종료 시간 </div>
+                                <div contenteditable="true" class="cell-title-text ns-kr"> 종료 시간 </div>
                             </div>
                         </div>
                     </div>
                     <div class="cell-data-container">
-                        <div class="cell-data">
-                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
+                        <div class="cell-data ns-kr">
+                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
                         </div>
                     </div>
                 </div>
@@ -134,6 +134,8 @@ import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
 import Editor from './Editor'
+import { mapState, mapMutations } from 'vuex'
+
 
 fecha.i18n = {
   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
@@ -156,30 +158,27 @@ export default {
     date: fecha.format(new Date(), this.format),
     popUp: false,
     flag: false,
-    dX: '9px',
-    dY: '9px',
 
-    user_id: -1,
-    note_id: -1,
-    note_started_at: "",
-    note_ended_at: "",
     content: "",
-
     title: "제목",
-    // data: [],
-    // cellData: [
-    //   {
-    //     cellType: 'date',
-    //     cellTitle: '시작 시간',
-    //     cellContent: '2019.07.16 화 오후 1:00'
-    //   },
-    //   {
-    //     cellType: 'date',
-    //     cellTitle: '종료 시간',
-    //     cellContent: '2019.07.16 화 오후 3:30'
-    //   },
-    // ]
   }),
+  computed: {
+    ...mapState([
+      'user_id',
+      'note_id',
+      'token',
+      'domain',
+      'noteTitle',
+    ]),
+    note_started_at: {
+        get () { return this.$store.state.note_started_at},
+        set (value) {  this.$store.commit('set_note_started_at', value) }
+    },
+    note_ended_at: {
+        get () { return this.$store.state.note_ended_at},
+        set (value) {  this.$store.commit('set_note_ended_at', value) }
+    }
+  },
   //  watch: {
   //   title: function (newtitle) {
   //     this.title = newtitle;
@@ -208,35 +207,9 @@ export default {
       hour= parseInt(hour)+12;
     var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
 
-    this.$refs.editor.saveNoteAuto(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
+    this.$refs.editor.saveNoteAuto(this.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
   },
   created(){
-    let self = this;
-    this.$store.commit('setNoteId');
-    axios.get( self.$store.state.domain + '/note?note_id=' + this.$store.state.note_id)
-      .then((res) => {
-        self.$store.state.note_started_at = res.data.started_at;
-        self.$store.state.note_ended_at = res.data.ended_at;
-        console.log('res.data.started_at', res.data.started_at);
-        
-
-        self.note_started_at = fecha.format(new Date(res.data.started_at), 'YYYY.MM.DD ddd A hh:mm');
-        self.note_ended_at = fecha.format(new Date(res.data.ended_at), 'YYYY.MM.DD ddd A hh:mm');
-      })
-      .catch((ex) => { 
-      });
-    // this.note_ended_at = this.$store.state.note_ended_at;
-    // window.addEventListener('beforeunload', function (event) {
-    // })
-  },
-  computed: {
-    styleObject () {
-      return {
-        left: this.dX + 'px',
-        top: this.dY + 'px',
-        position: 'fixed'
-      }
-    }
   },
   props: {
     // value: {type: String, default: ''},
@@ -271,7 +244,6 @@ export default {
   },
   watch: {
     popUp() {
-      // console.log(this.$refs.date)
     }
   },
   methods: {
@@ -302,7 +274,7 @@ export default {
         hour= parseInt(hour)+12;
       var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
 
-      this.$refs.editor.saveNote(this.$store.state.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
+      this.$refs.editor.saveNote(this.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
     },
     typing(e) {
     	this.title = e.target.value

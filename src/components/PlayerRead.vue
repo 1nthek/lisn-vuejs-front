@@ -54,8 +54,6 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2';
-import { mapState, mapMutations } from 'vuex'
-
 
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -95,12 +93,6 @@ export default {
       swal_saveingRec: null,
     }
   },
-  computed: {
-    ...mapState([
-      'note_id',
-      'domain',
-    ]), 
-  },
   watch: {
     isRecording: function (newVal) {
       this.$emit('isRecording', newVal);
@@ -117,7 +109,7 @@ export default {
           self.$store.commit('clearInter');
         } else{
           var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
-          axios.get(self.domain + "/note/audio?audio_id=" + audioId)
+          axios.get(self.$store.state.domain + "/note/audio?audio_id=" + audioId)
             .then((res) => {
               self.$store.state.audio.src = res.data.data_url;
               // self.$store.commit('setCurrentTime', {begin:0});
@@ -186,9 +178,9 @@ export default {
         var self = this;
         var formData = new FormData();
         formData.append('audio_data', blob, 'filename');
-        formData.append('note_id', this.note_id);
+        formData.append('note_id', this.$store.state.note_id);
 
-        axios.post(this.domain + '/note/audio', formData)
+        axios.post(this.$store.state.domain + '/note/audio', formData)
           .then((res) => {
             self.audio_id = res.data.audio_id;
             self.audio_timestamp = [];
@@ -201,10 +193,10 @@ export default {
                 formData2.append('ended_at', 99999); 
                 formData2.append('content', element.content);
                 
-                axios.post(this.domain + '/note/sentence', formData2)
+                axios.post(this.$store.state.domain + '/note/sentence', formData2)
                   .then((res) => {
                     let self = this;
-                    axios.get( this.domain + '/note?note_id=' + this.note_id)
+                    axios.get( this.$store.state.domain + '/note?note_id=' + self.$store.state.note_id)
                       .then((res) => {
                         self.$store.state.sttText = [];
                         self.title = res.data.title;
@@ -216,6 +208,7 @@ export default {
                             self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, audioId: audio_id});
                           })
                         });
+                        
                       })
                       .then(() => {
                         this.$store.state.hour = '0';
@@ -347,68 +340,15 @@ export default {
         
     },
     recBtnPressed(){
-      if(this.isRecording){
-        // Swal.fire({
-        //   toast: true,
-        //   position: 'top',
-        //   showConfirmButton: false,
-        //   timer: 1000,
-        //   type: 'success',
-        //   title: '녹음 종료'
-        // })
-        
-        this.isRecording = false;
-        this.$store.state.isRecordable = false;
-
-        recognition.stop();
-        recorder.stop();
-
-        if (!localstream) return;
-
-        localstream.getTracks().forEach((track) => {
-          track.stop();
-        });
-        
-        // localstream = null;
-        // localstream.getTracks().forEach((track) => {
-        //   track.stop();
-        // });
-      }else{
-        let self = this;
-        // navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        //   .then((stream) => {
-        //     localstream = stream;
-        //     self.startRecording(stream);
-        //   })
-        //   .catch((ex) => {
-        //     Swal.fire({
-        //       toast: true,
-        //       position: 'center',
-        //       showConfirmButton: false,
-        //       timer: 3000,
-        //       type: 'error',
-        //       title: '마이크가 연결되어 있지 않습니다.'
-        //     })
-        // });
-
-        navigator.getUserMedia({ audio: true, video: false },
-            function(stream) {
-              localstream = stream;
-              self.startRecording(stream);
-            },
-            function(ex) {
-              Swal.fire({
-                toast: true,
-                position: 'center',
-                showConfirmButton: false,
-                timer: 3000,
-                type: 'error',
-                title: '마이크가 연결되어 있지 않습니다.'
-              })
-            }
-        );
-      }
-    },  
+        Swal.fire({
+        toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timer: 3000,
+        type: 'error',
+        title: '녹음은 Edit 모드에서만 가능합니다.'
+        })
+    },
     playSound() {
       this.$store.commit('playSound');
     },

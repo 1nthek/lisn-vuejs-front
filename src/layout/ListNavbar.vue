@@ -122,6 +122,8 @@
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
 import axios from 'axios'
+import { mapState, mapMutations } from 'vuex'
+
 
 // import { BaseNav, Modal } from '@/components';
 
@@ -157,7 +159,6 @@ export default {
   },
   created(){
     let self = this;
-    self.$store.commit('setUserId');
     axios.get( this.$store.state.domain + '/profile?user_id=' + this.$store.state.user_id)
       .then((res) => {
         self.user_name = res.data.user_name;
@@ -168,13 +169,20 @@ export default {
       });
   },
   methods: {
+    ...mapMutations([
+      'logout',
+    ]),
     signOut(){
-      var auth2 = gapi.auth2.getAuthInstance();
-      localStorage.removeItem('glisn_user_id');
-      localStorage.removeItem('glisn_note_id');
-      auth2.signOut();
-      auth2.disconnect();
-      this.$router.push('/');
+      let self = this;
+      gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          self.logout();
+          var auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut();
+          auth2.disconnect();
+          self.$router.replace('/');
+        })
+      })
     },
     capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);

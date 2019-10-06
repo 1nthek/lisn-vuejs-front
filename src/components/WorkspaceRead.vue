@@ -6,7 +6,7 @@
           <s-t-t ref="stt"></s-t-t>
           <div class="divider"></div>
           <div class="note-container">
-              <Note ref="note"></Note>
+              <NoteRead ref="note"></NoteRead>
           </div>
       </div>
     </div>
@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import Note from './Note.vue'
+import NoteRead from './NoteRead.vue'
 import STT from './STT.vue'
 // import Player from './Player.vue'
 
 
 export default {
   components: {
-    Note,
+    NoteRead,
     STT,
     // Player
   },

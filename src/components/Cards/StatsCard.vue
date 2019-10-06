@@ -69,6 +69,11 @@ export default {
         inputOptions: directory,
         inputPlaceholder: '폴더 선택',
         showCancelButton: true,
+        confirmButtonClass: 'btn btn-success btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '이동',
+        cancelButtonText: '취소',
+        buttonsStyling: false,
         inputValidator: (value) => {
           return new Promise((resolve) => {
             if (value === '') {
@@ -88,6 +93,7 @@ export default {
       formData.append('note_id', note_id);
       formData.append('directory_id', directory_id);
       xhr.open('PUT', this.$store.state.domain + '/note/directory');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + self.$store.state.access_token);
       xhr.send(formData);
       xhr.onload = function() {
         Swal.fire({
@@ -98,7 +104,6 @@ export default {
           type: 'success',
           title: '폴더가 이동 되었습니다.'
         })
-        console.log(self.$store.state.directory_id);
         if(self.$store.state.directory_id==-1){
           
         }else{
@@ -109,12 +114,14 @@ export default {
     },
     handleDelete(note_id, title) {   
       Swal.fire({
-        title: '휴지통으로 이동',
-        text: `휴지통에서 완전히 삭제할 수 있습니다`,
+        // title: '휴지통으로 이동',
+        // text: `휴지통에서 완전히 삭제할 수 있습니다`,
+        title: '노트 삭제',
+        text: '"' + title + '"를 영구 삭제 합니다.',
         // type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: 'btn btn-success btn-fill',
-        cancelButtonClass: 'btn btn-danger btn-fill',
+        confirmButtonClass: 'btn btn-danger btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
         confirmButtonText: '삭제',
         cancelButtonText: '취소',
         buttonsStyling: false
@@ -130,6 +137,7 @@ export default {
       var formData = new FormData();
       formData.append('note_id', note_id);
       xhr.open('DELETE', this.$store.state.domain + '/note');
+      xhr.setRequestHeader('Authorization', 'Bearer ' + self.$store.state.access_token);
       xhr.send(formData);
       xhr.onload = function() {
         if(xhr.status == 200){

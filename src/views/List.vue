@@ -1,15 +1,14 @@
 <template>
     <div style="background:white;height: inherit;">
       <side-bar style="border: none;">
-        <template slot-scope="props" slot="links">
-          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }"></sidebar-item>
+        <template slot="links">
+          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }" :category="'all'"></sidebar-item>
+          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" :category="'shared'"></sidebar-item>
           <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
-          <!-- <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" ></sidebar-item> -->
-          <!-- <sidebar-item :link="{ name: '폴더', path: '/list', icon: 'ni ni-folder-17' }" ></sidebar-item> -->
 
-          <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}">
+          <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>
             <template>
-              <div v-for="dir in $store.state.directories" :key="dir.directory_id">
+              <div v-for="dir in directories" :key="dir.directory_id">
                 <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
               </div>
             </template>
@@ -38,19 +37,19 @@
             <vuescroll>
               <div style="margin-bottom:30px;width: 100%;background: white;">
                   <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
-                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{this.$store.state.directory_name}}</div>
-                    <button class="create-btn" @click="newPage()">
-                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;">
+                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{ directory_name }}</div>
+                    <button class="create-btn" @click.prevent="CREATE_NOTE" style="outline: 0">
+                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
                         + 새 노트
                       </div>
                     </button>
                   </div>
               </div>
-              <div class="cont-loader" ref="loader">
-                <div class="list-loader"></div>
+              <div v-if="isLoading" class="cont-isLoading" >
+                <div class="list-isLoading"></div>
               </div>
-              <div class="row" style="visibility:hidden;margin:0" ref="contents">
-                  <div class="col-xl-3 col-md-6 ani-card"  v-for="p in this.$store.state.noteList" :key="p.no" >
+              <div v-else class="row" style="margin:0" ref="contents">
+                  <div class="col-xl-3 col-md-6 ani-card"  v-for="p in noteList" :key="p.no" >
                     <stats-card :title="p.title"
                                 :note_id="p.note_id"
                                 :summery="p.summery"
@@ -76,93 +75,57 @@
 </template>
 
 <script>
-// import Sidebar from '../components/Sidebar.vue'
 import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
 import axios from 'axios'
 import Swal from 'sweetalert2';
-
-// import { FadeTransition } from 'vue2-transitions';
-// import BoardTable from './Tables/BoardTable'
-// import PaginatedTables from './Tables/PaginatedTables'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { setTokenInHeader } from '../api/api'
 
 export default {
   components: {
-    // Sidebar,
-    // PaginatedTables,
     ListNavbar,
     StatsCard,
-    // FadeTransition
-    // BoardTable
   },
   data() {
     return {
-      user_id: -1,
-      list_title: 'null',
+      isLoading: true,
     }
+  },
+  computed: {
+    ...mapState([
+      'user_id',
+      'directories',
+      'directory_name',
+      'noteList',
+      'domain',
+      'token',
+    ]),
   },
   created() {
     let self = this;
-    self.user_id = null;
-    self.$store.state.user_id = null;
-    setTimeout(() => {
-      gapi.load('auth2', function () {
-        gapi.auth2.init().then(function () {
-          var auth2 = gapi.auth2.getAuthInstance();
-          if (auth2.isSignedIn.get() == true) {
-            self.$store.commit('setUserId');
-            self.user_id = self.$store.state.user_id;
-            if(self.$store.state.user_id == null){
-              var auth2 = gapi.auth2.getAuthInstance();
-              localStorage.removeItem('glisn_user_id');
-              localStorage.removeItem('glisn_note_id');
-              auth2.signOut();
-              auth2.disconnect();
-              self.$router.push('/');
-            }
-            else{
-              let ref = self.$refs['contents'];
-              ref.style.visibility = "visible";
-              ref = self.$refs['loader'];
-              ref.style.display = "none";
-              self.$store.commit('getNoteList');
-              if(self.$store.state.error){
-                  self.$router.push('/');
-              }
-              self.$store.commit('getDirectoryList');
-            }
-          }
-          else{
-            self.$router.push('/home');
-          }
-        });
-      })
-    }, 300);  //delay loading
-
-    // setTimeout(() => {
-    //   let ref = this.$refs['contents'];
-    //   ref.style.visibility = "visible";
-    //   ref = this.$refs['loader'];
-    //   ref.style.display = "none";
-    // }, 300);  //delay loading
-
-
+    if(!self.user_id || !self.token){
+      delete localStorage.user_id;
+      delete localStorage.token;
+      self.$router.replace('/');
+    }
+    else{
+      setTokenInHeader(self.token);
+      this.FETCH_LISTS()
+      this.FETCH_DIRECTORIES()
+      self.setDirectoryName("모든 노트");
+      self.isLoading = false;
+    }
   },
   methods: {
-    newPage() {
-      let self = this;
-      var formData = new FormData();
-      formData.append('user_id', this.$store.state.user_id);
-      axios.post( this.$store.state.domain + '/note', formData)
-        .then((res) => {
-          var note_id = res.data.note_id;          
-          localStorage.setItem('glisn_note_id', note_id);
-          self.$store.commit('setNoteId');
-          self.$router.push('/note');
-        })
-        .catch((ex) => {
-        });
-    }
+    ...mapMutations([
+      'setDirectoryName',
+    ]),
+    ...mapActions([
+      'FETCH_LISTS',
+      'FETCH_DIRECTORIES',
+      'CREATE_NOTE'
+    ]),
   },
 }
 </script>
@@ -182,13 +145,13 @@ export default {
   }
 }
 
-.list-loader,
-.list-loader:after {
+.list-isLoading,
+.list-isLoading:after {
   border-radius: 50%;
   width: 10em;
   height: 10em;
 }
-.list-loader {
+.list-isLoading {
   margin: 60px auto;
   font-size: 10px;
   position: relative;
@@ -237,7 +200,7 @@ div.ani-card{
     opacity: 1;
   }
 }
-.cont-loader {
+.cont-isLoading {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -311,6 +274,7 @@ a {
     border-color: #f1404b !important;
     color: #fff !important;
     border-radius: 0.2rem;
+    outline: 0;
 }
 .lisn-navbar{
     position: fixed;
@@ -364,5 +328,8 @@ a {
     background: white;
     position: absolute;
 }
-
+.row {
+    margin-right: 0px;
+    margin-left: -15px;
+}
 </style>

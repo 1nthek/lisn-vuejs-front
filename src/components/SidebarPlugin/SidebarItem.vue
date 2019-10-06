@@ -68,8 +68,8 @@
                         <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
                           <i class="fas fa-edit" @click="renameFolder()"></i>
                         </div>
-                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
-                          <i class="fas fa-trash" @click="deleteFolder()"></i>
+                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolderSwal()">
+                          <i class="fas fa-trash" @click="deleteFolderSwal()"></i>
                         </div>
                       </div>
                     </div>
@@ -79,10 +79,18 @@
           </div>
         </template>
         <template v-else>
-          <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="tmptmp">
-            <i :class="link.icon" ></i>
-            <span class="nav-link-text" style="padding-left: 18px;" @click="tmptmp">{{ link.name }}</span>
-          </div>
+          <template v-if="category == 'all'">
+            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getAllNote">
+              <i :class="link.icon" ></i>
+              <span class="nav-link-text" style="padding-left: 18px;" @click="getAllNote">{{ link.name }}</span>
+            </div>
+          </template>
+          <template v-if="category == 'shared'">
+            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getSharedNote">
+              <i :class="link.icon" ></i>
+              <span class="nav-link-text" style="padding-left: 18px;" @click="getSharedNote">{{ link.name }}</span>
+            </div>
+          </template>
         </template>
       </component>
     </slot>
@@ -126,7 +134,11 @@ export default {
     directory_name:{
       type: String,
       default: "null",
-    }
+    },
+    category:{
+      type: String,
+      default: "",
+    },
   },
   provide() {
     return {
@@ -175,9 +187,13 @@ export default {
     }
   },
   methods: {
-    tmptmp(){
+    getAllNote(){
       this.$store.commit('getNoteList');
       this.$store.commit('setDirectoryName', "모든 노트");
+    },
+    getSharedNote(){
+      this.$store.commit('getSharedNoteList');
+      this.$store.commit('setDirectoryName', "공유 받은 노트");
     },
     getFolderList(){
       this.$store.commit('getDirectoryNoteList', this.directory_id);
@@ -193,6 +209,23 @@ export default {
         })
         .catch((ex) => {
         });
+    },
+    deleteFolderSwal(){
+      Swal.fire({
+        title: '폴더 삭제',
+        text: '포함된 노트는 삭제 되지 않습니다.',
+        // type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-danger btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '삭제',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.deleteFolder();
+        }
+      });
     },
     deleteFolder(){
       let self = this;
@@ -211,6 +244,11 @@ export default {
         input: 'text',
         inputValue: this.directory_name,
         showCancelButton: true,
+        confirmButtonClass: 'btn btn-success btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '변경',
+        cancelButtonText: '취소',
+        buttonsStyling: false,
         inputValidator: (value) => {
           if (!value) {
             return '폴더명을 작성해 합니다.'
@@ -304,7 +342,7 @@ export default {
 .sidebar-menu-item,.nav-link{
   color: rgba(0, 0, 0, 0.6) !important;
 }
-.nav-item.active:hover #add-folder-btn{
+.nav-item:hover #add-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
 }
