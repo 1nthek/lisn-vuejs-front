@@ -49,21 +49,6 @@ export default {
     Logo,
   },
   props: {
-    title: {
-      type: String,
-      default: 'Creative Tim',
-      description: 'Sidebar title'
-    },
-    shortTitle: {
-      type: String,
-      default: 'CT',
-      description: 'Sidebar short title'
-    },
-    logo: {
-      type: String,
-      default: 'https://demos.creative-tim.com/vue-argon-dashboard-pro/img/brand/green.png',
-      description: 'Sidebar app logo'
-    },
     backgroundColor: {
       type: String,
       default: 'vue',

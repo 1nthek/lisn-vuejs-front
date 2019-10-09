@@ -25,6 +25,7 @@ export default {
     ...mapState([
       'token',
       'user_id',
+      'note_id'
     ]), 
   },
   created() {

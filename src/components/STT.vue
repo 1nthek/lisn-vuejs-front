@@ -48,20 +48,18 @@ export default {
     },
     scrollSTT(){
       this.$refs['vs'].scrollTo(
-        { y: this.$refs['vs'].$el.childNodes[0].childNodes[0].scrollHeight },
-        1000
-      );
+        { y: this.$refs['vs'].$el.childNodes[0].childNodes[0].scrollHeight },1000);
     },
     getAudioAndPlay(item) {
       if(this.isRecordingfromPlayer){
         Swal.fire({
-              toast: true,
-              position: 'center',
-              showConfirmButton: false,
-              timer: 2000,
-              type: 'error',
-              title: '녹음중에는 재생을 할 수 없습니다'
-            })
+          toast: true,
+          position: 'center',
+          showConfirmButton: false,
+          timer: 2000,
+          type: 'error',
+          title: '녹음중에는 재생을 할 수 없습니다'
+        })
       }else{
         this.audioId = JSON.parse(JSON.stringify(item.audioId))
         axios.get(this.$store.state.domain + "/note/audio?audio_id=" + this.audioId)

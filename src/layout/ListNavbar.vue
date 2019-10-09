@@ -122,7 +122,7 @@
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
 import axios from 'axios'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 
 // import { BaseNav, Modal } from '@/components';
@@ -141,6 +141,11 @@ export default {
     }
   },
   computed: {
+    ...mapState([
+      'user_name',
+      'user_email',
+      'user_picture_url',
+    ]),
     routeName() {
       const { name } = this.$route;
       return this.capitalizeFirstLetter(name);
@@ -152,25 +157,17 @@ export default {
       showMenu: false,
       searchModalVisible: false,
       searchQuery: '',
-      user_name: null,
-      user_email: null,
-      user_picture_url: null,
     };
   },
   created(){
-    let self = this;
-    axios.get( this.$store.state.domain + '/profile?user_id=' + this.$store.state.user_id)
-      .then((res) => {
-        self.user_name = res.data.user_name;
-        self.user_email = res.data.user_email;
-        self.user_picture_url = res.data.user_picture_url;
-      })
-      .catch((ex) => { 
-      });
+    this.FETCH_PROFILE();
   },
   methods: {
     ...mapMutations([
       'logout',
+    ]),
+    ...mapActions([
+      'FETCH_PROFILE',
     ]),
     signOut(){
       let self = this;

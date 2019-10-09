@@ -9,7 +9,7 @@
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
 
     <div>
-      <button class="share-pelple-btn" style="position: relative;" @click="sharePeople()">
+      <button class="share-pelple-btn" style="position: relative;" @click="sharedPeople()">
         <div class="ns-kr" style="font-size: 16px; margin: 8px 10px;font-weight: bold;"><i class="fas fa-users"></i>&nbsp;</div>
       </button>
       <button class="share-btn" style="position: relative;" @click="shareNote()">
@@ -27,7 +27,7 @@
 import PlayerRead from '../components/PlayerRead'
 import Swal from 'sweetalert2';
 import axios from 'axios'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 
 export default {
@@ -40,6 +40,9 @@ export default {
     ]),
   },
    methods: {
+    ...mapActions([
+      'SHARE_NOTE',
+    ]),
     isRecording(para){
       this.$emit('isRecording', para);
     },
@@ -65,20 +68,10 @@ export default {
       })
 
       if (email) {
-        var self = this;
-        var formData = new FormData();
-        formData.append('note_id', this.$store.state.note_id);
-        formData.append('email', email);
-        
-        axios.post(this.$store.state.domain + '/note/shared', formData)
-          .then((res) => {
-            Swal.fire('Entered email: ' + email)
-          })
-          .catch((ex) => {
-          })
+        this.SHARE_NOTE(email);
       }
     },
-    sharePeople(){
+    sharedPeople(){
       
     },
    }
