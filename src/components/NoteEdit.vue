@@ -153,64 +153,6 @@ export default {
     DatePick,
     Editor,
   },
-  data: () => ({
-    format: 'YYYY.MM.DD ddd A hh:mm',
-    date: fecha.format(new Date(), this.format),
-    popUp: false,
-    flag: false,
-
-    content: "",
-    title: "제목",
-  }),
-  computed: {
-    ...mapState([
-      'user_id',
-      'note_id',
-      'token',
-      'domain',
-      'noteTitle',
-    ]),
-    note_started_at: {
-        get () { return this.$store.state.note_started_at},
-        set (value) {  this.$store.commit('set_note_started_at', value) }
-    },
-    note_ended_at: {
-        get () { return this.$store.state.note_ended_at},
-        set (value) {  this.$store.commit('set_note_ended_at', value) }
-    }
-  },
-  //  watch: {
-  //   title: function (newtitle) {
-  //     this.title = newtitle;
-  //   }
-  // },
-  beforeDestroy(){
-    var year = this.note_started_at.substr(0,4);
-    var month = parseInt(this.note_started_at.substr(5,2))-1;
-    var day = this.note_started_at.substr(8,2);
-    var ampm = this.note_started_at.substr(13,2);
-    var hour = this.note_started_at.substr(16,2);
-    var minute = this.note_started_at.substr(19,2);
-    if(ampm=="오후"){
-      hour= parseInt(hour)+12;
-    }
-      
-    var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-    
-    year = this.note_ended_at.substr(0,4);
-    month = parseInt(this.note_ended_at.substr(5,2))-1;
-    day = this.note_ended_at.substr(8,2);
-    ampm = this.note_ended_at.substr(13,2);
-    hour = this.note_ended_at.substr(16,2);
-    minute = this.note_ended_at.substr(19,2);
-    if(ampm == "오후")
-      hour= parseInt(hour)+12;
-    var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-
-    this.$refs.editor.saveNoteAuto(this.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
-  },
-  created(){
-  },
   props: {
     // value: {type: String, default: ''},
     // format: {type: String, default: 'YYYY-MM-DD'},
@@ -242,16 +184,46 @@ export default {
     },
     startWeekOnSunday: {type: Boolean, default: true}
   },
-  watch: {
-    popUp() {
+  data: () => ({
+    format: 'YYYY.MM.DD ddd A hh:mm',
+    date: fecha.format(new Date(), this.format),
+    popUp: false,
+    flag: false,
+
+    content: "",
+    title: "제목",
+  }),
+  computed: {
+    ...mapState([
+      'user_id',
+      'note_id',
+      'token',
+      'domain',
+      'noteTitle',
+    ]),
+    note_started_at: {
+        get () { return this.$store.state.note_started_at},
+        set (value) {  this.$store.commit('set_note_started_at', value) }
+    },
+    note_ended_at: {
+        get () { return this.$store.state.note_ended_at},
+        set (value) {  this.$store.commit('set_note_ended_at', value) }
     }
   },
+  beforeDestroy(){      
+    var started_at = this.parse_started_at();
+    var ended_at = this.parse_ended_at();
+    var showMessage = false; 
+    this.$refs.editor.saveNote(this.$refs.noteTitle.innerHTML, started_at, ended_at, showMessage);
+  },
   methods: {
-    setEditer(){
-      // this.$refs.noteTitle.innerHTML = this.$store.state.noteTitle =="untitled"?"":this.$store.state.noteTitle;
-      // this.$refs.editor.setEditer();
-    },
     saveNote(){
+      var started_at = this.parse_started_at();
+      var ended_at = this.parse_ended_at();
+      var showMessage = true; 
+      this.$refs.editor.saveNote(this.$refs.noteTitle.innerHTML, started_at, ended_at, showMessage);
+    },
+    parse_started_at(){
       var year = this.note_started_at.substr(0,4);
       var month = parseInt(this.note_started_at.substr(5,2))-1;
       var day = this.note_started_at.substr(8,2);
@@ -261,20 +233,19 @@ export default {
       if(ampm=="오후"){
         hour= parseInt(hour)+12;
       }
-        
-      var started_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-      
-      year = this.note_ended_at.substr(0,4);
-      month = parseInt(this.note_ended_at.substr(5,2))-1;
-      day = this.note_ended_at.substr(8,2);
-      ampm = this.note_ended_at.substr(13,2);
-      hour = this.note_ended_at.substr(16,2);
-      minute = this.note_ended_at.substr(19,2);
-      if(ampm == "오후")
+      return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+    },
+    parse_ended_at(){
+      var year = this.note_ended_at.substr(0,4);
+      var month = parseInt(this.note_ended_at.substr(5,2))-1;
+      var day = this.note_ended_at.substr(8,2);
+      var ampm = this.note_ended_at.substr(13,2);
+      var hour = this.note_ended_at.substr(16,2);
+      var minute = this.note_ended_at.substr(19,2);
+      if(ampm == "오후"){
         hour= parseInt(hour)+12;
-      var ended_at = fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-
-      this.$refs.editor.saveNote(this.note_id, this.$refs.noteTitle.innerHTML, started_at, ended_at);
+      }
+      return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
     },
     typing(e) {
     	this.title = e.target.value

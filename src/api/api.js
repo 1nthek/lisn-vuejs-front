@@ -1,12 +1,9 @@
 import axios from 'axios'
 import router from '../router'
-// import {store} from '../store/store'
 
-const domain = "http://54.180.86.133/api";
+const domain = "http://15.164.232.194/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
-  // store.state.token = null;
-  // store.state.user_id = null;
   delete localStorage.token;
   delete localStorage.user_id;
   router.replace('/');
@@ -33,9 +30,12 @@ export const list = {
   fetch(user_id) {
     return request('get', `/list/note/all?user_id=${user_id}`)
   },
-  // create(title) {
-  //   return request('post', '/boards', { title })
-  // },
+  fetch_shared(user_id) {
+    return request('get', `/list/note/shared?user_id=${user_id}`)
+  },
+  fetch_directory(directory_id){
+    return request('get', `/list/note?directory_id=${directory_id}`)
+  }
   // update(id, payload) {
   //   return request('put', `/boards/${id}`, payload)
   // },
@@ -50,6 +50,15 @@ export const note = {
   },
   create(formData){
     return request('post', `/note`, formData);
+  },
+  share(formData){
+    return request('post', `/note/shared`, formData);
+  },
+  update(formData) {
+    return request('put', `/note`, formData)
+  },
+  destroy(formData){
+    return request('delete', `/note`, formData);
   }
 }
 
@@ -57,6 +66,24 @@ export const directory = {
   fetch(user_id) {
     return request('get', `/list/directory?user_id=${user_id}`)
   },
+  create(formData) {
+    return request('post', `/directory`, formData);
+  },
+  move(formData){
+    return request('put', `/note/directory`, formData)
+  },
+  update(formData) {
+    return request('put', `/directory`, formData)
+  },
+  destroy(formData) {
+    return request('delete', `/directory`, formData);
+  }
+}
+
+export const profile = {
+  fetch(user_id){
+    return request('get', `/profile?user_id=${user_id}`)
+  }
 }
 
 export const auth = {

@@ -53,28 +53,32 @@
         :href="link.path">
         <template v-if="addLink" >
           <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
-            <div @click.self="getFolderList()" @mouseover.self="folderModify = false" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 4px 16px 4px 52px">
+            <div @click.self="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 4px 16px 4px 52px">
               <div>
                 <span class="nav-link-text" @click.self="getFolderList()" >{{ link.name }}</span>            
               </div>
-              <div id="modify-folder-btn" @mouseover="folderModify = true">
-                <i class="fas fa-ellipsis-h" style="font-size: 14px;"></i>
+              <div style="font-size: 14px;display: flex;">
+                <div class="modify-folder-btn" @click="renameFolder()">
+                  <i class="fas fa-edit" @click="renameFolder()"></i>
+                </div>
+                <div class="modify-folder-btn" @click="deleteFolder()">
+                  <i class="fas fa-trash" @click="deleteFolder()"></i>
+                </div>
               </div>
-              <div style="position: absolute;left: 150px;" v-show="folderModify" >
-                <!-- <div class="" :class="{ show: folderModify }" style="padding: 0;width: 80px;min-width: 80px;"> -->
+              <!-- <div style="position: absolute;left: 150px;" v-show="folderModify" >
                 <div style="margin-left: 30px;" @mouseleave="folderModify = false">
                     <div class="dropdown-item" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
                       <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
                         <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
                           <i class="fas fa-edit" @click="renameFolder()"></i>
                         </div>
-                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolderSwal()">
-                          <i class="fas fa-trash" @click="deleteFolderSwal()"></i>
+                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
+                          <i class="fas fa-trash" @click="deleteFolder()"></i>
                         </div>
                       </div>
                     </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </template>
@@ -97,10 +101,11 @@
   </component>
 </template>
 <script>
-import { CollapseTransition } from 'vue2-transitions';
 
+import { CollapseTransition } from 'vue2-transitions';
 import axios from 'axios'
 import Swal from 'sweetalert2';
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 
 export default {
@@ -162,6 +167,11 @@ export default {
     };
   },
   computed: {
+    ...mapState([
+      'user_id',
+    ]),
+  },
+  computed: {
     baseComponent() {
       return this.isMenu || this.link.isRoute ? 'li' : 'router-link';
     },
@@ -187,30 +197,34 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setDirectoryName',
+      'getDirectoryNoteList'
+    ]),
+    ...mapActions([
+      'FETCH_LISTS',
+      'FETCH_SHARED_LISTS',
+      'FETCH_DIRECTORIES',
+      'FETCH_DIRECTORY_LISTS',
+      'CREATE_DIRECTORY',
+      'UPDATE_DIRECTORY',
+      'DESTROY_DIRECTORY',
+    ]),
     getAllNote(){
-      this.$store.commit('getNoteList');
-      this.$store.commit('setDirectoryName', "모든 노트");
+      this.FETCH_LISTS();
     },
     getSharedNote(){
-      this.$store.commit('getSharedNoteList');
-      this.$store.commit('setDirectoryName', "공유 받은 노트");
+      this.FETCH_SHARED_LISTS();
     },
     getFolderList(){
-      this.$store.commit('getDirectoryNoteList', this.directory_id);
-      this.$store.commit('setDirectoryName', this.directory_name);
+      const directory_id = this.directory_id;
+      const directory_name = this.directory_name;
+      this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
     },
     addFolder(){
-      let self = this;
-      var formData = new FormData();
-      formData.append('user_id', this.$store.state.user_id);
-      axios.post( this.$store.state.domain + '/directory', formData)
-        .then((res) => {
-          self.$store.commit('getDirectoryList');
-        })
-        .catch((ex) => {
-        });
+      this.CREATE_DIRECTORY();
     },
-    deleteFolderSwal(){
+    deleteFolder(){
       Swal.fire({
         title: '폴더 삭제',
         text: '포함된 노트는 삭제 되지 않습니다.',
@@ -223,20 +237,9 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          this.deleteFolder();
+          this.DESTROY_DIRECTORY(this.directory_id);
         }
       });
-    },
-    deleteFolder(){
-      let self = this;
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append('directory_id', this.directory_id);
-      xhr.open('DELETE', this.$store.state.domain + '/directory');
-      xhr.send(formData);
-      xhr.onload = function() {
-        self.$store.commit('getDirectoryList');        
-      }
     },
     renameFolder(){
       Swal.fire({
@@ -254,19 +257,9 @@ export default {
             return '폴더명을 작성해 합니다.'
           }
           else{
-            let self = this;
-            var xhr = new XMLHttpRequest();
-            var formData = new FormData();
-            formData.append('directory_id', this.directory_id);
-            formData.append('name', value);
-
-            xhr.open('PUT', this.$store.state.domain + '/directory');
-            xhr.send(formData);
-            xhr.onload = function() {
-              self.$store.commit('getDirectoryList');
-              self.$store.commit('getDirectoryNoteList', self.directory_id);
-              self.$store.commit('setDirectoryName', value);
-            }
+            const directory_id = this.directory_id;
+            const directory_name = value;
+            this.UPDATE_DIRECTORY({directory_id, directory_name});
           }
         }
       })
@@ -346,17 +339,19 @@ export default {
   visibility: visible !important;
   opacity:1 !important;
 }
-#add-folder-btn,#modify-folder-btn{
+#add-folder-btn,.modify-folder-btn{
   transition: all 200ms ease-in 0s;
   display: flex;
   align-items: center;
   justify-content:center;
   width: 20px;
   height: 20px;
-  border: 1px solid rgba(55, 53, 57, 0.15);
   border-radius: 2px;
   visibility:hidden;
   opacity:0
+}
+#add-folder-btn{
+  border: 1px solid rgba(55, 53, 57, 0.15);
 }
 .cont2{
   transition: all 200ms ease-in 0s;
@@ -367,10 +362,10 @@ export default {
 #add-folder-btn:hover{
   background: #DAD9D6;
 }
-#modify-folder-btn:hover{
+.modify-folder-btn:hover{
   background: #DAD9D6;
 }
-#folder-cont:hover #modify-folder-btn{
+#folder-cont:hover .modify-folder-btn{
   visibility: visible !important;
   opacity:1 !important;
 }

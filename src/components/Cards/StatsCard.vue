@@ -1,5 +1,5 @@
 <template>
-  <card class="card-stats" :show-footer-line="true" :note_id="note_id" v-on:openNote="$emit('openNote')">
+  <card class="card-stats" :show-footer-line="true" :note_id="note_id">
     <div style="display:flex;flex-basis: auto;">
       <div style="flex: auto;">
         <div class="row">
@@ -19,7 +19,7 @@
       <div>
         <div v-if="$slots.icon || icon">
           <slot name="icon">
-            <div id="trash" class="icon-shape text-white rounded-circle shadow" @click.stop="handleDelete(note_id, title)" style="cursor: pointer;width: 37px;height: 37px;"
+            <div id="trash" class="icon-shape text-white rounded-circle shadow" @click.stop="deleteNote(note_id, title)" style="cursor: pointer;width: 37px;height: 37px;"
                 :class="[`bg-${type}`, iconClasses]">
               <i :class="icon"></i>
             </div>
@@ -39,11 +39,17 @@
 import Card from './Card.vue';
 import Swal from 'sweetalert2';
 import axios from 'axios'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'stats-card',
   components: {
     Card
+  },
+  computed: {
+    ...mapState([
+      'directories',
+    ]),
   },
   props: {
     type: {
@@ -57,11 +63,15 @@ export default {
     iconClasses: [String, Array]
   },
   methods: {
+    ...mapActions([
+      'DESTROY_NOTE',
+      'MOVE_DIRECTORY'
+    ]),
     moveDirectory(note_id){
       var directory = {};
-      for (var i = 0; i < this.$store.state.directories.length; i++) {
-        directory[this.$store.state.directories[i].directory_id] = this.$store.state.directories[i].name;
-      }
+      this.directories.forEach(element => {
+        directory[element.directory_id] = element.name;
+      });
       
       Swal.fire({
         title: '해당 폴더로 이동',
@@ -79,40 +89,15 @@ export default {
             if (value === '') {
               resolve('폴더를 선택해야 합니다')
             } else {
-              this.moveDirectoryAPI(note_id, value);
+              const directory_id = value;
+              this.MOVE_DIRECTORY({note_id, directory_id});
               resolve();
             }
           })
         }
       })
     },
-    moveDirectoryAPI(note_id, directory_id){
-      let self = this;
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append('note_id', note_id);
-      formData.append('directory_id', directory_id);
-      xhr.open('PUT', this.$store.state.domain + '/note/directory');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + self.$store.state.access_token);
-      xhr.send(formData);
-      xhr.onload = function() {
-        Swal.fire({
-          toast: true,
-          position: 'top',
-          showConfirmButton: false,
-          timer: 1600,
-          type: 'success',
-          title: '폴더가 이동 되었습니다.'
-        })
-        if(self.$store.state.directory_id==-1){
-          
-        }else{
-          self.$store.commit('getDirectoryNoteList', self.$store.state.directory_id);
-        }
-      }
-
-    },
-    handleDelete(note_id, title) {   
+    deleteNote(note_id, title) {   
       Swal.fire({
         // title: '휴지통으로 이동',
         // text: `휴지통에서 완전히 삭제할 수 있습니다`,
@@ -127,51 +112,14 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          this.deleteRow(note_id, title);
+          this.DESTROY_NOTE({note_id, title});
         }
       });
     },
-    deleteRow(note_id, title) {
-      let self = this;
-      var xhr = new XMLHttpRequest();
-      var formData = new FormData();
-      formData.append('note_id', note_id);
-      xhr.open('DELETE', this.$store.state.domain + '/note');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + self.$store.state.access_token);
-      xhr.send(formData);
-      xhr.onload = function() {
-        if(xhr.status == 200){
-          Swal.fire({
-            title: '삭제',
-            text: `노트 '${title}'를 삭제 하였습니다.`,
-            type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
-          });
-          self.$store.commit('getNoteList');
-        }
-        else{
-          Swal.fire({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 2000,
-            type: 'error',
-            title: '노트 삭제 실패',
-          });
-        }
-      }
-    }
   }
 }
 </script>
 <style>
-/* .icon.icon-shape {
-  transition: background 300ms ease-in 0s;
-}
-.icon.icon-shape:hover {
-  background: #fb6340 !important;
-} */
 .summery{
   font-weight:600;font-size: 12px;height: 17px;color: #617386;transition: all .4s ease 0s;
 }

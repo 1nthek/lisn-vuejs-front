@@ -5,6 +5,11 @@ import axios from 'axios'
 import * as api from '../api/api'
 import fecha from 'fecha'
 import router from '../router'
+import Swal from 'sweetalert2';
+import { Editor, EditorContent, } from 'tiptap'
+import {
+  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Link,  Strike,  Underline,  History,  HorizontalRule,  Focus,
+} from 'tiptap-extensions'
 
 
 Vue.use(Vuex);
@@ -48,10 +53,40 @@ export const store = new Vuex.Store({
     directory_name: "모든 노트",
     sttText:[],
 
+    user_name: null,
+    user_email: null,
+    user_picture_url: null,
+
+    tiptap_editor: new Editor({
+      extensions: [
+        new Blockquote(),
+        new CodeBlock(),
+        new HardBreak(),
+        new Heading({ levels: [1, 2, 3] }),
+        new BulletList(),
+        new OrderedList(),
+        new ListItem(),
+        new TodoItem(),
+        new TodoList(),
+        new Bold(),
+        new Code(),
+        new Italic(),
+        new Link(),
+        new Strike(),
+        new Underline(),
+        new History(),
+        new HorizontalRule(),
+        new Focus(),
+      ],
+      content: "",
+      // autoFocus: true,
+    }),
+
+
     //staging server
     // domain: 'http://54.180.117.235/api'
     //dev server
-    domain: 'http://54.180.86.133/api'
+    domain: 'http://15.164.232.194/api'
     //real server
     // domain: 'https://li-sn.io/v1/api'
 
@@ -118,6 +153,7 @@ export const store = new Vuex.Store({
     },
     setNoteData(state, value){
       let self = this;
+      state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
       state.note_started_at = fecha.format(new Date(value.started_at), 'YYYY.MM.DD ddd A hh:mm')
@@ -164,104 +200,7 @@ export const store = new Vuex.Store({
     setNoteId(state, note_id) {
       state.note_id = note_id;
     },
-    setDirectoryName(state, directory_name){
-      state.directory_name = directory_name;
-    },
-    getNoteList(state) {
-      let self = this;
-      state.error = false;
-
-      state.directory_id = -1;
-      setTimeout(() => {
-        axios.get(state.domain + '/list/note/all?user_id=' + state.user_id)
-          .then(res => {
-            res.data.notes.forEach(element => {
-              if (element.title == "") {
-                element.title = "untitled";
-              }
-              var date1 = new Date(Date.parse(element.created_at));
-              var date2 = new Date(Date.parse(element.updated_at));
-              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
-            });
-            state.noteList = res.data.notes;
-          })
-          .catch((ex) => {
-            axios.delete(state.domain + '/signin/token')
-              .then((res) => {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut();
-                auth2.disconnect();
-                state.error = true;
-              })
-              .catch((ex) => {
-              })
-          })
-      }, 300);  //delay loading
-    },
-    getSharedNoteList(state) {
-      let self = this;
-      state.error = false;
-
-      state.directory_id = -1;
-      setTimeout(() => {
-        axios.get(state.domain + '/list/note/shared?user_id=' + state.user_id)
-          .then(res => {
-            res.data.notes.forEach(element => {
-              if (element.title == "") {
-                element.title = "untitled";
-              }
-              var date1 = new Date(Date.parse(element.created_at));
-              var date2 = new Date(Date.parse(element.updated_at));
-              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
-            });
-            state.noteList = res.data.notes;
-          })
-          .catch((ex) => {
-            axios.delete(state.domain + '/signin/token')
-              .then((res) => {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut();
-                auth2.disconnect();
-                state.error = true;
-              })
-              .catch((ex) => {
-              })
-          })
-      }, 300);  //delay loading
-    },
-    getDirectoryNoteList(state, directory_id, directory_name) {
-      let self = this;
-      state.error = false;
-      state.directory_id = directory_id;
-      setTimeout(() => {
-        axios.get(state.domain + '/list/note?directory_id=' + directory_id)
-          .then(res => {
-            res.data.notes.forEach(element => {
-              if (element.title == "") {
-                element.title = "untitled";
-              }
-              var date1 = new Date(Date.parse(element.created_at));
-              var date2 = new Date(Date.parse(element.updated_at));
-              element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-              element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
-            });
-            state.noteList = res.data.notes;
-          })
-          .catch(err => {
-            axios.delete(state.domain + '/signin/token')
-              .then(res => {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut();
-                auth2.disconnect();
-                state.error = true;
-              })
-              .catch(err => {
-              })
-          })
-      }, 300);  //delay loading
-    },
+    
     startCountingTimer(state){
       state.timeOffset = 0;
       state.timerId = setInterval(() => {
@@ -327,19 +266,93 @@ export const store = new Vuex.Store({
     },
     SET_DIRECTORIES(state, directories){
       state.directories = directories;
+    },
+    SET_DIRECTORY_ID(state, directory_id){
+      state.directory_id = directory_id;
+    },
+    SET_DIRECTORY_NAME(state, directory_name) {
+      state.directory_name = directory_name;
+    },
+    SET_PROFILE(state, data){
+      state.user_name = data.user_name;
+      state.user_email = data.user_email;
+      state.user_picture_url = data.user_picture_url;
     }
   },
   actions:{
-    FETCH_LISTS({ commit, state }) {
+    FETCH_LISTS({ state, commit }) {
       return api.list.fetch(state.user_id).then(data => {
-        commit('SET_LISTS', data.notes)        
+        commit('SET_DIRECTORY_ID', null);
+        commit('SET_LISTS', data.notes);
+        commit('SET_DIRECTORY_NAME', "모든 노트")
       })
     },
-    FETCH_DIRECTORIES({commit, state}){
+    FETCH_SHARED_LISTS({ state, commit }) {
+      return api.list.fetch_shared(state.user_id).then(data => {
+        commit('SET_LISTS', data.notes);
+        commit('SET_DIRECTORY_NAME', "공유 받은 노트")
+      })
+    },
+    FETCH_DIRECTORY_LISTS({ state, commit }, { directory_id, directory_name}) {
+      return api.list.fetch_directory(directory_id).then(data => {
+        commit('SET_DIRECTORY_ID', directory_id);
+        commit('SET_LISTS', data.notes);
+        commit('SET_DIRECTORY_NAME', directory_name)
+      })
+    },
+
+    FETCH_DIRECTORIES({state, commit}){
       return api.directory.fetch(state.user_id).then(data => {
         commit('SET_DIRECTORIES', data.directories)
       })
     },
+    CREATE_DIRECTORY({ state, commit, dispatch },){
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      return api.directory.create(formData).then(data => {
+        dispatch('FETCH_DIRECTORIES')
+      })
+    },
+    MOVE_DIRECTORY({ state, commit, dispatch }, { note_id, directory_id }) {
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('directory_id', directory_id);
+      
+      return api.directory.move(formData).then(data => {
+        Swal.fire({
+          toast: true,
+          position: 'top',
+          showConfirmButton: false,
+          timer: 1600,
+          type: 'success',
+          title: '폴더가 이동 되었습니다.'
+        })
+        if (state.directory_id != null) {
+          const directory_id = state.directory_id
+          const directory_name = state.directory_name
+          dispatch('FETCH_DIRECTORY_LISTS', {directory_id, directory_name});
+        }
+      })
+    },
+    UPDATE_DIRECTORY({ state, commit, dispatch }, { directory_id, directory_name }) {
+      var formData = new FormData();
+      formData.append('directory_id', directory_id);
+      formData.append('name', directory_name);
+      return api.directory.update(formData).then(data => {
+        dispatch('FETCH_DIRECTORIES')
+        if (directory_id == state.directory_id){
+          commit('SET_DIRECTORY_NAME', directory_name)
+        }
+      })
+    },
+    DESTROY_DIRECTORY({ state, commit, dispatch }, directory_id) {
+      var formData = new FormData();
+      formData.append('directory_id', directory_id);
+      return api.directory.destroy(formData).then(data => {
+        dispatch('FETCH_DIRECTORIES')
+      })
+    },
+
     CREATE_NOTE({state}){
       var formData = new FormData();
       formData.append('user_id', state.user_id);
@@ -347,12 +360,87 @@ export const store = new Vuex.Store({
         router.push('/noteEdit/' + data.note_id);
       })
     },
-    FETCH_NOTE({commit, state}){
+    FETCH_NOTE({state, commit}){
       return api.note.fetch(state.note_id).then(data => {
         commit('setNoteData', data);
       })
+    },
+    SHARE_NOTE({state, commit}, email){
+      var formData = new FormData();
+      formData.append('email', email);
+      formData.append('note_id', state.note_id);
+      return api.note.share(formData)
+        .then(data => {
+          Swal.fire('공유 성공: ' + email)
+        })
+        .catch(err => {
+          console.log(err);
+          
+          if (err.status == 400 && err.data == "Already Exist") {
+            Swal.fire('이미 공유된 이메일: ' + email)
+          }
+          else if (err.status == 400) {
+            Swal.fire('존재하지 않는 이메일: ' + email)
+          }
+        })
+    },
+    UPDATE_NOTE({ state, commit, dispatch }, { title, content, started_at, ended_at, showMessage}){
+      var formData = new FormData();
+      formData.append('note_id', state.note_id);
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('started_at', started_at);
+      formData.append('ended_at', ended_at);
 
+      return api.note.update(formData)
+        .then(data => {
+          if (showMessage){
+            Swal.fire({
+              position: 'center',
+              type: 'success',
+              title: '저장 완료',
+              showConfirmButton: false,
+              timer: 1000
+            })
+          }
+        })
+        .catch(err => {
+          console.log('저장 실패');
+        })
+    },
+    DESTROY_NOTE({ commit, dispatch }, {note_id, title}){
+      var formData = new FormData();
+      formData.append('note_id', note_id);      
+      return api.note.destroy(formData)
+        .then(data => {
+          dispatch('FETCH_LISTS');
+          Swal.fire({
+            title: '삭제',
+            text: `노트 '${title}'를 삭제 하였습니다.`,
+            type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            type: 'error',
+            title: '노트 삭제 실패',
+          });
+        })
+    },
+
+    FETCH_PROFILE({state, commit}){
+      return api.profile.fetch(state.user_id).then(data => {
+        commit('SET_PROFILE', data);
+      })
     }
+
+
   }
 })
 

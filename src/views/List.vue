@@ -113,14 +113,10 @@ export default {
       setTokenInHeader(self.token);
       this.FETCH_LISTS()
       this.FETCH_DIRECTORIES()
-      self.setDirectoryName("모든 노트");
       self.isLoading = false;
     }
   },
   methods: {
-    ...mapMutations([
-      'setDirectoryName',
-    ]),
     ...mapActions([
       'FETCH_LISTS',
       'FETCH_DIRECTORIES',
