@@ -1,6 +1,3 @@
-// import BaseInput from '../components/Inputs/BaseInput.vue';
-// import BaseDropdown from '../components/BaseDropdown'
-// import BaseButton from '../components/BaseButton'
 import SideBar from '../components/SidebarPlugin/SideBar';
 import SidebarItem from '../components/SidebarPlugin/SidebarItem';
 import SidebarPlugin from '../components/SidebarPlugin/index.js';
@@ -21,10 +18,7 @@ import '../assets/css/nucleo/css/nucleo.css';
 import '../assets/sass/argon.scss';
 
 export default {
-  install (Vue) {
-    // Vue.component(BaseInput.name, BaseInput);
-    // Vue.component(BaseDropdown.name, BaseDropdown)
-    // Vue.component(BaseButton.name, BaseButton)
+  install (Vue) { 
     Vue.use(ElementUI, { locale })
     Vue.use(VueMaterial);
     Vue.use(Transitions);

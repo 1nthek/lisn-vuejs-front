@@ -80,7 +80,7 @@ export default {
       'token',
     ]),
   },
-  created(){
+  mounted(){
     let self = this;
     gapi.load('auth2', function () {
       gapi.auth2.init().then(function () {
@@ -89,27 +89,25 @@ export default {
             self.$router.replace('/list');
         }
         else{
-          gapi.load('auth2', function(){
-            var auth2 = gapi.auth2.init({
-              client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
-            });
+          // gapi.load('auth2', function(){
+            // var auth2 = gapi.auth2.init({
+            //   client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
+            // });
             auth2.attachClickHandler(document.getElementById('customBtn0'), {},
               function(googleUser) {
                 self.onSignIn(googleUser);
-              }, function(error) {
-                });
+              }, function(error) {}
+            );
             auth2.attachClickHandler(document.getElementById('customBtn1'), {},
               function(googleUser) {
                 self.onSignIn(googleUser);
-              }, function(error) {
-            });
-          });
+              }, function(error) {}
+            );
+          // });
           self.isLoading = false;
         }
       });
     });
-  },
-  mounted() {
     // window.addEventListener('scroll', this.handleScroll);
   },
   destroyed () {

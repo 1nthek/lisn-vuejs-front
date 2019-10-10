@@ -131,17 +131,6 @@ export default {
   });
   },
   methods: {
-    // saveRec(){
-    //   if(this.isRecording){
-    //     recognition.stop();
-    //     recorder.stop();
-    //     this.isRecording = false;
-    //   }
-      
-    //   this.$store.state.isPlaying = false;
-    //   this.$store.commit('clearInter');
-    //   this.$store.state.audio.pause();
-    // },
     update_sentence_text(event_object_list) {
         // var sentence_tag = document.getElementById(tmp_sentence_id);
         var transcript = "";
@@ -152,25 +141,9 @@ export default {
         this.$emit('scrollSTT')
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
     },
-    // post_record_sentence_info(tmp_sentence_id, formData) {
-    //   axios.post(this.$store.state.domain + '/record/sentence', formData)
-    //     .then((res) => {
-    //       var sentence_id = JSON.parse(res)['sentence_id'];
-    //         var sentence_tag = document.getElementById(tmp_sentence_id);
-    //         // set real sentence id
-    //         sentence_tag.id = sentence_id;
-    //         sentence_tag.onclick = function(event) {
-    //             get_audio_and_play(event.target.id);
-    //         };
-    //     })
-    //     .catch((ex) => {
-    //     });
-    // },
     sendRecording() {
       var blob = new Blob(this.chunks, {'type': 'audio/webm;'});
-        // clear chunks
         this.chunks = [];
-        
         if(this.audio_timestamp.length == 0){
           Swal.fire({
             toast: true,
@@ -335,8 +308,6 @@ export default {
                     word_start_time = 0;
                                 
                 self.audio_timestamp.push(word_start_time);
-                
-                
                 self.update_sentence_text(event_object_list);
                 self.is_first_word = false;
             }
@@ -348,15 +319,6 @@ export default {
     },
     recBtnPressed(){
       if(this.isRecording){
-        // Swal.fire({
-        //   toast: true,
-        //   position: 'top',
-        //   showConfirmButton: false,
-        //   timer: 1000,
-        //   type: 'success',
-        //   title: '녹음 종료'
-        // })
-        
         this.isRecording = false;
         this.$store.state.isRecordable = false;
 
@@ -368,29 +330,8 @@ export default {
         localstream.getTracks().forEach((track) => {
           track.stop();
         });
-        
-        // localstream = null;
-        // localstream.getTracks().forEach((track) => {
-        //   track.stop();
-        // });
       }else{
         let self = this;
-        // navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-        //   .then((stream) => {
-        //     localstream = stream;
-        //     self.startRecording(stream);
-        //   })
-        //   .catch((ex) => {
-        //     Swal.fire({
-        //       toast: true,
-        //       position: 'center',
-        //       showConfirmButton: false,
-        //       timer: 3000,
-        //       type: 'error',
-        //       title: '마이크가 연결되어 있지 않습니다.'
-        //     })
-        // });
-
         navigator.getUserMedia({ audio: true, video: false },
             function(stream) {
               localstream = stream;
@@ -435,11 +376,6 @@ export default {
       recorder.stop();
       this.isRecording = false;
     }
-    // if(localstream!=undefined){
-    //   localstream.getTracks().forEach((track) => {
-    //     track.stop();
-    //   });
-    // }
 
     this.$store.state.isPlaying = false;
     this.$store.commit('clearInter');
