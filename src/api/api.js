@@ -36,12 +36,6 @@ export const list = {
   fetch_directory(directory_id){
     return request('get', `/list/note?directory_id=${directory_id}`)
   }
-  // update(id, payload) {
-  //   return request('put', `/boards/${id}`, payload)
-  // },
-  // destroy(id) {
-  //   return request('delete', `/boards/${id}`)
-  // }
 }
 
 export const note = {

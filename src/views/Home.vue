@@ -82,32 +82,29 @@ export default {
   },
   mounted(){
     let self = this;
-    gapi.load('auth2', function () {
-      gapi.auth2.init().then(function () {
-        var auth2 = gapi.auth2.getAuthInstance();
-        if (auth2.isSignedIn.get() && self.user_id && self.token && localStorage.token && localStorage.user_id) {
-            self.$router.replace('/list');
-        }
-        else{
-          // gapi.load('auth2', function(){
-            // var auth2 = gapi.auth2.init({
-            //   client_id: '935445294329-t38oc4vmt9l5sokr34h8ueap63dfq4hi.apps.googleusercontent.com',
-            // });
-            auth2.attachClickHandler(document.getElementById('customBtn0'), {},
-              function(googleUser) {
-                self.onSignIn(googleUser);
-              }, function(error) {}
-            );
-            auth2.attachClickHandler(document.getElementById('customBtn1'), {},
-              function(googleUser) {
-                self.onSignIn(googleUser);
-              }, function(error) {}
-            );
-          // });
-          self.isLoading = false;
-        }
-      });
-    });
+    setTimeout(() => {
+      gapi.load('auth2', function () {
+        gapi.auth2.init().then(function () {
+          var auth2 = gapi.auth2.getAuthInstance();
+          if (auth2.isSignedIn.get() && self.user_id && self.token && localStorage.token && localStorage.user_id) {
+              self.$router.replace('/list');
+          }
+          else{
+              auth2.attachClickHandler(document.getElementById('customBtn0'), {},
+                function(googleUser) {
+                  self.onSignIn(googleUser);
+                }, function(error) {}
+              );
+              auth2.attachClickHandler(document.getElementById('customBtn1'), {},
+                function(googleUser) {
+                  self.onSignIn(googleUser);
+                }, function(error) {}
+              );
+            self.isLoading = false;
+          }
+        });
+      })
+    },1000);
     // window.addEventListener('scroll', this.handleScroll);
   },
   destroyed () {
