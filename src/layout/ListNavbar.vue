@@ -93,19 +93,19 @@
                   </div>
                 </div>
                 <div class="dropdown-divider"></div>
-                <div class="dropdown-item" style="display: flex;">
+                <div @click.prevent="$router.push('profile')" class="dropdown-item" style="display: flex;">
                   <div class="navbar-icon">
                     <i class="fas fa-user-edit"></i>
                   </div>
                   <span class="ns-kr navbar-txt">프로필</span>
                 </div>
-                <div class="dropdown-item" style="display: flex;">
+                <!-- <div class="dropdown-item" style="display: flex;">
                   <div class="navbar-icon">
                     <i class="fas fa-cog"></i>
                   </div>
                   <span class="ns-kr navbar-txt">설정</span>
-                </div>
-                <div class="dropdown-divider"></div>
+                </div> -->
+                <!-- <div class="dropdown-divider"></div> -->
                 <div @click="signOut()" class="dropdown-item" style="display: flex;">
                   <div class="navbar-icon">
                     <i class="fas fa-running" style="font-size: 1.4em;"></i>

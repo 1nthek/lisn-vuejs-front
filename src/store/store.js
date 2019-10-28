@@ -151,6 +151,21 @@ export const store = new Vuex.Store({
       
       state.sttText = [];
     },
+    initRecording(state) {
+      if (state.timerId != null) {
+        clearInterval(state.timerId);
+      }
+      state.audio.pause();
+      state.hour = '0';
+      state.minute = '00';
+      state.second = '00';
+
+      state.audio = new Audio();
+      state.timeOffset = 0.000;
+      state.isPlaying = false;
+      state.isRecordable = true;
+      state.sttText = [];
+    },
     setNoteData(state, value){
       let self = this;
       state.tiptap_editor.setContent(value.content)

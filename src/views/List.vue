@@ -66,7 +66,7 @@
                       </template>
                     </stats-card>
                   </div>
-            </div>
+              </div>
            </vuescroll>
         </div>
       </div>

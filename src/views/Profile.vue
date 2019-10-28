@@ -24,16 +24,16 @@
                             </div>
                         </div>
                         <div class="text-center mt-5">
-                            <div class="photo-container"><img alt="" data-src="img/ryan.jpg" src="../assets/emoji.png" lazy="loaded"></div>
-                            <h1>name</h1>
-                            <div class="h6 font-weight-300"><i class="ni location_pin mr-2"></i>SEOUL</div>
-                            <div class="h6 mt-4"><i class="ni business_briefcase-24 mr-2"></i>email@email.com</div>
-                            <div><i class="ni education_hat mr-2"></i>University of Computer Science</div>
+                            <div class="photo-container"><img alt="" data-src="img/ryan.jpg" :src="user_picture_url" lazy="loaded"></div>
+                            <h1 style="margin-top: 20px">{{user_name}}</h1>
+                            <!-- <div class="h6"><i class="ni location_pin mr-2"></i>SEOUL</div> -->
+                            <div class="mt-4">{{user_email}}</div>
+                            <!-- <div><i class="ni education_hat mr-2"></i>University of Computer Science</div> -->
                         </div>
                         <div class="mt-5 py-5 border-top text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9">
-                                    <p>abcabc</p>
+                                    <p>i'm ......</p>
                                 </div>
                             </div>
                         </div>
@@ -44,8 +44,29 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+
 export default {
-    
+    computed: {
+        ...mapState([
+        'user_name',
+        'user_email',
+        'user_picture_url',
+        ]),
+    },
+    data() {
+        return {
+            
+        }
+    },
+    created() {
+        this.FETCH_PROFILE();        
+    },
+    methods: {
+        ...mapActions([
+            'FETCH_PROFILE',
+        ]),
+    }
 }
 </script>
 

@@ -99,7 +99,7 @@ export default {
     ...mapState([
       'note_id',
       'domain',
-    ]), 
+    ]),
   },
   watch: {
     isRecording: function (newVal) {
@@ -141,27 +141,38 @@ export default {
         this.$emit('scrollSTT')
         this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id]});
     },
-    sendRecording() {
+    async sendRecording() {
       var blob = new Blob(this.chunks, {'type': 'audio/webm;'});
         this.chunks = [];
+        let self = this;
+
         if(this.audio_timestamp.length == 0){
-          Swal.fire({
-            toast: true,
-            position: 'center',
-            showConfirmButton: false,
-            timer: 1600,
-            type: 'warning',
-            title: '인식된 단어가 없습니다.'
-          })
-          return;
+          const saveRecord = await Swal.fire({
+            title: '인식된 단어가 없습니다',
+            text: '녹음 파일을 저장할까요?',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success btn-fill',
+            cancelButtonClass: 'btn btn-danger btn-fill',
+            confirmButtonText: '저장',
+            cancelButtonText: '안함',
+            allowOutsideClick: false,
+            showCloseButton: true,
+            buttonsStyling: false
+          }).then(result => {
+              return result.value;
+          });
+
+          if(!saveRecord){
+            self.$store.commit('initRecording');
+            return;
+          }
         }
 
-        var self = this;
         var formData = new FormData();
         formData.append('audio_data', blob, 'filename');
         formData.append('note_id', this.note_id);
 
-        axios.post(this.domain + '/note/audio', formData)
+        axios.post(this.domain + '/note/audio', formData) //녹음 파일 업로드
           .then((res) => {
             self.audio_id = res.data.audio_id;
             self.audio_timestamp = [];
@@ -191,24 +202,25 @@ export default {
                         });
                       })
                       .then(() => {
+
                         this.$store.state.hour = '0';
                         this.$store.state.minute = '00';
                         this.$store.state.second = '00';
                         this.$store.state.timeOffset = 0;
 
-                        setTimeout(() => {
-                          if(self.swal_saveingRec)
-                            self.swal_saveingRec.close();
+                        if(self.swal_saveingRec)
+                          self.swal_saveingRec.close();
                           
-                          Swal.fire({
-                            toast: true,
-                            position: 'center',
-                            showConfirmButton: false,
-                            timer: 1600,
-                            type: 'warning',
-                            title: '녹음 파일 저장 완료'
-                          })
-                        }, 500);
+                        // setTimeout(() => {
+                        //   Swal.fire({
+                        //     toast: true,
+                        //     position: 'center',
+                        //     showConfirmButton: false,
+                        //     timer: 1600,
+                        //     type: 'warning',
+                        //     title: '녹음 파일 저장 완료'
+                        //   })
+                        // }, 500);
                       })
                       .catch((ex) => {
                         Toast_save_fail.fire();
