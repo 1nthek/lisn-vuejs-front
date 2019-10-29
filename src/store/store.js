@@ -53,6 +53,8 @@ export const store = new Vuex.Store({
     directory_name: "모든 노트",
     sttText:[],
 
+    audio_id: null,
+
     user_name: null,
     user_email: null,
     user_picture_url: null,
@@ -178,7 +180,7 @@ export const store = new Vuex.Store({
         var audio_id = element.audio_id;
         var sentences = element.sentences;
         sentences.forEach(ele => {
-          state.sttText.push({ content: ele.content, begin: ele.started_at, audioId: audio_id });
+          state.sttText.push({ content: ele.content, id: idx, begin: ele.started_at, end: ele.ended_at, audioId: audio_id });
         })
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
