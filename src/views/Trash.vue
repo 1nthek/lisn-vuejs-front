@@ -35,23 +35,22 @@
                 <table class="row" style="margin:0" ref="contents">
                   <tr class="deleted_conversation" style="padding: 0 15px; margin: 0 20px;">
                   <th>
-                      <input type="checkbox" v-model="selectAll" class="mat-checkbox" @click.stop="selectAll">
-                      <button class="deleted_conversation_button">
-                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" @click.stop="deleteNote(selected)">
+                      <input type="checkbox" id="main-checkbox" v-model="selectAll" class="mat-checkbox" @click="allSelected()">
+                      <button class="deleted_conversation_button" @click="deleteNote()">
+                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" >
                           영구 삭제
                         </div>
                       </button>
-                      <button class="deleted_conversation_button">
+                      <button class="deleted_conversation_button" @click="restoreNote()">
                         <!-- 체크된 note_id를 복원 시켜야되는데 -->
-                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" @click.stop="restoreNote(selected)">
+                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" >
                           복원
                         </div>
                       </button>
                   </th>
                   </tr>
                   <tr class="card-list"  v-for="p in noteList" :key="p.no" >
-                    
-                    <input type="checkbox" :value="p.note_id" v-model="selected" class="mat-checkbox">
+                    <input type="checkbox" :value="p.note_id" v-model="selected" class="mat-checkbox" @click="select()">
                     
                     <div class="trash-list">
                       <div class="trash-title">
@@ -91,14 +90,17 @@ export default {
   data() {
     return {
       isLoading: true,
+      selected: [],
+      selectAll: false
     }
     
   },
-  //// select 관련 주석 ////
-  data: () => ({
-    selected: [],
-    selectAll: false
-  }),
+  // watch: {
+  //   selected: function (val) {
+  //     console.log(this.selected);
+      
+  //   },
+  // },
   //////////////////////////
   computed: {
     ...mapState([
@@ -130,7 +132,8 @@ export default {
     }
     else{
       setTokenInHeader(self.token);
-      this.FETCH_DIRECTORIES()
+      this.FETCH_DIRECTORIES();
+      this.FETCH_TRASH_LISTS();
       self.isLoading = false;
     }
   },
@@ -138,20 +141,34 @@ export default {
     ...mapActions([
       'FETCH_DIRECTORIES',
       'RESTORE_NOTE',
-      'TRASH_NOTE'
+      'TRASH_NOTE',
+      'FETCH_TRASH_LISTS'
     ]),
-    restoreNote(note_id) {
+    select(){
+      this.selectAll = false;
+    },
+    allSelected(){
+      this.selected = [];
+      if (!this.selectAll) {
+          for (let p in this.noteList) {
+              this.selected.push(this.noteList[p].note_id);
+          }
+      }
+    },
+    restoreNote() {
       Swal.fire({
         title: '복구',
         confirmButtonText: '확인'
       }).then(result => {
         if (result.value) {
-          this.RESTORE_NOTE({note_id});
+          for(let item in this.selected){
+            this.RESTORE_NOTE(this.selected[item]);
+          }
         }
       });
       
     },
-    deleteNote(note_id) {
+    deleteNote() {
       Swal.fire({
         title: '노트 삭제',
         text: '노트를 영구 삭제합니다.',
@@ -164,23 +181,12 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
-          this.TRASH_NOTE({note_id});
+          for(let item in this.selected){
+            this.TRASH_NOTE(this.selected[item]);
+          }
         }
       });
     }
-    /////////// select 관련 주석 //////////////
-    /*
-    selectAll: function() {
-      this.selected = [];
-      if (!this.selectAll) {
-        for (let p in noteList) {
-          this.selected.push(noteList[p].note_id);
-        }
-      }
-    },
-    */
-    ////////////////////////////////////////////
-    
   }
 }
 </script>

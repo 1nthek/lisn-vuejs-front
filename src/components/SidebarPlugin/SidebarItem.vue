@@ -224,7 +224,7 @@ export default {
       this.FETCH_SHARED_LISTS();
     },
     getTrashNote(){
-      this.FETCH_TRASH_LISTS();
+      // this.FETCH_TRASH_LISTS();
     },
     getFolderList(){
       const directory_id = this.directory_id;
