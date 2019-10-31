@@ -6,7 +6,7 @@
           <div class="col">
             <slot>
               <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
-              <div class="mb-0 ns-kr summery">{{summery}}</div>
+              <div class="mb-0 ns-kr summary">{{summary}}</div>
             </slot>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default {
     icon: String,
     note_id: "",
     title: String,
-    summery: String,
+    summary: String,
     iconClasses: [String, Array]
   },
   methods: {
@@ -102,7 +102,7 @@ export default {
         // title: '휴지통으로 이동',
         // text: `휴지통에서 완전히 삭제할 수 있습니다`,
         title: '노트 삭제',
-        text: '"' + title + '"를 영구 삭제 합니다.',
+        text: '"' + title + '"를 휴지통으로 이동합니다.',
         // type: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-danger btn-fill',
@@ -120,7 +120,7 @@ export default {
 }
 </script>
 <style>
-.summery{
+.summary{
   font-weight:600;font-size: 12px;height: 17px;color: #617386;transition: all .4s ease 0s;
 }
 #ellipsis:hover{
@@ -132,7 +132,7 @@ export default {
 .card-stats .card-body {
     padding: 14px 20px !important; 
 }
-/* .summery:hover{
+/* .summary:hover{
     color: rgb(167, 197, 229);
 } */
 .swal2-content select {
