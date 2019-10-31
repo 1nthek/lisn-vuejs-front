@@ -95,6 +95,12 @@
               <span class="nav-link-text" style="padding-left: 18px;" @click="getSharedNote">{{ link.name }}</span>
             </div>
           </template>
+          <template v-if="category == 'trash'">
+            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getTrashNote">
+              <i :class="link.icon" ></i>
+              <span class="nav-link-text" style="padding-left: 18px;" @click="getTrashNote">{{ link.name }}</span>
+            </div>
+          </template>
         </template>
       </component>
     </slot>
@@ -209,12 +215,16 @@ export default {
       'CREATE_DIRECTORY',
       'UPDATE_DIRECTORY',
       'DESTROY_DIRECTORY',
+      'FETCH_TRASH_LISTS',
     ]),
     getAllNote(){
       this.FETCH_LISTS();
     },
     getSharedNote(){
       this.FETCH_SHARED_LISTS();
+    },
+    getTrashNote(){
+      this.FETCH_TRASH_LISTS();
     },
     getFolderList(){
       const directory_id = this.directory_id;
