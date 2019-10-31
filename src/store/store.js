@@ -86,12 +86,13 @@ export const store = new Vuex.Store({
     //staging server
     // domain: 'http://54.180.117.235/api'
     //dev server
-    domain: 'http://15.164.232.194/api'
+    //domain: 'http://15.164.232.194/api'
     //real server
-    // domain: 'https://li-sn.io/v1/api'
+     domain: 'https://li-sn.io/api'
 
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
+    //domain: 'http://localhost:8000/api'
   },
   getters:{
     isAuth(state){
@@ -300,6 +301,12 @@ export const store = new Vuex.Store({
         commit('SET_DIRECTORY_NAME', directory_name)
       })
     },
+    FETCH_TRASH_LISTS({ state, commit }) {
+      return api.list.fetch_trash(state.user_id).then(data => {
+        commit('SET_LISTS', data.notes);
+        commit('SET_DIRECTORY_NAME', "휴지통")
+      })
+    },
 
     FETCH_DIRECTORIES({state, commit}){
       return api.directory.fetch(state.user_id).then(data => {
@@ -431,6 +438,45 @@ export const store = new Vuex.Store({
             type: 'error',
             title: '노트 삭제 실패',
           });
+        })
+    },
+    TRASH_NOTE({ commit, dispatch}, {note_id}){
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      return api.trash.destroy(formData)
+        .then(data => {
+          dispatch('FETCH_LISTS');
+          Swal.fire({
+            title: '삭제',
+            text: `노트를 삭제 하였습니다.`,
+            type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            type: 'error',
+            title: '노트 삭제 실패',
+          });
+        })
+    },
+    RESTORE_NOTE({ state, commit, dispath}, {note_id}){
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      return api.trash.restore(formData)
+        .then(data => {
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: '복구 완료',
+            showConfirmButton: false,
+            timer: 1000
+          })
         })
     },
 
