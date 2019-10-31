@@ -12,21 +12,9 @@
                 <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
               </div>
             </template>
-            <!-- <sidebar-item :link="{ name: '폴더1', path: '/list' }"/> -->
           </sidebar-item>
-        </template>
-        <template slot="links-after">
           <hr class="my-3">
-          <!-- <h6 class="navbar-heading p-0 text-muted">Documentation</h6> -->
-
-          <ul class="navbar-nav mb-md-3">
-            <li class="nav-item">
-              <div class="nav-link">
-                <i class="fas fa-trash"></i>
-                <span class="nav-link-text">휴지통</span>
-              </div>
-            </li>
-          </ul>
+          <sidebar-item :link="{ name: '휴지통', path: '/trash', icon: 'fas fa-trash' }" :category="'trash'"></sidebar-item>
         </template>
     </side-bar>
     <div class="main-content">
@@ -52,7 +40,7 @@
                   <div class="col-xl-3 col-md-6 ani-card"  v-for="p in noteList" :key="p.no" >
                     <stats-card :title="p.title"
                                 :note_id="p.note_id"
-                                :summery="p.summery"
+                                :summary="p.summary"
                                 type="gradient-orange"
                                 id="noteList"
                                 icon="fas fa-trash"
