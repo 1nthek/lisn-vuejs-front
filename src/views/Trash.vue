@@ -42,9 +42,8 @@
                         </div>
                       </button>
                       <button class="deleted_conversation_button" @click="restoreNote()">
-                        <!-- 체크된 note_id를 복원 시켜야되는데 -->
                         <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" >
-                          복원
+                          복구
                         </div>
                       </button>
                   </th>
@@ -58,7 +57,6 @@
                       </div>
                       <div class="trash-summary">
                         {{ p.summary }}
-                        요약 테스트용 20글자 아무거나
                       </div>
                       <div class="trash-bottom">
                         {{ p.created_at}}
@@ -156,17 +154,9 @@ export default {
       }
     },
     restoreNote() {
-      Swal.fire({
-        title: '복구',
-        confirmButtonText: '확인'
-      }).then(result => {
-        if (result.value) {
-          for(let item in this.selected){
-            this.RESTORE_NOTE(this.selected[item]);
-          }
-        }
-      });
-      
+     for(let item in this.selected){
+       this.RESTORE_NOTE(this.selected[item]);
+     }
     },
     deleteNote() {
       Swal.fire({
