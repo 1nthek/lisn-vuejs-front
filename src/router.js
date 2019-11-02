@@ -5,6 +5,7 @@ import Note from '../src/views/Note'
 import NoteEdit from '../src/views/NoteEdit'
 import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
+import Trash from '../src/views/Trash'
 import { store } from './store/store'
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ export default new Router({
     {
       path: '*',
       component: NotFound
+    },
+    {
+      path: '/trash',
+      component: Trash,
+      beforeEnter: requireAuth
     }
   ]
 })

@@ -8,7 +8,7 @@ import router from '../router'
 import Swal from 'sweetalert2';
 import { Editor, EditorContent, } from 'tiptap'
 import {
-  Blockquote,  CodeBlock,  HardBreak,  Heading,  OrderedList,  BulletList,  ListItem,  TodoItem,  TodoList,  Bold,  Code,  Italic,  Link,  Strike,  Underline,  History,  HorizontalRule,  Focus,
+  Blockquote, CodeBlock, HardBreak, Heading, OrderedList, BulletList, ListItem, TodoItem, TodoList, Bold, Code, Italic, Link, Strike, Underline, History, HorizontalRule, Focus,
 } from 'tiptap-extensions'
 
 
@@ -45,13 +45,13 @@ export const store = new Vuex.Store({
     isRecordable: true,
     error: false,
     directories: [],
-    
+
     token: null,
     user_id: null,
     note_id: null,
     directory_id: null,
     directory_name: "모든 노트",
-    sttText:[],
+    sttText: [],
 
     user_name: null,
     user_email: null,
@@ -86,26 +86,27 @@ export const store = new Vuex.Store({
     //staging server
     // domain: 'http://54.180.117.235/api'
     //dev server
-    domain: 'http://15.164.232.194/api'
+    //domain: 'http://15.164.232.194/api'
     //real server
-    // domain: 'https://li-sn.io/v1/api'
+    domain: 'https://li-sn.io/api'
 
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
+    //domain: 'http://localhost:8000/api'
   },
-  getters:{
-    isAuth(state){
+  getters: {
+    isAuth(state) {
       return state.token && state.user_id;
     }
   },
   mutations: {
-    set_note_started_at(state, val){
+    set_note_started_at(state, val) {
       state.note_started_at = val;
     },
     set_note_ended_at(state, val) {
       state.note_ended_at = val;
     },
-    onRefresh(state, { token, user_id }){
+    onRefresh(state, { token, user_id }) {
       let self = this;
       if (!token || !user_id) {
         gapi.load('auth2', function () {
@@ -119,28 +120,28 @@ export const store = new Vuex.Store({
           })
         })
       }
-      else{
+      else {
         state.token = token;
         state.user_id = user_id;
         api.setTokenInHeader(token);
       }
     },
-    logout(state){
+    logout(state) {
       state.token = null;
       state.user_id = null;
       delete localStorage.token;
       delete localStorage.user_id;
       api.setTokenInHeader(null);
     },
-    initData(state){
-      if (state.timerId != null){
+    initData(state) {
+      if (state.timerId != null) {
         clearInterval(state.timerId);
       }
       state.audio.pause();
       state.hour = '0';
       state.minute = '00';
       state.second = '00';
-      
+
       state.audio = new Audio();
       state.timeOffset = 0.000;
       state.isPlaying = false;
@@ -148,10 +149,10 @@ export const store = new Vuex.Store({
       state.noteTitle = "";
       state.content = "";
       state.isRecordable = true;
-      
+
       state.sttText = [];
     },
-    setNoteData(state, value){
+    setNoteData(state, value) {
       let self = this;
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
@@ -173,18 +174,18 @@ export const store = new Vuex.Store({
           })
       });
     },
-    clearInter(state){
+    clearInter(state) {
       clearInterval(state.timerId);
     },
     playSound(state) {
       state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
-      
+
       state.timerId = setInterval(() => {
         var curTime = state.audio.currentTime;
         state.hour = Math.floor(curTime / 3600);
-        state.hour = (state.hour >= 10) ? state.hour :  state.hour;
+        state.hour = (state.hour >= 10) ? state.hour : state.hour;
         state.minute = Math.floor((curTime / 60) % 60);
         state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
         state.second = Math.floor(curTime % 60);
@@ -200,14 +201,14 @@ export const store = new Vuex.Store({
     setNoteId(state, note_id) {
       state.note_id = note_id;
     },
-    
-    startCountingTimer(state){
+
+    startCountingTimer(state) {
       state.timeOffset = 0;
       state.timerId = setInterval(() => {
         state.timeOffset = state.timeOffset + 1;
         var curTime = state.timeOffset;
         state.hour = Math.floor(curTime / 3600);
-        state.hour = (state.hour >= 10) ? state.hour :  state.hour;
+        state.hour = (state.hour >= 10) ? state.hour : state.hour;
         state.minute = Math.floor((curTime / 60) % 60);
         state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
         state.second = Math.floor(curTime % 60);
@@ -216,19 +217,19 @@ export const store = new Vuex.Store({
     },
     setCurrentTime(state, item) {
       var stamp = parseFloat(item.begin) / 1000;
-      
+
       state.timeOffset = stamp;
       state.audio.currentTime = stamp;
-      
+
       var curTime = stamp;
       state.hour = Math.floor(curTime / 3600);
-      state.hour = (state.hour >= 10) ? state.hour :  state.hour;
+      state.hour = (state.hour >= 10) ? state.hour : state.hour;
       state.minute = Math.floor((curTime / 60) % 60);
       state.minute = (state.minute >= 10) ? state.minute : "0" + state.minute;
       state.second = Math.floor(curTime % 60);
       state.second = (state.second >= 10) ? state.second : "0" + state.second;
     },
-    getCurrentWord(state) {      
+    getCurrentWord(state) {
       var word = null;
       for (var i = 0, len = state.sttText.length; i < len; i += 1) {
         var is_current_word = (
@@ -240,7 +241,7 @@ export const store = new Vuex.Store({
           // ||
           // (state.audio.currentTime < parseFloat(state.sttText[i].begin) / 1000)
         );
-        
+
         if (is_current_word) {
           word = state.sttText[i];
           break;
@@ -252,7 +253,7 @@ export const store = new Vuex.Store({
       }
       return word;
     },
-    SET_LISTS(state, notes){
+    SET_LISTS(state, notes) {
       notes.forEach(element => {
         if (element.title == "") {
           element.title = "untitled";
@@ -264,22 +265,22 @@ export const store = new Vuex.Store({
       });
       state.noteList = notes;
     },
-    SET_DIRECTORIES(state, directories){
+    SET_DIRECTORIES(state, directories) {
       state.directories = directories;
     },
-    SET_DIRECTORY_ID(state, directory_id){
+    SET_DIRECTORY_ID(state, directory_id) {
       state.directory_id = directory_id;
     },
     SET_DIRECTORY_NAME(state, directory_name) {
       state.directory_name = directory_name;
     },
-    SET_PROFILE(state, data){
+    SET_PROFILE(state, data) {
       state.user_name = data.user_name;
       state.user_email = data.user_email;
       state.user_picture_url = data.user_picture_url;
     }
   },
-  actions:{
+  actions: {
     FETCH_LISTS({ state, commit }) {
       return api.list.fetch(state.user_id).then(data => {
         commit('SET_DIRECTORY_ID', null);
@@ -293,20 +294,26 @@ export const store = new Vuex.Store({
         commit('SET_DIRECTORY_NAME', "공유 받은 노트")
       })
     },
-    FETCH_DIRECTORY_LISTS({ state, commit }, { directory_id, directory_name}) {
+    FETCH_DIRECTORY_LISTS({ state, commit }, { directory_id, directory_name }) {
       return api.list.fetch_directory(directory_id).then(data => {
         commit('SET_DIRECTORY_ID', directory_id);
         commit('SET_LISTS', data.notes);
         commit('SET_DIRECTORY_NAME', directory_name)
       })
     },
+    FETCH_TRASH_LISTS({ state, commit }) {
+      return api.list.fetch_trash(state.user_id).then(data => {
+        commit('SET_LISTS', data.notes);
+        commit('SET_DIRECTORY_NAME', "휴지통")
+      })
+    },
 
-    FETCH_DIRECTORIES({state, commit}){
+    FETCH_DIRECTORIES({ state, commit }) {
       return api.directory.fetch(state.user_id).then(data => {
         commit('SET_DIRECTORIES', data.directories)
       })
     },
-    CREATE_DIRECTORY({ state, commit, dispatch },){
+    CREATE_DIRECTORY({ state, commit, dispatch }, ) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
       return api.directory.create(formData).then(data => {
@@ -317,7 +324,7 @@ export const store = new Vuex.Store({
       var formData = new FormData();
       formData.append('note_id', note_id);
       formData.append('directory_id', directory_id);
-      
+
       return api.directory.move(formData).then(data => {
         Swal.fire({
           toast: true,
@@ -330,7 +337,7 @@ export const store = new Vuex.Store({
         if (state.directory_id != null) {
           const directory_id = state.directory_id
           const directory_name = state.directory_name
-          dispatch('FETCH_DIRECTORY_LISTS', {directory_id, directory_name});
+          dispatch('FETCH_DIRECTORY_LISTS', { directory_id, directory_name });
         }
       })
     },
@@ -340,7 +347,7 @@ export const store = new Vuex.Store({
       formData.append('name', directory_name);
       return api.directory.update(formData).then(data => {
         dispatch('FETCH_DIRECTORIES')
-        if (directory_id == state.directory_id){
+        if (directory_id == state.directory_id) {
           commit('SET_DIRECTORY_NAME', directory_name)
         }
       })
@@ -353,19 +360,19 @@ export const store = new Vuex.Store({
       })
     },
 
-    CREATE_NOTE({state}){
+    CREATE_NOTE({ state }) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
       return api.note.create(formData).then(data => {
         router.push('/noteEdit/' + data.note_id);
       })
     },
-    FETCH_NOTE({state, commit}){
+    FETCH_NOTE({ state, commit }) {
       return api.note.fetch(state.note_id).then(data => {
         commit('setNoteData', data);
       })
     },
-    SHARE_NOTE({state, commit}, email){
+    SHARE_NOTE({ state, commit }, email) {
       var formData = new FormData();
       formData.append('email', email);
       formData.append('note_id', state.note_id);
@@ -375,7 +382,7 @@ export const store = new Vuex.Store({
         })
         .catch(err => {
           console.log(err);
-          
+
           if (err.status == 400 && err.data == "Already Exist") {
             Swal.fire('이미 공유된 이메일: ' + email)
           }
@@ -384,7 +391,7 @@ export const store = new Vuex.Store({
           }
         })
     },
-    UPDATE_NOTE({ state, commit, dispatch }, { title, content, started_at, ended_at, showMessage}){
+    UPDATE_NOTE({ state, commit, dispatch }, { title, content, started_at, ended_at, showMessage }) {
       var formData = new FormData();
       formData.append('note_id', state.note_id);
       formData.append('title', title);
@@ -394,7 +401,7 @@ export const store = new Vuex.Store({
 
       return api.note.update(formData)
         .then(data => {
-          if (showMessage){
+          if (showMessage) {
             Swal.fire({
               position: 'center',
               type: 'success',
@@ -408,9 +415,9 @@ export const store = new Vuex.Store({
           console.log('저장 실패');
         })
     },
-    DESTROY_NOTE({ commit, dispatch }, {note_id, title}){
+    DESTROY_NOTE({ commit, dispatch }, { note_id, title }) {
       var formData = new FormData();
-      formData.append('note_id', note_id);      
+      formData.append('note_id', note_id);
       return api.note.destroy(formData)
         .then(data => {
           dispatch('FETCH_LISTS');
@@ -433,8 +440,48 @@ export const store = new Vuex.Store({
           });
         })
     },
+    TRASH_NOTE({ commit, dispatch }, note_id) {
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      return api.trash.destroy(formData)
+        .then(data => {
+          dispatch('FETCH_TRASH_LISTS');
+          Swal.fire({
+            title: '삭제',
+            text: `노트를 삭제 하였습니다.`,
+            type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          });
+        })
+        .catch(err => {
+          Swal.fire({
+            toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            type: 'error',
+            title: '노트 삭제 실패',
+          });
+        })
+    },
+    RESTORE_NOTE({ state, commit, dispatch }, note_id) {
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      return api.trash.restore(formData)
+        .then(data => {
+          dispatch('FETCH_TRASH_LISTS');
+          Swal.fire({
+            position: 'center',
+            type: 'success',
+            title: '복구 완료',
+            showConfirmButton: false,
+            timer: 1000
+          })
+        })
+    },
 
-    FETCH_PROFILE({state, commit}){
+    FETCH_PROFILE({ state, commit }) {
       return api.profile.fetch(state.user_id).then(data => {
         commit('SET_PROFILE', data);
       })

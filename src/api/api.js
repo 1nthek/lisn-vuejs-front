@@ -1,7 +1,9 @@
 import axios from 'axios'
 import router from '../router'
 
-const domain = "http://15.164.232.194/api";
+//const domain = "http://15.164.232.194/api";
+//const domain = "http://localhost:8000/api";
+const domain = "https://li-sn.io/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
   delete localStorage.token;
@@ -35,6 +37,9 @@ export const list = {
   },
   fetch_directory(directory_id){
     return request('get', `/list/note?directory_id=${directory_id}`)
+  },
+  fetch_trash(user_id) {
+    return request('get', `/list/note/trash?user_id=${user_id}`)
   }
   // update(id, payload) {
   //   return request('put', `/boards/${id}`, payload)
@@ -58,7 +63,7 @@ export const note = {
     return request('put', `/note`, formData)
   },
   destroy(formData){
-    return request('delete', `/note`, formData);
+    return request('put', `/note/trash`, formData);
   }
 }
 
@@ -83,6 +88,18 @@ export const directory = {
 export const profile = {
   fetch(user_id){
     return request('get', `/profile?user_id=${user_id}`)
+  }
+}
+
+export const trash = {
+  fetch(user_id){
+    return request('get', `/list/note/trash?user_id=${user_id}`)
+  },
+  destroy(formData) {
+    return request('delete', `/note`, formData);
+  },
+  restore(formData) {
+    return request('delete', `/note/trash`, formData);
   }
 }
 
