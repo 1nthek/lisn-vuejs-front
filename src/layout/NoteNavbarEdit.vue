@@ -2,7 +2,7 @@
   <div class="noteNavbar-container">
     <router-link to="/list" style="margin: 10px;">
       <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
-        <i class="fas fa-chevron-left"></i>&nbsp;내 노트
+        <i class="fas fa-chevron-left"></i>&nbsp;작성 완료
       </div>
     </router-link>
 

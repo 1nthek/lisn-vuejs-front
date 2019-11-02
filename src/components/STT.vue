@@ -63,7 +63,8 @@ export default {
           type: 'error',
           title: '녹음중에는 재생을 할 수 없습니다'
         })
-      }else{
+      }
+      else{
         this.audioId = JSON.parse(JSON.stringify(item.audioId))
         axios.get(this.$store.state.domain + "/note/audio?audio_id=" + this.audioId)
           .then((res) => {
