@@ -8,15 +8,18 @@
           <ul id="v-for-object" class="demo">
             <template v-for="(item, index) in this.$store.state.sttText">
               <div :key="index" style="padding: 0.5rem 0; margin:5px" >
-                  <div style="display:flex;">
+                  <div class="single-stt-cont" style="display:flex;">
                     <div v-show="!isMinimized" style="font-size: 26px;" class="stt-icon">
                       <i class="fas fa-user-circle"></i>
                     </div>
-                    <div style="fisplay:flex;flex-direction: column;">
-                      <div style="margin: 8px 0 2px 10px;">{{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.begin/1000)/3600)%60 }}{{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.begin/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.begin/1000)/60)%60 }}:{{ parseInt(item.begin/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.begin/1000)%60 }}</div>
-                      <span v-show="!isMinimized" class="stt-content" style="padding: 0 6px;border-radius: 20px;" @click="getAudioAndPlay(item)">
+                    <div>
+                      <div style="margin: 8px 0 2px 10px;">
+                        {{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.begin/1000)/3600)%60 }}{{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.begin/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.begin/1000)/60)%60 }}:{{ parseInt(item.begin/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.begin/1000)%60 }}
+                        ~&nbsp;{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.end/1000)/3600)%60 }}{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.end/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.end/1000)/60)%60 }}:{{ parseInt(item.end/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.end/1000)%60 }}
+                        </div>
+                      <div v-show="!isMinimized" class="stt-content" style="padding: 6px 6px;border-radius: 5px;transition: all 0.3s linear;width: fit-content;cursor:pointer" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`">
                         {{item.content}}
-                      </span>
+                      </div>
                     </div>
                   </div>
               </div>
@@ -92,7 +95,8 @@ span{
     width: fit-content;
 }
 .stt-content:hover {
-    background-color: bisque;
+    background-color: #4089FF !important;
+    color: white !important;
 }
 .lisn-stt-container{
     padding: 0rem 1.5rem 0rem 0rem;

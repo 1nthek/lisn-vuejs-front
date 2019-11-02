@@ -152,16 +152,13 @@ export default {
     this.editor = this.tiptap_editor;
     this.editor.setOptions({editable: true})
   },
-  beforeDestroy() {
-    // this.editor.destroy()
-  },
   methods: {
     ...mapActions([
       'UPDATE_NOTE',
     ]),
-    saveNote(title, started_at, ended_at, showMessage){
+    saveNote(title){
       var content = this.editor.getHTML();
-      this.UPDATE_NOTE({ title, content, started_at, ended_at, showMessage});
+      this.UPDATE_NOTE({ title, content});
     },
   }
 }
@@ -173,6 +170,7 @@ export default {
 }
 .tiptap{
   height: 100px;
+  color: #304455;
 }
 .menubar__button{
     font-size: 15px;

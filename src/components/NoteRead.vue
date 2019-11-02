@@ -2,7 +2,7 @@
   <vuescroll>
     <div class="lisn-note-container">
       <div style="display: flex;justify-content: space-between;">
-        <div class="ns-kr" ref="noteTitle" contenteditable="false" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{noteTitle=="untitled"?"":noteTitle}}</div>
+        <input type="text" v-model="noteTitle" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;" disabled draggable="false">
       </div>
         <div class="cell">
           <div class="date-cell">
@@ -12,13 +12,13 @@
                           <div class="cell-title-img">
                               <i class="far fa-clock"></i>
                           </div>
-                          <div class="cell-title-text ns-kr"> 시작 시간 </div>
+                          <div class="cell-title-text ns-kr"> 노트 생성 </div>
                       </div>
                   </div>
               </div>
               <div class="cell-data-container">
                   <div class="cell-data ns-kr" style="cursor: default;">
-                    <div style="color:black">{{note_started_at}}</div>
+                    <div style="color:black">{{note_created_at}}</div>
                   </div>
               </div>
           </div>
@@ -31,13 +31,13 @@
                           <div class="cell-title-img">
                               <i class="far fa-clock"></i>
                           </div>
-                          <div class="cell-title-text ns-kr"> 종료 시간 </div>
+                          <div class="cell-title-text ns-kr"> 최종 수정 </div>
                       </div>
                   </div>
               </div>
               <div class="cell-data-container">
                   <div class="cell-data ns-kr" style="cursor: default;">
-                    <div style="color:black">{{note_ended_at}}</div>
+                    <div style="color:black">{{note_updated_at}}</div>
                   </div>
               </div>
           </div>
@@ -90,8 +90,8 @@ export default {
       'token',
       'domain',
       'noteTitle',
-      'note_started_at',
-      'note_ended_at',
+      'note_created_at',
+      'note_updated_at',
     ]),
   },
   created(){
@@ -148,6 +148,9 @@ export default {
 }
 </script>
 <style>
+input{
+  color: #273849 !important;
+}
 div[contenteditable=false]:empty:before {
     content: attr(placeholder);
     color: rgb(182, 182, 182);

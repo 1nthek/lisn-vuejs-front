@@ -52,7 +52,7 @@
                   <div class="col-xl-3 col-md-6 ani-card"  v-for="p in noteList" :key="p.no" >
                     <stats-card :title="p.title"
                                 :note_id="p.note_id"
-                                :summery="p.summery"
+                                :summary="p.summary"
                                 type="gradient-orange"
                                 id="noteList"
                                 icon="fas fa-trash"
@@ -100,6 +100,7 @@ export default {
       'noteList',
       'domain',
       'token',
+      'interval_stt',
     ]),
   },
   created() {
@@ -120,8 +121,11 @@ export default {
     ...mapActions([
       'FETCH_LISTS',
       'FETCH_DIRECTORIES',
-      'CREATE_NOTE'
+      'CREATE_NOTE',
     ]),
+    ...mapMutations([
+      'clear_interval_stt',
+    ])
   },
 }
 </script>
@@ -159,6 +163,12 @@ export default {
   transform: translateZ(0);
   animation: load8 1.1s infinite linear;
 }
+.cont-isLoading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @-webkit-keyframes load8 {
   0% {
     transform: rotate(0deg);
@@ -196,11 +206,7 @@ div.ani-card{
     opacity: 1;
   }
 }
-.cont-isLoading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+
 div{
   -ms-user-select: none; 
   -moz-user-select: -moz-none;

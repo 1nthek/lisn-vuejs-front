@@ -62,6 +62,7 @@ export default {
 }
 .tiptap{
   height: 100px;
+  color: #304455;
 }
 .menubar__button{
     font-size: 15px;

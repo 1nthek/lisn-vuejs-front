@@ -12,7 +12,6 @@
       <slot name="header">
       </slot>
     </div>
-    <!-- <div class="card-body" @click.prevent="$router.push('/note/'+ note_id)" :class="bodyClasses" v-if="!noBody" style="cursor:pointer"> -->
     <div class="card-body" @click.prevent="$router.push('/note/'+ note_id)" :class="bodyClasses" v-if="!noBody" style="cursor:pointer">
       <slot></slot>
     </div>  

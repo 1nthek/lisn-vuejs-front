@@ -1,8 +1,8 @@
 <template>
-    <div style="background:#f0f0f0;height: 100vh;">
-      <NoteNavbarRead @scrollSTT="scrollSTT" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarRead>
-      <WorkspaceRead ref="workspace"></WorkspaceRead>
-    </div>
+  <div style="background:#f0f0f0;height: 100vh;">
+    <NoteNavbarRead @scrollSTT="scrollSTT" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarRead>
+    <WorkspaceRead ref="workspace" :isLoading="isLoading"></WorkspaceRead>
+  </div>
 </template>
 
 <script>
@@ -11,7 +11,6 @@ import NoteNavbarRead from '../layout/NoteNavbarRead'
 import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
-
 export default {
   components: {
     WorkspaceRead,
@@ -19,17 +18,18 @@ export default {
   },
   data(){
     return{
+      isLoading: true,
     }
   },
   computed: {
     ...mapState([
       'token',
       'user_id',
-      'note_id'
     ]), 
   },
   created() {
     let self = this;
+    self.clear_interval_stt();
     if(!self.user_id || !self.token){
       delete localStorage.user_id;
       delete localStorage.token;
@@ -38,13 +38,17 @@ export default {
     else{
       self.setNoteId(self.$route.params.nid);
       self.initData();
-      self.FETCH_NOTE();
+      self.FETCH_NOTE()
+        .then(() => {
+          this.isLoading = false;
+        })
     }
   },
   methods: {
     ...mapMutations([
       'setNoteId',
       'initData',
+      'clear_interval_stt',
     ]),
     ...mapActions([
       'FETCH_NOTE',

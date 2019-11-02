@@ -2,7 +2,7 @@
   <div class="player-container" >
     <div class="player">
       <div class="btn-container">
-        <template v-if="this.$store.state.isRecordable">
+        <template v-if="isRecordable">
           <div class="btn-record">
             <template v-if="isRecording">
               <div class="cont-mic blinkRed" @click="recBtnPressed()">
@@ -17,15 +17,15 @@
             </template>
           </div>
         </template>
-        <template v-if="!this.$store.state.isRecordable">
+        <template v-if="!isRecordable">
           <div class="btn-play">
-            <template v-if="this.$store.state.isPlaying">
-              <div class="cont-mic" style="background:#606060" @click.prevent="pauseSound()">
+            <template v-if="isPlaying">
+              <div class="cont-mic" style="background:#606060" @click.prevent="pauseSoundClicked()">
                 <i class="fas fa-pause" style="font-size: 17px;padding-top: 1px;"></i>        
               </div>
             </template>
             <template v-else>
-              <div class="cont-mic" style="background:#606060" @click.prevent="playSound()">
+              <div class="cont-mic" style="background:#606060" @click.prevent="playSoundClicked()">
                 <i class="fas fa-play" style="font-size: 17px;padding-left: 3px;padding-top: 1px;"></i>
               </div>
             </template>
@@ -33,7 +33,7 @@
         </template>
       </div>
       <div class="time">
-        {{this.$store.state.hour}}:{{this.$store.state.minute}}:{{this.$store.state.second}}
+        {{hour}}:{{minute}}:{{second}}
       </div>
       <div class="soundVol">
         <div id="vol0" class="vol"></div> 
@@ -54,8 +54,7 @@
 <script>
 import axios from 'axios'
 import Swal from 'sweetalert2';
-import { mapState, mapMutations } from 'vuex'
-
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 var recognition = new SpeechRecognition();
@@ -97,7 +96,6 @@ export default {
     return {
       audio_id:-1,
 
-      isPlaying: false,
       isRecording: false,
       timerId: null,
       chunks: null,
@@ -109,7 +107,6 @@ export default {
       is_first_word: null,
 
       swal_saveingRec: null,
-
       tmp_idx: 0,
     }
   },
@@ -117,38 +114,52 @@ export default {
     ...mapState([
       'note_id',
       'domain',
+      'hour',
+      'minute',
+      'second',
+      'isPlaying',
+      'isRecordable',
+      'sttText',
+      'audio',
     ]),
   },
   watch: {
-    isRecording: function (newVal) {
-      this.$emit('isRecording', newVal);
-    }
+    // isRecording: function (newVal) {
+    //   this.$emit('isRecording', newVal);
+    // }
   },
   created() {
     let self = this;
-    window.addEventListener('keydown', function (e) {
-      if (e.keyCode == 32) {
-        if(self.$store.state.isPlaying){
-          self.$store.state.isPlaying = false;
-          self.$store.state.audio.pause();
-          self.$store.state.timeOffset = self.$store.state.audio.currentTime;
-          self.$store.commit('clearInter');
-        } else{
-          var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
-          axios.get(self.domain + "/note/audio?audio_id=" + audioId)
-            .then((res) => {
-              self.$store.state.audio.src = res.data.data_url;
-              // self.$store.commit('setCurrentTime', {begin:0});
-              self.$store.commit('playSound');
-              // self.$store.state.audio.play();
-            })
-            .catch((ex) => {
-            })
-        }
-      }
-  });
+    // window.addEventListener('keydown', function (e) {
+    //   if (e.keyCode == 32) {
+    //     if(self.$store.state.isPlaying){
+    //       self.$store.state.isPlaying = false;
+    //       self.$store.state.audio.pause();
+    //       self.$store.state.timeOffset = self.$store.state.audio.currentTime;
+    //     } else{
+    //       var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
+    //       axios.get(self.domain + "/note/audio?audio_id=" + audioId)
+    //         .then((res) => {
+    //           self.$store.state.audio.src = res.data.data_url;
+    //           self.$store.commit('playSound');
+    //         })
+    //         .catch((ex) => {
+    //         })
+    //     }
+    //   }
+  // });
   },
   methods: {
+    ...mapMutations([
+      'clear_player_data',
+      'clear_interval_stt',
+      'clear_playTimer',
+      'pauseSound',
+      'set_isRecording',
+      'set_isRecordable',
+      'set_isPlaying',
+      'playSound',
+    ]),
     update_sentence_text(event_object_list) {
         var transcript = "";
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
@@ -156,7 +167,7 @@ export default {
         }
         this.$emit('scrollSTT')
         if(this.audio_timestamp.length!=0){
-          this.$set(this.$store.state.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id], end: Date.now() - this.audio_start_time});
+          this.$set(this.sttText, this.tmp_id, {content: transcript, id: this.tmp_id, begin: this.audio_timestamp[this.tmp_id], end: Date.now() - this.audio_start_time});
         }
     },
     async sendRecording() {
@@ -190,11 +201,6 @@ export default {
       formData.append('audio_data', blob, 'filename');
       formData.append('note_id', this.note_id);
       
-      self.$store.state.hour = '0';
-      self.$store.state.minute = '00';
-      self.$store.state.second = '00';
-      self.$store.state.timeOffset = 0;
-      self.audio_timestamp = [];
       self.audio_id =  await axios.post(this.domain + '/note/audio', formData)
         .then(res => {
           return res.data.audio_id;
@@ -205,7 +211,7 @@ export default {
           alert_upload_rec_fail.fire();
         })
 
-      this.$store.state.sttText.forEach(async (element) => {
+      this.sttText.forEach(async (element) => {
         var formData2 = new FormData();
         formData2.append('index', element.id);
         formData2.append('audio_id', self.audio_id);
@@ -220,16 +226,16 @@ export default {
             alert_post_stt_fail.fire()
           })
       })
+      self.clear_player_data();
       setTimeout(async () => {
         await axios.get( this.domain + '/note?note_id=' + this.note_id)
           .then(res => {
-            self.$store.state.sttText = [];
             res.data.audios.forEach(element => {
               var audio_id = element.audio_id;
               var sentences = element.sentences;
               var idx=0;
               sentences.forEach(ele => {
-                self.$set(self.$store.state.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, end: ele.ended_at, audioId: audio_id});
+                self.$set(self.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, end: ele.ended_at, audioId: audio_id});
               })
             });
           })
@@ -277,7 +283,9 @@ export default {
               Swal.showLoading()
             },
           })
-          self.$store.commit('clearInter');
+          // self.clear_player_data();
+          // self.clear_interval_stt();
+          self.clear_playTimer();
           self.sendRecording();
         };
 
@@ -309,8 +317,7 @@ export default {
                 }
                 if(self.audio_timestamp.length==0)
                   return;
-                // self.$set(self.$store.state.sttText, self.tmp_id, {content: transcript, id: self.tmp_id, begin: self.audio_timestamp[self.tmp_id], end: Date.now() - self.audio_start_time});
-                
+
                 self.is_first_word = true;
                 self.tmp_id ++;
             }
@@ -334,7 +341,7 @@ export default {
     recBtnPressed(){
       if(this.isRecording){
         this.isRecording = false;
-        this.$store.state.isRecordable = false;
+        this.set_isRecordable(false);
 
         recognition.stop();
         recorder.stop();
@@ -344,7 +351,8 @@ export default {
         localstream.getTracks().forEach((track) => {
           track.stop();
         });
-      }else{
+      }
+      else{
         let self = this;
         navigator.getUserMedia({ audio: true, video: false },
             function(stream) {
@@ -364,24 +372,21 @@ export default {
         );
       }
     },  
-    playSound() {
-      this.$store.commit('playSound');
+    playSoundClicked() {
+      this.playSound();
     },
-    pauseSound() {
-      this.$store.state.isPlaying = false;
-      this.$store.state.audio.pause();
-      this.$store.state.timeOffset = this.$store.state.audio.currentTime;
-      this.$store.commit('clearInter');
+    pauseSoundClicked() {
+      this.pauseSound();
     },
     printTime() {
-      var curTime = this.$store.state.audio.currentTime;
+      var curTime = this.audio.currentTime;
 
-      this.$store.state.hour = Math.floor(curTime / 3600);
-      this.$store.state.hour = (this.$store.state.hour >= 10) ? this.$store.state.hour : "0" + this.$store.state.hour;
-      this.$store.state.minute = Math.floor((curTime / 60) % 60);
-      this.$store.state.minute = (this.$store.state.minute >= 10) ? this.$store.state.minute : "0" + this.$store.state.minute;
-      this.$store.state.second = Math.floor(curTime % 60);
-      this.$store.state.second = (this.$store.state.second >= 10) ? this.$store.state.second : "0" + this.$store.state.second;
+      this.hour = Math.floor(curTime / 3600);
+      this.hour = (this.hour >= 10) ? this.hour : "0" + this.hour;
+      this.minute = Math.floor((curTime / 60) % 60);
+      this.minute = (this.minute >= 10) ? this.minute : "0" + this.minute;
+      this.second = Math.floor(curTime % 60);
+      this.second = (this.second >= 10) ? this.second : "0" + this.second;
     },
   },
   beforeDestroy() {
@@ -390,10 +395,10 @@ export default {
       recorder.stop();
       this.isRecording = false;
     }
-
-    this.$store.state.isPlaying = false;
-    this.$store.commit('clearInter');
-    this.$store.state.audio.pause();
+    this.set_isPlaying(false);
+    this.clear_playTimer();
+    this.clear_interval_stt();
+    this.audio.pause();
   },
 }
 </script>

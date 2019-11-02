@@ -1,12 +1,18 @@
 <template>
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
-      <!-- <player v-on:scrollSTT="scrollSTT"></player> -->
       <div class="lisn-workspace-container workspace-width">
           <s-t-t ref="stt"></s-t-t>
           <div class="divider"></div>
           <div class="note-container">
-              <NoteEdit ref="note"></NoteEdit>
+            <template v-if="isLoading">
+              <div class="cont-isLoading">
+                <div class="list-isLoading"></div>
+              </div>
+            </template>
+            <template v-else>
+              <NoteEdit ref="note"></NoteEdit>                
+            </template>
           </div>
       </div>
     </div>
@@ -16,14 +22,14 @@
 <script>
 import NoteEdit from './NoteEdit.vue'
 import STT from './STT.vue'
-// import Player from './Player.vue'
-
 
 export default {
   components: {
     NoteEdit,
     STT,
-    // Player
+  },
+  props: {
+    isLoading: Boolean,
   },
   methods:{
     isRecording(para){
@@ -43,6 +49,47 @@ export default {
 </script>
 
 <style>
+.list-isLoading,
+.list-isLoading:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.list-isLoading {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid #e1207920;
+  border-right: 1.1em solid #e1207920;
+  border-bottom: 1.1em solid #e1207920;
+  border-left: 1.1em solid #e12079;
+  transform: translateZ(0);
+  animation: load8 1.1s infinite linear;
+}
+.cont-isLoading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+}
+
+@-webkit-keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .workspace-width{
 	width:100%
 }

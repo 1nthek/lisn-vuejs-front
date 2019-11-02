@@ -1,7 +1,8 @@
 import axios from 'axios'
 import router from '../router'
 
-const domain = "http://15.164.232.194/api";
+// const domain = "http://15.164.232.194/api";
+const domain = "https://li-sn.io/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
   delete localStorage.token;

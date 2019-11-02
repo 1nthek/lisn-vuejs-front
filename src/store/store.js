@@ -32,7 +32,7 @@ export const store = new Vuex.Store({
     minute: '00',
     second: '00',
 
-    timerId: null,
+    playTimer: null,
     audio: new Audio(),
     timeOffset: 0.000,
     isPlaying: false,
@@ -41,6 +41,10 @@ export const store = new Vuex.Store({
     noteTitle: "",
     note_started_at: "",
     note_ended_at: "",
+
+    note_created_at: "",
+    note_updated_at: "",
+
     content: "",
     isRecordable: true,
     error: false,
@@ -59,7 +63,13 @@ export const store = new Vuex.Store({
     user_email: null,
     user_picture_url: null,
 
+    interval_stt: null,
+    colored_stt_id: null,
+
     tiptap_editor: new Editor({
+      onUpdate: ({ state, getHTML, getJSON, transaction }) => {
+        store.dispatch('UPDATE_NOTE', { title: store.state.noteTitle, content: getHTML() });
+      },
       extensions: [
         new Blockquote(),
         new CodeBlock(),
@@ -85,12 +95,10 @@ export const store = new Vuex.Store({
     }),
 
 
-    //staging server
-    // domain: 'http://54.180.117.235/api'
     //dev server
-    domain: 'http://15.164.232.194/api'
+    // domain: 'http://15.164.232.194/api'
     //real server
-    // domain: 'https://li-sn.io/v1/api'
+     domain: 'https://li-sn.io/api'
 
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
@@ -101,6 +109,36 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    clear_interval_stt(state){
+      if (state.interval_stt != null) {
+        clearInterval(state.interval_stt);
+      }
+    },
+    clear_playTimer(state){
+      if (state.playTimer != null) {
+        clearInterval(state.playTimer);
+      }
+    },
+    clear_player_data(state){
+      state.hour = '0';
+      state.minute = '00';
+      state.second = '00';
+      state.timeOffset = 0;
+      state.audio_timestamp = [];
+      state.sttText = [];
+    },
+    set_isPlaying(state, val){
+      state.isPlaying = val;
+    },
+    set_isRecording(state, val) {
+      state.isRecording = val;
+    },
+    set_isRecordable(state, val) {
+      state.isRecordable = val;
+    },
+    set_noteTitle(state, val){
+      state.noteTitle = val;
+    },
     set_note_started_at(state, val){
       state.note_started_at = val;
     },
@@ -135,8 +173,8 @@ export const store = new Vuex.Store({
       api.setTokenInHeader(null);
     },
     initData(state){
-      if (state.timerId != null){
-        clearInterval(state.timerId);
+      if (state.playTimer != null){
+        clearInterval(state.playTimer);
       }
       state.audio.pause();
       state.hour = '0';
@@ -147,15 +185,17 @@ export const store = new Vuex.Store({
       state.timeOffset = 0.000;
       state.isPlaying = false;
 
-      state.noteTitle = "";
+      // state.noteTitle = "";
       state.content = "";
       state.isRecordable = true;
       
       state.sttText = [];
+      state.interval_stt = null;
+      // state.colored_stt_id = null;
     },
     initRecording(state) {
-      if (state.timerId != null) {
-        clearInterval(state.timerId);
+      if (state.playTimer != null) {
+        clearInterval(state.playTimer);
       }
       state.audio.pause();
       state.hour = '0';
@@ -175,12 +215,20 @@ export const store = new Vuex.Store({
       state.content = value.content;
       state.note_started_at = fecha.format(new Date(value.started_at), 'YYYY.MM.DD ddd A hh:mm')
       state.note_ended_at = fecha.format(new Date(value.ended_at), 'YYYY.MM.DD ddd A hh:mm')
+
+      var date = new Date(value.created_at);
+      state.note_created_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
+      date = new Date(value.updated_at);
+      state.note_updated_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
+
       value.audios.forEach(element => {
         state.isRecordable = false;
         var audio_id = element.audio_id;
         var sentences = element.sentences;
+        var idx = 0;
+
         sentences.forEach(ele => {
-          state.sttText.push({ content: ele.content, id: idx, begin: ele.started_at, end: ele.ended_at, audioId: audio_id });
+          state.sttText.push({ content: ele.content, id: idx++, begin: ele.started_at, end: ele.ended_at, audioId: audio_id });
         })
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
@@ -190,15 +238,18 @@ export const store = new Vuex.Store({
           })
       });
     },
-    clearInter(state){
-      clearInterval(state.timerId);
+    pauseSound(state){
+      state.isPlaying = false;
+      state.audio.pause();
+      state.timeOffset = state.audio.currentTime;
+      clearInterval(state.playTimer);
     },
     playSound(state) {
       state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
       
-      state.timerId = setInterval(() => {
+      state.playTimer = setInterval(() => {
         var curTime = state.audio.currentTime;
         state.hour = Math.floor(curTime / 3600);
         state.hour = (state.hour >= 10) ? state.hour :  state.hour;
@@ -207,6 +258,28 @@ export const store = new Vuex.Store({
         state.second = Math.floor(curTime % 60);
         state.second = (state.second >= 10) ? state.second : "0" + state.second;
       }, 1000)
+      
+      state.interval_stt = setInterval(() => {
+        var curTime = state.audio.currentTime*1000;
+        if (state.colored_stt_id != null){
+          document.getElementById("stt-" + state.colored_stt_id).style.backgroundColor = "white";
+          document.getElementById("stt-" + state.colored_stt_id).style.color = "black";
+          document.getElementById("stt-" + state.colored_stt_id).style.fontWeight = "normal";
+          state.colored_stt_id = null;
+        }
+        for (let i = 0; i < state.sttText.length;++i){
+          if (state.sttText[i].begin > curTime){
+            break;  //없음
+          }
+          else if (state.sttText[i].begin <= curTime && state.sttText[i].end >= curTime){
+            document.getElementById("stt-" + state.sttText[i].id).style.backgroundColor = "#4089FF";
+            document.getElementById("stt-" + state.sttText[i].id).style.color = "white";
+            document.getElementById("stt-" + state.sttText[i].id).style.fontWeight = "bold";
+            state.colored_stt_id = state.sttText[i].id;
+            break;
+          }
+        }
+      }, 500)
     },
     setAccessToken(state) {
       state.token = localStorage.getItem('token');
@@ -220,7 +293,7 @@ export const store = new Vuex.Store({
     
     startCountingTimer(state){
       state.timeOffset = 0;
-      state.timerId = setInterval(() => {
+      state.playTimer = setInterval(() => {
         state.timeOffset = state.timeOffset + 1;
         var curTime = state.timeOffset;
         state.hour = Math.floor(curTime / 3600);
@@ -401,25 +474,16 @@ export const store = new Vuex.Store({
           }
         })
     },
-    UPDATE_NOTE({ state, commit, dispatch }, { title, content, started_at, ended_at, showMessage}){
+    UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
       var formData = new FormData();
       formData.append('note_id', state.note_id);
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('started_at', started_at);
-      formData.append('ended_at', ended_at);
+      formData.append('started_at', "2000/01/02/01/00/00");
+      formData.append('ended_at', "2000/01/02/01/00/00");
 
       return api.note.update(formData)
         .then(data => {
-          if (showMessage){
-            Swal.fire({
-              position: 'center',
-              type: 'success',
-              title: '저장 완료',
-              showConfirmButton: false,
-              timer: 1000
-            })
-          }
         })
         .catch(err => {
           console.log('저장 실패');

@@ -7,9 +7,9 @@
     </router-link>
 
     <player v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></player>
-      <button class="save-btn" style="position: relative;" @click="$emit('saveNote')">
-        <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;"><i class="fas fa-save"></i>&nbsp;저장</div>
-      </button>
+    <!-- <button class="save-btn" style="position: relative;" @click="$emit('saveNote')">
+      <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;"><i class="fas fa-save"></i>&nbsp;저장</div>
+    </button> -->
     </div>
 </template>
 

@@ -2,46 +2,49 @@
   <vuescroll>
     <div class="lisn-note-container">
       <div style="display: flex;justify-content: space-between;">
-        <div class="ns-kr" id="noteTitle" ref="noteTitle" contenteditable="true" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;">{{this.$store.state.noteTitle=="untitled"?"":this.$store.state.noteTitle}}</div>
+        <input type="text" v-on:input="typing" v-model="noteTitle" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;">
       </div>
-              <div class="cell">
-                <div class="date-cell">
-                    <div class="cell-title-container">
-                        <div class="cell-title">
-                            <div class="cell-title-inner">
-                                <div class="cell-title-img">
-                                    <i class="far fa-clock"></i>
-                                </div>
-                                <div contenteditable="true" class="cell-title-text ns-kr"> 시작 시간 </div>
-                            </div>
+      <div class="cell">
+        <div class="date-cell">
+            <div class="cell-title-container">
+                <div class="cell-title">
+                    <div class="cell-title-inner">
+                        <div class="cell-title-img">
+                            <i class="far fa-clock"></i>
                         </div>
-                    </div>
-                    <div class="cell-data-container">
-                        <div class="cell-data ns-kr">
-                            <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
-                        </div>
+                        <div class="cell-title-text ns-kr"> 노트 생성 </div>
                     </div>
                 </div>
-              </div>
-              <div class="cell">
-                <div class="date-cell">
-                    <div class="cell-title-container">
-                        <div class="cell-title">
-                            <div class="cell-title-inner">
-                                <div class="cell-title-img">
-                                    <i class="far fa-clock"></i>
-                                </div>
-                                <div contenteditable="true" class="cell-title-text ns-kr"> 종료 시간 </div>
-                            </div>
+            </div>
+            <div class="cell-data-container">
+                <div class="cell-data ns-kr" style="cursor: default;">
+                  <div style="color:black">{{note_created_at}}</div>
+                    <!-- <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="cell">
+        <div class="date-cell">
+            <div class="cell-title-container">
+                <div class="cell-title">
+                    <div class="cell-title-inner">
+                        <div class="cell-title-img">
+                            <i class="far fa-clock"></i>
                         </div>
-                    </div>
-                    <div class="cell-data-container">
-                        <div class="cell-data ns-kr">
-                            <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick>
-                        </div>
+                        <div class="cell-title-text ns-kr"> 최종 수정 </div>
                     </div>
                 </div>
-              </div>
+            </div>
+            <div class="cell-data-container">
+                <div class="cell-data ns-kr" style="cursor: default;">
+                  <div style="color:black">{{note_updated_at}}</div>
+
+                    <!-- <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
+                </div>
+            </div>
+        </div>
+      </div>
         <!-- <template v-for="item in cellData" v-if="item.cellType === 'date'">
             <div class="cell" v-bind:key='item.id'>
                 <div class="date-cell">
@@ -134,7 +137,7 @@ import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
 import axios from 'axios'
 import Editor from './Editor'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 
 fecha.i18n = {
@@ -199,64 +202,46 @@ export default {
       'note_id',
       'token',
       'domain',
-      'noteTitle',
+      'note_created_at',
+      'note_updated_at',
     ]),
-    note_started_at: {
-        get () { return this.$store.state.note_started_at},
-        set (value) {  this.$store.commit('set_note_started_at', value) }
-    },
-    note_ended_at: {
-        get () { return this.$store.state.note_ended_at},
-        set (value) {  this.$store.commit('set_note_ended_at', value) }
+    noteTitle:{
+      get () { return this.$store.state.noteTitle},
+      set (value) {  this.set_noteTitle(value) }
     }
   },
-  beforeDestroy(){      
-    var started_at = this.parse_started_at();
-    var ended_at = this.parse_ended_at();
-    var showMessage = false; 
-    this.$refs.editor.saveNote(this.$refs.noteTitle.innerHTML, started_at, ended_at, showMessage);
-  },
   methods: {
-    saveNote(){
-      var started_at = this.parse_started_at();
-      var ended_at = this.parse_ended_at();
-      var showMessage = true; 
-      this.$refs.editor.saveNote(this.$refs.noteTitle.innerHTML, started_at, ended_at, showMessage);
-    },
-    parse_started_at(){
-      var year = this.note_started_at.substr(0,4);
-      var month = parseInt(this.note_started_at.substr(5,2))-1;
-      var day = this.note_started_at.substr(8,2);
-      var ampm = this.note_started_at.substr(13,2);
-      var hour = this.note_started_at.substr(16,2);
-      var minute = this.note_started_at.substr(19,2);
-      if(ampm=="오후"){
-        hour= parseInt(hour)+12;
-      }
-      return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-    },
-    parse_ended_at(){
-      var year = this.note_ended_at.substr(0,4);
-      var month = parseInt(this.note_ended_at.substr(5,2))-1;
-      var day = this.note_ended_at.substr(8,2);
-      var ampm = this.note_ended_at.substr(13,2);
-      var hour = this.note_ended_at.substr(16,2);
-      var minute = this.note_ended_at.substr(19,2);
-      if(ampm == "오후"){
-        hour= parseInt(hour)+12;
-      }
-      return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-    },
+    ...mapMutations([
+      'set_noteTitle',
+    ]),
     typing(e) {
-    	this.title = e.target.value
+      this.noteTitle = e.target.value;
+      this.$refs.editor.saveNote(this.noteTitle);
     },
-    addCell () {
-      this.cellData.push({
-        cellType: 'text',
-        cellTitle: '제목',
-        cellContent: ''
-      })
-    },
+    // parse_started_at(){
+    //   var year = this.note_started_at.substr(0,4);
+    //   var month = parseInt(this.note_started_at.substr(5,2))-1;
+    //   var day = this.note_started_at.substr(8,2);
+    //   var ampm = this.note_started_at.substr(13,2);
+    //   var hour = this.note_started_at.substr(16,2);
+    //   var minute = this.note_started_at.substr(19,2);
+    //   if(ampm=="오후"){
+    //     hour= parseInt(hour)+12;
+    //   }
+    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
+    // },
+    // parse_ended_at(){
+    //   var year = this.note_ended_at.substr(0,4);
+    //   var month = parseInt(this.note_ended_at.substr(5,2))-1;
+    //   var day = this.note_ended_at.substr(8,2);
+    //   var ampm = this.note_ended_at.substr(13,2);
+    //   var hour = this.note_ended_at.substr(16,2);
+    //   var minute = this.note_ended_at.substr(19,2);
+    //   if(ampm == "오후"){
+    //     hour= parseInt(hour)+12;
+    //   }
+    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
+    // },
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)
     },
@@ -277,6 +262,12 @@ export default {
 }
 </script>
 <style>
+input{
+  color: #273849 !important;
+}
+input:focus{
+  outline:none;
+}
 div[contenteditable=true]:empty:before {
     content: attr(placeholder);
     color: rgb(182, 182, 182);
