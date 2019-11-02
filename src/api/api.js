@@ -36,6 +36,9 @@ export const list = {
   },
   fetch_directory(directory_id){
     return request('get', `/list/note?directory_id=${directory_id}`)
+  },
+  fetch_trash(user_id) {
+    return request('get', `/list/note/trash?user_id=${user_id}`)
   }
 }
 
@@ -53,7 +56,7 @@ export const note = {
     return request('put', `/note`, formData)
   },
   destroy(formData){
-    return request('delete', `/note`, formData);
+    return request('put', `/note/trash`, formData);
   }
 }
 
@@ -78,6 +81,18 @@ export const directory = {
 export const profile = {
   fetch(user_id){
     return request('get', `/profile?user_id=${user_id}`)
+  }
+}
+
+export const trash = {
+  fetch(user_id){
+    return request('get', `/list/note/trash?user_id=${user_id}`)
+  },
+  destroy(formData) {
+    return request('delete', `/note`, formData);
+  },
+  restore(formData) {
+    return request('delete', `/note/trash`, formData);
   }
 }
 

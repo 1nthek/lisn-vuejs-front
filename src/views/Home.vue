@@ -16,9 +16,6 @@
                 </div>
               </div>
               <ul class="nav__right ns-kr" :class="{'active': this.navOpen }">
-                  <li> <div class="nav__link"> About </div> </li>
-                  <li> <div class="nav__link"> Pricing  </div> </li>
-                  <li> <div class="nav__link"> Contact Us </div> </li>
                   <li>
                     <div id="customBtn0">
                       <span class="nav__link nav__link--cta">로그인</span>
@@ -31,6 +28,7 @@
         <div class="lisn-wallpaper">
           <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_1.jpg); background-size: cover;"></div>
        </div>
+       
       </transition>
         <div class="home-cont-1">
           <div style="max-width: 1200px;margin: 0 auto;padding: 26px 25px;display: flex;justify-content: flex-end;">
@@ -47,6 +45,17 @@
             </div>
             </div>
           </div>
+        </div>
+        <div class="lisn-intro">
+          <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_2.jpg); background-size: cover;">
+          <div class="lisn-introtext" style="color: black; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; text-align: center; text-transform: uppercase;">How To Use LISN...</div>
+          <div align="center" class="lisn-introvideo">
+            <iframe id="lisn-video" src="https://www.youtube.com/embed/UAnnAvKzLCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
+          </div>
+        </div>
+        <div class="lisn-function">
+
         </div>
   <!-- <app-footer></app-footer>  -->
 </div>
@@ -196,6 +205,57 @@ export default {
     100% { transform: rotate(360deg); }
 } */
 
+.lisn-intro{
+  /*background: rgb(239, 240, 242);*/
+  /* border-radius: 10px; */
+  width: 100vw;
+    /* height: 100vh; */
+  height: 110vh;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.lisn-introvideo{
+  width: 100vw;
+    /* height: 100vh; */
+  height: 100vh;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.lisn-introtext{
+  position: relative;
+  top:15%;
+  z-index: 150;
+}
+
+#lisn-video{
+  position: relative;
+  width: 60%;
+  height: 70%;
+  top: 20%;
+}
+
+#lisn-videotext{
+  position: relative;
+  width: 60%;
+  height: 70%;
+  top: 20%;
+}
+
+.lisn-function{
+  background: rgb(239, 240, 242);
+  /* border-radius: 10px; */
+  width: 100vw;
+    /* height: 100vh; */
+  height: 100vh;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
 .home-cont-1{
   background: #00000070;
   /* border-radius: 10px; */
@@ -243,6 +303,7 @@ export default {
 .lisn-wallpaper {
     /* background: #00000040; */
     width: 100vw;
+    /* height: 100vh; */
     height: 100vh;
     display: block;
     position: relative;
@@ -289,7 +350,7 @@ export default {
 .home-nav {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 26px 25px;
+    padding: 10px 15px;
     display: flex;
     justify-content: space-between;
 }

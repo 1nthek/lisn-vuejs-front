@@ -180,11 +180,11 @@ export default {
     height: 24px;
     background: antiquewhite;
 }
-.has-focus {
+/*.has-focus { */
   /* border-radius: 3px; */
   /* box-shadow: 0 0 0 1px #3ea4ffe6; */
   /* border: 1px solid #BCBEC0; */
-}
+/*}*/
 div.tiptap p{
     font-size: 16px !important;
     margin-bottom: 5px;

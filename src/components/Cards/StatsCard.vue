@@ -102,7 +102,7 @@ export default {
         // title: '휴지통으로 이동',
         // text: `휴지통에서 완전히 삭제할 수 있습니다`,
         title: '노트 삭제',
-        text: '"' + title + '"를 영구 삭제 합니다.',
+        text: '"' + title + '"를 휴지통으로 이동합니다.',
         // type: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-danger btn-fill',
