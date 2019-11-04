@@ -1,30 +1,10 @@
 <template>
   <nav :class="classes" class="navbar">
     <div :class="containerClasses">
-      <slot name="brand"></slot>
-
-      <slot name="toggle-button">
-        <button
-          class="navbar-toggler collapsed"
-          v-if="hasMenu"
-          type="button"
-          @click="toggleMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-        </button>
-      </slot>
-
-      <button class="navbar-toggler" @click.stop="toggleMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-        <div
+      <div
           class="navbar-collapse navbar-custom-collapse collapse show"
           :class="menuClasses"
+          style="justify-content: space-between"
           v-show="show"
           v-click-outside="closeMenu">
           <slot :close-menu="closeMenu"></slot>
