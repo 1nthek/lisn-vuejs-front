@@ -1,8 +1,8 @@
 <template>
   <vuescroll>
-    <div class="lisn-note-container">
+    <div class="lisn-note-container ns-kr">
       <div style="display: flex;justify-content: space-between;">
-        <input type="text" v-model="noteTitle" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;" disabled draggable="false">
+        <input type="text" v-model="noteTitle" placeholder="제목을 입력하세요" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;" disabled draggable="false">
       </div>
         <div class="cell">
           <div class="date-cell">
@@ -95,37 +95,6 @@ export default {
   },
   created(){
   },
-  props: {
-    // value: {type: String, default: ''},
-    // format: {type: String, default: 'YYYY-MM-DD'},
-    // displayFormat: {type: String},
-    // hasInputElement: {type: Boolean, default: true},
-    // inputAttributes: {type: Object},
-    selectableYearRange: {type: Number, default: 40},
-    pickTime: {type: Boolean, default: true},
-    // pickMinutes: {type: Boolean, default: true},
-    // pickSeconds: {type: Boolean, default: false},
-    // isDateDisabled: {type: Function, default: () => false},
-    nextMonthCaption: {type: String, default: '다음 달'},
-    prevMonthCaption: {type: String, default: '이전 달'},
-    setTimeCaption: {type: String, default: '시간 설정:'},
-    mobileBreakpointWidth: {type: Number, default: 500},
-    weekdays: {
-      type: Array,
-      default: () => ([
-        '월', '화', '수', '목', '금', '토', '일'
-      ])
-    },
-    months: {
-      type: Array,
-      default: () => ([
-        '1월', '2월', '3월', '4월',
-        '5월', '6월', '7월', '8월',
-        '9월', '10월', '11월', '12월'
-      ])
-    },
-    startWeekOnSunday: {type: Boolean, default: true}
-  },
   methods: {
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)
@@ -150,18 +119,23 @@ export default {
 input{
   color: #273849 !important;
 }
-div[contenteditable=false]:empty:before {
+input:focus{
+  outline:none;
+}
+div[contenteditable=true]:empty:before {
     content: attr(placeholder);
     color: rgb(182, 182, 182);
     display: block;
 }
-div[contenteditable="false"]:focus {
+div[contenteditable="true"]:focus {
    outline: none;
 }
 .cell-title-text{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 16px;
+    color: #303133;
 }
 .text-cell, .person-cell, .date-cell{
     display: inherit;
@@ -187,19 +161,8 @@ div.vdpComponent.vdpWithInput :focus{
     visibility: collapse;
 }
 .lisn-note-container{
-    /* pointer-events: auto; */
     position: relative;
     z-index: 0;
-}
-.pop-up{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    /* background: rgba(0, 0, 0, 0.4); */
-    z-index: 99;
-    /* pointer-events: none; */
 }
 .cell{
     display: flex;
@@ -231,6 +194,8 @@ div.vdpComponent.vdpWithInput :focus{
 }
 .cell-title-img{
     margin-right: 10px;
+    font-size: 16px;
+    color: #303133;
 }
 .cell-data-container{
     display: flex;
@@ -249,8 +214,9 @@ div.vdpComponent.vdpWithInput :focus{
     width: 100%;
     min-height: 34px;
     padding: 6px 8px 7px;
+    text-overflow: ellipsis;
     font-size: 14px;
-    /* overflow: hidden; */
+    color: #303133;
 }
 .people-container{
     display: flex;

@@ -1,7 +1,12 @@
 <template>
 <div class="stt-container" ref="container" :class="{show: !isMinimized}">
   <div style="display: flex;margin-left: 8px;;font-size: 18px;">
-    <div class="bar-icon" @click="isMinimized =! isMinimized"><i v-if="isMinimized" class="fas fa-angle-double-right"></i><i v-if="!isMinimized" class="fas fa-angle-double-left"></i></div>
+    <div class="bar-icon" @click="isMinimized =! isMinimized">
+      <i v-if="isMinimized" class="fas fa-angle-double-right"></i>
+      <i v-if="!isMinimized" class="fas fa-angle-double-left">
+        <span class="ns-kr" style="padding-left: 12px;font-size: 19px;font-weight: bold;">실시간 음성 인식</span>
+      </i>
+    </div>
   </div>
   <vuescroll ref="vs">
         <div class="lisn-stt-container">
