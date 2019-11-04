@@ -53,7 +53,6 @@
 import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
-import axios from 'axios'
 import EditorRead from './EditorRead'
 import { mapState, mapMutations } from 'vuex'
 

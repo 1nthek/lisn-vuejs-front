@@ -16,20 +16,24 @@
           </slot>
         </p>
       </div>
-      <div>
-        <div v-if="$slots.icon || icon">
-          <slot name="icon">
-            <div id="trash" class="icon-shape text-white rounded-circle shadow" @click.stop="deleteNote(note_id, title)" style="cursor: pointer;width: 37px;height: 37px;"
-                :class="[`bg-${type}`, iconClasses]">
-              <i :class="icon"></i>
+      <div style="display: flex;align-items: center;margin-right: 10px;color:gray">
+        <div class="ns-kr cont3">
+          <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;">
+            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
+              <i class="fas fa-trash"></i>
             </div>
-          </slot>
-        </div>
-        <div>
-          <div id="ellipsis" class="icon-shape rounded-circle" @click.stop="moveDirectory(note_id)" style="cursor: pointer;width: 37px;height: 37px;margin-top: 8px;">
-          <i class="fas fa-ellipsis-h"></i>
-              <!-- <i :class="icon"></i> -->
+            <div style="font-weight: bold;font-size: 15px;margin-left: 8px;width: 60px;">
+              노트 삭제
             </div>
+          </div>
+          <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;">
+            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 18px;">
+              <i class="fas fa-sign-in-alt"></i>
+            </div>
+            <div style="font-weight: bold;font-size: 15px;margin-left: 8px;width: 60px;">            
+              폴더 이동
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,7 +42,6 @@
 <script>
 import Card from './Card.vue';
 import Swal from 'sweetalert2';
-import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -120,21 +123,24 @@ export default {
 }
 </script>
 <style>
+#noteList:hover .cont3{
+  color: black;
+}
 .summary{
-  font-weight:600;font-size: 12px;height: 17px;color: #617386;transition: all .4s ease 0s;
+  font-weight:600;
+  font-size: 14px;
+  height: 17px;
+  color: #617386;
 }
-#ellipsis:hover{
-  background: lightgray;
+#folder-move, #trash{
+  transition: all 200ms ease-in 0s;
 }
-#trash:hover{
-  color:lightgray !important;
-}
+/* #folder-move:hover, #trash:hover{
+  padding-right: 8px;
+} */
 .card-stats .card-body {
     padding: 14px 20px !important; 
 }
-/* .summary:hover{
-    color: rgb(167, 197, 229);
-} */
 .swal2-content select {
     -moz-appearance: menulist !important;
     -webkit-appearance: menulist !important;

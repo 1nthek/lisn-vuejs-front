@@ -6,7 +6,6 @@
 
 <script>
 import Swal from 'sweetalert2';
-import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { Editor, EditorContent } from 'tiptap'
 import {

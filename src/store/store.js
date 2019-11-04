@@ -40,8 +40,6 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
-    note_started_at: "",
-    note_ended_at: "",
 
     note_created_at: "",
     note_updated_at: "",
@@ -143,12 +141,6 @@ export const store = new Vuex.Store({
     set_noteTitle(state, val){
       state.noteTitle = val;
     },
-    set_note_started_at(state, val) {
-      state.note_started_at = val;
-    },
-    set_note_ended_at(state, val) {
-      state.note_ended_at = val;
-    },
     onRefresh(state, { token, user_id }) {
       let self = this;
       if (!token || !user_id) {
@@ -219,8 +211,6 @@ export const store = new Vuex.Store({
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
-      state.note_started_at = fecha.format(new Date(value.started_at), 'YYYY.MM.DD ddd A hh:mm')
-      state.note_ended_at = fecha.format(new Date(value.ended_at), 'YYYY.MM.DD ddd A hh:mm')
 
       var date = new Date(value.created_at);
       state.note_created_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
@@ -239,8 +229,6 @@ export const store = new Vuex.Store({
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
             state.audio.src = res.data.audio_url;
-          })
-          .catch((ex) => {
           })
       });
     },
@@ -456,10 +444,11 @@ export const store = new Vuex.Store({
       })
     },
 
-    CREATE_NOTE({ state }) {
+    CREATE_NOTE({ state, commit, dispatch }) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
       return api.note.create(formData).then(data => {
+        // dispatch('UPDATE_EDIT', data.note_id);
         router.push('/noteEdit/' + data.note_id);
       })
     },
@@ -564,6 +553,26 @@ export const store = new Vuex.Store({
             timer: 1000
           })
         })
+    },
+
+    UPDATE_EDIT({ state, commit, dispatch }, note_id ) {
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      formData.append('note_id', note_id);       
+      return api.edit.update(formData);
+    },
+    DESTROY_EDIT({ state, commit, dispatch }, note_id ) {
+      var formData = new formData();
+      formData.append('user_id', state.user_id);
+      formData.append('note_id', note_id)
+      return api.edit.destroy(formData);
+    },
+    
+
+    FETCH_AUDIO({ state, commit }, audio_id) {
+      return api.audio.fetch(audio_id).then(data => {
+        state.audio.src = data.audio_url;
+      })
     },
 
     FETCH_PROFILE({ state, commit }) {

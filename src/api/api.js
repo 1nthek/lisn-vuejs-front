@@ -3,7 +3,7 @@ import router from '../router'
 
 // const domain = "http://15.164.232.194/api";
 const domain = "https://li-sn.io/api";
-const Unauthorized = 400
+const Unauthorized = 401
 const onUnauthorized = () => {
   delete localStorage.token;
   delete localStorage.user_id;
@@ -58,6 +58,24 @@ export const note = {
   destroy(formData){
     return request('put', `/note/trash`, formData);
   }
+}
+
+export const edit = {
+  update(formData) {
+    return request('put', `/note/edited`, formData);
+  },
+  destroy(formData) {
+    return request('delete', `/note/edited`, formData);
+  }
+}
+
+export const audio = {
+  fetch(audio_id){
+    return request('get', `/note/audio?audio_id=${audio_id}`);
+  },
+  // create(formData){
+  //   return request('post', `note/audio`, formData);
+  // }
 }
 
 export const directory = {

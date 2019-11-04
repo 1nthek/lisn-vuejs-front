@@ -121,7 +121,6 @@
 <script>
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
-import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 
