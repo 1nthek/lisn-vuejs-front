@@ -121,6 +121,7 @@ export default {
       'isRecordable',
       'sttText',
       'audio',
+      'rec_length',
     ]),
   },
   watch: {
@@ -199,7 +200,8 @@ export default {
       
       var formData = new FormData();
       formData.append('audio_data', blob, 'filename');
-      formData.append('note_id', this.note_id);
+      formData.append('note_id', self.note_id);
+      formData.append('length ', self.rec_length);
       
       self.audio_id =  await axios.post(this.domain + '/note/audio', formData)
         .then(res => {
@@ -265,12 +267,12 @@ export default {
         recognition.start();
 
         recorder.onstart = () => {
-            self.$store.commit('startCountingTimer');
-            self.audio_start_time = Date.now();
+          self.$store.commit('startCountingTimer');
+          self.audio_start_time = Date.now();
         };
 
         recorder.ondataavailable = (e) => {
-              self.chunks.push(e.data);
+          self.chunks.push(e.data);
         }
         recorder.onstop = () => {
           let timerInterval;
@@ -290,9 +292,9 @@ export default {
         };
 
         recognition.onend = function() {
-            if(self.isRecording == true) {
-                recognition.start();
-            }
+          if(self.isRecording == true) {
+              recognition.start();
+          }
         }
 
         recognition.onresult = function(event_object_list) {
