@@ -19,7 +19,6 @@
             <div class="cell-data-container">
                 <div class="cell-data ns-kr" style="cursor: default;">
                   <div style="color:black">{{note_created_at}}</div>
-                    <!-- <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
                 </div>
             </div>
         </div>
@@ -39,8 +38,6 @@
             <div class="cell-data-container">
                 <div class="cell-data ns-kr" style="cursor: default;">
                   <div style="color:black">{{note_updated_at}}</div>
-
-                    <!-- <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
                 </div>
             </div>
         </div>
@@ -218,30 +215,6 @@ export default {
       this.noteTitle = e.target.value;
       this.$refs.editor.saveNote(this.noteTitle);
     },
-    // parse_started_at(){
-    //   var year = this.note_started_at.substr(0,4);
-    //   var month = parseInt(this.note_started_at.substr(5,2))-1;
-    //   var day = this.note_started_at.substr(8,2);
-    //   var ampm = this.note_started_at.substr(13,2);
-    //   var hour = this.note_started_at.substr(16,2);
-    //   var minute = this.note_started_at.substr(19,2);
-    //   if(ampm=="오후"){
-    //     hour= parseInt(hour)+12;
-    //   }
-    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-    // },
-    // parse_ended_at(){
-    //   var year = this.note_ended_at.substr(0,4);
-    //   var month = parseInt(this.note_ended_at.substr(5,2))-1;
-    //   var day = this.note_ended_at.substr(8,2);
-    //   var ampm = this.note_ended_at.substr(13,2);
-    //   var hour = this.note_ended_at.substr(16,2);
-    //   var minute = this.note_ended_at.substr(19,2);
-    //   if(ampm == "오후"){
-    //     hour= parseInt(hour)+12;
-    //   }
-    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-    // },
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)
     },

@@ -492,8 +492,6 @@ export const store = new Vuex.Store({
       formData.append('note_id', state.note_id);
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('started_at', "2000/01/02/01/00/00");
-      formData.append('ended_at', "2000/01/02/01/00/00");
 
       return api.note.update(formData)
         .then(data => {
