@@ -5,9 +5,8 @@
           class="navbar-collapse navbar-custom-collapse collapse show"
           :class="menuClasses"
           style="justify-content: space-between"
-          v-show="show"
-          v-click-outside="closeMenu">
-          <slot :close-menu="closeMenu"></slot>
+          v-show="show">
+          <slot></slot>
         </div>
     </div>
   </nav>
@@ -21,11 +20,6 @@ export default {
       default: false,
       description:
         'Whether navbar menu is shown (valid for viewports < specified by `expand` prop)'
-    },
-    transparent: {
-      type: Boolean,
-      default: false,
-      description: 'Whether navbar is transparent'
     },
     expand: {
       type: String,
@@ -44,25 +38,6 @@ export default {
       description:
         'Container classes. Can be used to control container classes (contains both navbar brand and menu items)'
     },
-    type: {
-      type: String,
-      default: '',
-      validator(value) {
-        return [
-          '',
-          'dark',
-          'success',
-          'danger',
-          'warning',
-          'white',
-          'primary',
-          'light',
-          'info',
-          'vue'
-        ].includes(value);
-      },
-      description: 'Navbar color type'
-    }
   },
   model: {
     prop: 'show',
@@ -88,12 +63,6 @@ export default {
     }
   },
   methods: {
-    toggleMenu() {
-      this.$emit('change', !this.show);
-    },
-    closeMenu() {
-      this.$emit('change', false);
-    }
   }
 };
 </script>

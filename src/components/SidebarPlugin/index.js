@@ -13,18 +13,11 @@ const SidebarStore = {
     }
     this.showSidebar = value;
     let docClasses = document.body.classList
+    docClasses.toggle('g-sidenav-open');
     if (value) {
       docClasses.add('g-sidenav-open')
-
-      // docClasses.add('g-sidenav-pinned')
-      // docClasses.add('g-sidenav-show')
-      // docClasses.remove('g-sidenav-hidden')
     } else {
       docClasses.remove('g-sidenav-open')
-
-      // docClasses.add('g-sidenav-hidden')
-      // docClasses.remove('g-sidenav-pinned')
-      // docClasses.remove('g-sidenav-show')
     }
   },
   // onMouseEnter() {

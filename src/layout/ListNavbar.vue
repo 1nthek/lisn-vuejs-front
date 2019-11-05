@@ -85,13 +85,9 @@
   </base-nav>
 </template>
 <script>
-// import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
 import Logo from "../assets/Logo"
 import { mapState, mapMutations, mapActions } from 'vuex'
-
-
-// import { BaseNav, Modal } from '@/components';
 
 export default {
   components: {
@@ -148,21 +144,9 @@ export default {
         })
       })
     },
-    capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-    toggleNotificationDropDown() {
-      this.activeNotifications = !this.activeNotifications;
-    },
-    closeDropDown() {
-      this.activeNotifications = false;
-    },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    hideSidebar() {
-      this.$sidebar.displaySidebar(false);
-    }
   }
 };
 </script>
