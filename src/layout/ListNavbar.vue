@@ -63,18 +63,15 @@
                     </div>
                     <span class="ns-kr navbar-txt">프로필</span>
                   </div>
-                  <!-- <div class="dropdown-item" style="display: flex;">
-                    <div class="navbar-icon">
-                      <i class="fas fa-cog"></i>
-                    </div>
-                    <span class="ns-kr navbar-txt">설정</span>
-                  </div> -->
-                  <!-- <div class="dropdown-divider"></div> -->
                   <div @click="signOut()" class="dropdown-item" style="display: flex;">
                     <div class="navbar-icon">
                       <i class="fas fa-running" style="font-size: 1.4em;"></i>
                     </div>
                       <span class="ns-kr navbar-txt">로그아웃</span>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div style="display: flex;cursor: default;padding: 0rem 1rem;font-size: 12px;color: #bababa;font-weight: normal;">
+                    <span class="ns-kr">LISN 웹 v1.4.1</span>
                   </div>
               </ul>
           </div>
@@ -151,6 +148,12 @@ export default {
 };
 </script>
 <style scoped>
+.dropdown-item{
+  transition: all 300ms ease-in 0s;
+}
+.dropdown-item:hover {
+    background-color: #ececec;
+}
 @media (max-width: 767px){
   #sidenav-logo {
     display: none;

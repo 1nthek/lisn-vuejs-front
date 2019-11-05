@@ -16,7 +16,7 @@
           </slot>
         </p>
       </div>
-      <div style="display: flex;align-items: center;margin-right: 10px;color:gray">
+      <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
         <div class="ns-kr cont3">
           <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;">
             <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
