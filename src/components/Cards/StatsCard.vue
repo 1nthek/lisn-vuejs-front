@@ -18,19 +18,19 @@
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
         <div class="ns-kr cont3">
-          <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;">
+          <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;width: max-content;">
             <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
               <i class="fas fa-trash"></i>
             </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px;width: 60px;">
+            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">
               노트 삭제
             </div>
           </div>
-          <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;">
+          <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;width: max-content;">
             <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 18px;">
               <i class="fas fa-sign-in-alt"></i>
             </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px;width: 60px;">            
+            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">            
               폴더 이동
             </div>
           </div>

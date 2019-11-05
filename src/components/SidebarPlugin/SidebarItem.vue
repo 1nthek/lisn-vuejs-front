@@ -341,7 +341,7 @@ export default {
 @media(hover: hover) and (pointer: fine) {
   .modify-folder-btn{
     /* visibility:hidden; */
-    opacity:0.3
+    opacity:0
   }
   #folder-cont:hover .modify-folder-btn{
     /* visibility: visible !important; */

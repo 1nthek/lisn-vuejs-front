@@ -9,8 +9,7 @@
 
     <slot name="image"></slot>
     <div class="card-header" :class="headerClasses" v-if="$slots.header">
-      <slot name="header">
-      </slot>
+      <slot name="header"></slot>
     </div>
     <div class="card-body" @click.prevent="$router.push('/note/'+ note_id)" :class="bodyClasses" v-if="!noBody" style="cursor:pointer">
       <slot></slot>

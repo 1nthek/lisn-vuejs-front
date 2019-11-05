@@ -1,6 +1,6 @@
 <template>
-<div class="tmp" v-on:click.stop="outside_clicked">
-  <div class="sidebar-cont sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
+<div class="sidebar-cont" v-on:click.stop="outside_clicked">
+  <div class="sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
     <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#f0f0f0" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
           <router-link to="/list">
@@ -72,7 +72,7 @@ export default {
 };
 </script>
 <style>
-.g-sidenav-pinned.g-sidenav-open .tmp{
+.g-sidenav-pinned.g-sidenav-open .sidebar-cont{
   z-index: 1000;
   background: rgba(42,51,60,.4);
   position: fixed;
@@ -82,7 +82,7 @@ export default {
   left: 0;
 }
 @media (min-width:1200px){
-  .g-sidenav-pinned.g-sidenav-open .tmp{
+  .g-sidenav-pinned.g-sidenav-open .sidebar-cont{
     z-index: 0;
   }
 }
