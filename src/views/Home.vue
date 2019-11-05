@@ -29,18 +29,17 @@
           <div class="lisn-background"><video style="width:100%" controls autoplay loop><source :src="selectVideo" type="video/mp4"></video></div>
        </div>
        
-      
+      <link href="https://fonts.googleapis.com/css?family=Jua|Staatliches&display=swap&subset=korean" rel="stylesheet">
         <div class="home-cont-1">
-          <div style="max-width: 1200px;margin: 0 auto;padding: 26px 25px;display: flex;justify-content: flex-end;">
+          <div style="margin: 0 auto;padding: 26px 25px;display: flex;justify-content: center;">
             <!-- <div class="ani-slide-in"> -->
             <div>
-              <div class="wave__h ns-kr " style="color: white;font-size: 36px;font-weight: bold;padding-bottom: 30px;"> 대화를 쉽고 빠르게 정리하세요 </div>
-              <div style="display: flex;justify-content: flex-end;">
+              <div class="wave__h ns-kr " style="color: white; font-size:10rem;-webkit-font-smoothing: antialiased; text-align:center; font-family:'Staaatliches'"> LISN </div>
+              <div style="color: white; font-size:2.5rem; text-align: center; font-family:'Jua', sans-serif;"> 손쉽게 음성을 녹음하고 노트를 정리해보세요.</div>
+              <div style="display: flex;justify-content: center;padding-top:50px;">
                 <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
-                    <div class="btn-inner--icon">
-                      <img src="../img/icons/common/google.svg">
-                    </div>
-                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 사용</div>
+                    
+                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">지금 시작하기</div>
               </div>
             </div>
             </div>
@@ -77,6 +76,7 @@ export default {
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video04.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video05.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video06.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video07.mp4',
       ],
       selectVideo: 0
     }
@@ -208,64 +208,10 @@ export default {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 } */
-
-.lisn-intro{
-  /*background: rgb(239, 240, 242);*/
-  /* border-radius: 10px; */
-  width: 100vw;
-    /* height: 100vh; */
-  height: 110vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
-.lisn-introvideo{
-  width: 100vw;
-    /* height: 100vh; */
-  height: 100vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
-.lisn-introtext{
-  position: relative;
-  top:15%;
-  z-index: 150;
-}
-
-#lisn-video{
-  position: relative;
-  width: 60%;
-  height: 70%;
-  top: 20%;
-}
-
-#lisn-videotext{
-  position: relative;
-  width: 60%;
-  height: 70%;
-  top: 20%;
-}
-
-.lisn-function{
-  background: rgb(239, 240, 242);
-  /* border-radius: 10px; */
-  width: 100vw;
-    /* height: 100vh; */
-  height: 100vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
 .home-cont-1{
-  background: #00000070;
-  /* border-radius: 10px; */
-  box-shadow: 0 0 12px 0 rgba(0,0,0,0.1), 0 10px 30px 0 rgba(0,0,0,0.2);
+  
   position: absolute;
-  top: 48%;
+  top: 25%;
   right: 0;
   left: 0;
   z-index: 30;
@@ -330,6 +276,7 @@ export default {
     top: 0;
     right: 0;
     left: 0;
+    /* background: white; */
 }
 #home-header.scrolled {
     position: fixed;
@@ -352,7 +299,7 @@ export default {
 }
 
 .home-nav {
-    max-width: 1200px;
+    
     margin: 0 auto;
     padding: 10px 15px;
     display: flex;
