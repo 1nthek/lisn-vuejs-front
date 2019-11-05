@@ -24,12 +24,12 @@
               </ul>
           </div>
       </div>
-      <transition appear appear-active-class="fade-enter-active">
+      
         <div class="lisn-wallpaper">
-          <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_1.jpg); background-size: cover;"></div>
+          <div class="lisn-background"><video style="width:100%" controls autoplay loop><source :src="selectVideo" type="video/mp4"></video></div>
        </div>
        
-      </transition>
+      
         <div class="home-cont-1">
           <div style="max-width: 1200px;margin: 0 auto;padding: 26px 25px;display: flex;justify-content: flex-end;">
             <!-- <div class="ani-slide-in"> -->
@@ -45,17 +45,6 @@
             </div>
             </div>
           </div>
-        </div>
-        <div class="lisn-intro">
-          <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_2.jpg); background-size: cover;">
-          <div class="lisn-introtext" style="color: black; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; text-align: center; text-transform: uppercase;">How To Use LISN...</div>
-          <div align="center" class="lisn-introvideo">
-            <iframe id="lisn-video" src="https://www.youtube.com/embed/UAnnAvKzLCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          </div>
-        </div>
-        <div class="lisn-function">
-
         </div>
   <!-- <app-footer></app-footer>  -->
 </div>
@@ -81,6 +70,15 @@ export default {
       // scrolled: false,
       navOpen: false,
       isLoading: true,
+      videos: [
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video01.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video02.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video03.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video04.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video05.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video06.mp4',
+      ],
+      selectVideo: 0
     }
   },
   computed: {
@@ -119,11 +117,17 @@ export default {
   destroyed () {
     // window.removeEventListener('scroll', this.handleScroll);
   },
+  created() {
+    this.selectVideo = this.randomItem(this.videos)
+  },
   methods: {
   ...mapMutations([
     'setUserId',
     'setAccessToken',
   ]),
+  randomItem (items) {
+    return items[Math.floor(Math.random()*items.length)];
+  },
   openbar(){
     this.navOpen = true;
   },
@@ -307,7 +311,7 @@ export default {
     height: 100vh;
     display: block;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* opacity: 0; */
     /* transition: opacity .6s; */
 }
@@ -318,7 +322,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: -2;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
 }
 #home-header {
     position: fixed;
