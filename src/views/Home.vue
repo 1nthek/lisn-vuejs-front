@@ -89,7 +89,7 @@
       </div>
       
         <div class="lisn-wallpaper">
-          <div class="lisn-background"><video style="width:100%" controls autoplay loop><source :src="selectVideo" type="video/mp4"></video></div>
+          <div class="lisn-background"><video autoplay loop muted style="width:100%"><source :src="selectVideo" type="video/mp4"></video></div>
        </div>
        
       
