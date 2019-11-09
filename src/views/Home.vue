@@ -159,7 +159,7 @@ export default {
         gapi.auth2.init().then(function () {
           var auth2 = gapi.auth2.getAuthInstance();
           if (auth2.isSignedIn.get() && self.user_id && self.token && localStorage.token && localStorage.user_id) {
-              self.$router.replace('/list');
+              self.$router.replace('/');
           }
           else{
               auth2.attachClickHandler(document.getElementById('customBtn0'), {},
@@ -230,7 +230,7 @@ export default {
         localStorage.setItem('user_id', res.data.user_id);
         self.setAccessToken();
         self.setUserId();
-        self.$router.push('/list');
+        self.$router.push('/');
       })
       .catch((ex) => {
       });

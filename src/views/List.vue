@@ -2,57 +2,27 @@
     <div style="background:white;height: inherit;">
       <side-bar style="border: none;">
         <template slot="links">
-          <sidebar-item :link="{ name: '모든 노트', path: '/list', icon: 'ni ni-books' }" :category="'all'"></sidebar-item>
-          <sidebar-item :link="{ name: '공유 받은 노트', path: '/list', icon: 'ni ni-send' }" :category="'shared'"></sidebar-item>
-          <!-- <sidebar-item :link="{ name: '즐겨찾기', path: '/list', icon: 'fas fa-star' }" ></sidebar-item> -->
+          <sidebar-item :link="{ name: '모든 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
+          <sidebar-item :link="{ name: '공유 받은 노트', path: '/sharedNotes', icon: 'ni ni-send' }"></sidebar-item>
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>
             <template>
               <div v-for="dir in directories" :key="dir.directory_id">
-                <sidebar-item :link="{ name: dir.name, path: '/list' }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
+                <sidebar-item :link="{ name: dir.name, path: '/folder/'+ dir.directory_id + '/' + dir.name }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
               </div>
             </template>
           </sidebar-item>
+
           <hr class="my-3">
-          <sidebar-item :link="{ name: '휴지통', path: '/trash', icon: 'fas fa-trash' }" :category="'trash'"></sidebar-item>
+          <sidebar-item :link="{ name: '휴지통', path: '/trash', icon: 'fas fa-trash' }"></sidebar-item>
         </template>
     </side-bar>
+    <list-navbar ref="navbar" :type="$route.meta.navbarType"></list-navbar>
     <div class="main-content">
-      <!-- <base-header></base-header> -->
-      <list-navbar ref="navbar" :type="$route.meta.navbarType"></list-navbar>
       <div class="lisn-home-comp" @click="$sidebar.displaySidebar(false)">
         <div class="notes-container">
             <vuescroll>
-              <div style="margin-bottom:30px;width: 100%;background: white;">
-                  <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
-                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">{{ directory_name }}</div>
-                    <button class="create-btn" @click.prevent="CREATE_NOTE" style="outline: 0">
-                      <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
-                        + 새 노트
-                      </div>
-                    </button>
-                  </div>
-              </div>
-              <div v-if="isLoading" class="cont-isLoading" >
-                <div class="list-isLoading"></div>
-              </div>
-              <div v-else class="row" style="margin:0" ref="contents">
-                  <div class="col-xl-3 col-md-6 ani-card"  v-for="p in noteList" :key="p.no" >
-                    <stats-card :title="p.title"
-                                :note_id="p.note_id"
-                                :summary="p.summary"
-                                id="noteList"
-                                v-on:openNote="openNote()">
-
-                      <template slot="footer">
-                        <div class="note-date ns-kr" style="font-weight: bold;color:#666666">
-                          <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
-                          <span class="text-nowrap">{{ p.created_at }}</span>
-                        </div>
-                      </template>
-                    </stats-card>
-                  </div>
-              </div>
+              <router-view></router-view>
            </vuescroll>
         </div>
       </div>
@@ -63,10 +33,7 @@
 <script>
 import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
-import axios from 'axios'
-import Swal from 'sweetalert2';
 import { mapState, mapMutations, mapActions } from 'vuex'
-import { setTokenInHeader } from '../api/api'
 
 export default {
   components: {
@@ -75,18 +42,13 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
     }
   },
   computed: {
     ...mapState([
       'user_id',
       'directories',
-      'directory_name',
-      'noteList',
-      'domain',
       'token',
-      'interval_stt',
     ]),
   },
   created() {
@@ -94,24 +56,16 @@ export default {
     if(!self.user_id || !self.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      self.$router.replace('/home');
     }
     else{
-      setTokenInHeader(self.token);
-      this.FETCH_LISTS()
       this.FETCH_DIRECTORIES()
-      self.isLoading = false;
     }
   },
   methods: {
     ...mapActions([
-      'FETCH_LISTS',
       'FETCH_DIRECTORIES',
-      'CREATE_NOTE',
     ]),
-    ...mapMutations([
-      'clear_interval_stt',
-    ])
   },
 }
 </script>

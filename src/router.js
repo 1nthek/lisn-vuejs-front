@@ -6,25 +6,49 @@ import NoteEdit from '../src/views/NoteEdit'
 import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
 import Profile from '../src/views/Profile'
-import Trash from '../src/views/Trash'
+
+import AllNotes from '../src/components/List/allNotes'
+import SharedNotes from '../src/components/List/sharedNotes'
+import Directory from '../src/components/List/Directory'
+import Trash from '../src/components/List/Trash'
+
 import { store } from './store/store'
 Vue.use(Router)
 
 const requireAuth = (to, from, next) => {
-  store.getters.isAuth ? next() : next('/')
+  store.getters.isAuth ? next() : next('/home')
 }
 
 export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/home',
       component: Home
     },
     {
-      path: '/list',
+      path: '/',
       component: List,
-      beforeEnter: requireAuth
+      redirect: '/allNotes',
+      beforeEnter: requireAuth,
+      children: [
+        {
+          path: 'allNotes',
+          component: AllNotes
+        },
+        {
+          path: 'sharedNotes',
+          component: SharedNotes
+        },
+        {
+          path: 'trash',
+          component: Trash
+        },
+        {
+          path: '/folder/:fid/:name',
+          component: Directory,
+        }
+      ]
     },
     {
       path: '/note/:nid',
@@ -39,11 +63,6 @@ export default new Router({
     {
       path: '/profile',
       component: Profile,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/trash',
-      component: Trash,
       beforeEnter: requireAuth
     },
     {

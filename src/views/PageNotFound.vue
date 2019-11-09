@@ -6,7 +6,7 @@
             <h2 class="ko" style="margin-bottom: 18px;">이용에 불편을 드려 죄송합니다.</h2>
             <p class="ko" style="margin:0">요청하신 페이지를 찾을 수 없습니다. </p>
             <p class="ko">존재하지 않거나, 현재 사용할 수 없는 페이지입니다. </p>
-            <router-link to="/" class="ko">홈으로 이동</router-link>
+            <router-link to="/home" class="ko">홈으로 이동</router-link>
         </div>
     </div>
 </template>

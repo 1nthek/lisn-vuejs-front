@@ -3,7 +3,7 @@
   <div class="sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
     <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#f0f0f0" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
-          <router-link to="/list">
+          <router-link to="/">
             <div id="sidenav-logo" style="padding: 0px 14px">
               <logo></logo>
             </div>

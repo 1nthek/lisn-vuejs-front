@@ -1,6 +1,6 @@
 <template>
   <div class="noteNavbar-container">
-    <router-link to="/list" style="margin: 10px;">
+    <router-link to="/" style="margin: 10px;">
       <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
         <i class="fas fa-chevron-left"></i>&nbsp;모든 노트
       </div>

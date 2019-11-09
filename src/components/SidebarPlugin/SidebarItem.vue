@@ -41,9 +41,9 @@
         :href="link.path">
         <template v-if="addLink" >   <!-- each directory -->
           <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
-            <div @click.self="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding:4px 20px 4px 32px">
+            <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding:4px 20px 4px 32px">
               <div style="padding-left: 30px;">
-                <span class="nav-link-text" @click.self="getFolderList()" >{{ link.name }}</span>            
+                <span class="nav-link-text" >{{ link.name }}</span>            
               </div>
               <div style="font-size: 14px;display: flex;">
                 <div class="modify-folder-btn" @click="renameFolder()">
@@ -58,24 +58,10 @@
         </template>
         
         <template v-else>   <!-- if not directory -->
-          <template v-if="category == 'all'">
-            <div class="cont2" @click="getAllNote">
-              <i :class="link.icon" ></i>
-              <span class="nav-link-text" style="padding-left: 18px;" @click="getAllNote">{{ link.name }}</span>
+            <div class="cont2">
+              <i :class="link.icon"></i>
+              <span class="nav-link-text" style="padding-left: 18px;">{{ link.name }}</span>
             </div>
-          </template>
-          <template v-if="category == 'shared'">
-            <div class="cont2" @click="getSharedNote">
-              <i :class="link.icon" ></i>
-              <span class="nav-link-text" style="padding-left: 18px;" @click="getSharedNote">{{ link.name }}</span>
-            </div>
-          </template>
-          <template v-if="category == 'trash'">
-            <div class="cont2" @click="getTrashNote">
-              <i :class="link.icon" ></i>
-              <span class="nav-link-text" style="padding-left: 18px;" @click="getTrashNote">{{ link.name }}</span>
-            </div>
-          </template>
         </template>
       </component>
     </slot>
@@ -121,20 +107,14 @@ export default {
       type: String,
       default: "null",
     },
-    category:{
-      type: String,
-      default: "",
-    },
   },
   provide() {
     return {
       addLink: this.addChild,
-      removeLink: this.removeChild
     };
   },
   inject: {
     addLink: { default: null },
-    removeLink: { default: null },
     autoClose: {
       default: true
     }
@@ -183,29 +163,18 @@ export default {
       'getDirectoryNoteList'
     ]),
     ...mapActions([
-      'FETCH_LISTS',
-      'FETCH_SHARED_LISTS',
-      'FETCH_DIRECTORIES',
-      'FETCH_DIRECTORY_LISTS',
       'CREATE_DIRECTORY',
       'UPDATE_DIRECTORY',
       'DESTROY_DIRECTORY',
-      'FETCH_TRASH_LISTS',
+      'FETCH_DIRECTORY_LISTS',
     ]),
-    getAllNote(){
-      this.FETCH_LISTS();
-    },
-    getSharedNote(){
-      this.FETCH_SHARED_LISTS();
-    },
-    getTrashNote(){
-      // this.FETCH_TRASH_LISTS();
-    },
-    getFolderList(){
-      const directory_id = this.directory_id;
-      const directory_name = this.directory_name;
-      this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
-    },
+    // async getFolderList(){
+    //   const directory_id = this.directory_id;
+    //   const directory_name = this.directory_name;
+    //   console.log('directory_name');
+      
+    //   await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
+    // },
     addFolder(){
       this.CREATE_DIRECTORY();
     },
@@ -265,10 +234,6 @@ export default {
         return 'router-link';
       }
     },
-    linkAbbreviation(name) {
-      const matches = name.match(/\b(\w)/g);
-      return matches.join('');
-    },
     linkClick() {
       this.$emit('closeNote')
       if (
@@ -279,32 +244,12 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },
-    // collapseMenu() {
-    //   this.collapsed = !this.collapsed;
-    // },
-    // collapseSubMenu(link) {
-    //   link.collapsed = !link.collapsed;
-    // }
   },
   mounted() {
     if (this.addLink) {
       this.addLink(this);
     }
-    // if (this.link.collapsed !== undefined) {
-    //   this.collapsed = this.link.collapsed;
-    // }
-    // if (this.isActive && this.isMenu) {
-    //   this.collapsed = false;
-    // }
   },
-  destroyed() {
-    if (this.$el && this.$el.parentNode) {
-      this.$el.parentNode.removeChild(this.$el);
-    }
-    if (this.removeLink) {
-      this.removeLink(this);
-    }
-  }
 };
 </script>
 <style>

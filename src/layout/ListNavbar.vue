@@ -137,7 +137,7 @@ export default {
           var auth2 = gapi.auth2.getAuthInstance();
           auth2.signOut();
           auth2.disconnect();
-          self.$router.replace('/');
+          self.$router.replace('/home');
         })
       })
     },
