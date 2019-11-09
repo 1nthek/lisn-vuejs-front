@@ -10,6 +10,7 @@ import router from './router.js'
 import DashboardPlugin from './plugins/dashboard-plugin';
 import App from './App'
 import { store } from './store/store.js'
+import './plugins/demo.scss'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
