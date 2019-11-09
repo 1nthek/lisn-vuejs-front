@@ -6,7 +6,7 @@
       </div>
     </router-link>
 
-    <player v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></player>
+    <player-edit v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></player-edit>
     <!-- <button class="save-btn" style="position: relative;" @click="$emit('saveNote')">
       <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;"><i class="fas fa-save"></i>&nbsp;저장</div>
     </button> -->
@@ -16,7 +16,7 @@
 <script>
 // import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
-import Player from '../components/Player'
+import PlayerEdit from '../components/PlayerEdit'
 
 // import { BaseNav, Modal } from '@/components';
 
@@ -24,7 +24,7 @@ export default {
   components: {
     // CollapseTransition,
     BaseNav,
-    Player,
+    PlayerEdit,
     // Modal
   },
    methods: {
