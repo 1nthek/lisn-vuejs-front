@@ -5,29 +5,21 @@
     class="nav-item"
     :class="{ active: isActive }"
     tag="li">
-    <div v-if="isMenu">
-      <template v-if="addLink">
-        <span class="nav-link-text">
-          {{ link.name }} <b class="caret"></b>
-        </span>
-      </template>
-      <template v-else>
-        <div class="cont1">
-          <div>
-            <i :class="link.icon" style="min-width: 2rem;"></i>
-            <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
-          </div>
-          <div id="add-folder-btn" @click.stop="addFolder()">
-            <i class="fas fa-plus" style="font-size: 16px;"></i>
-          </div>
+    <div v-if="isMenu">    <!-- root directory -->
+      <div class="cont1">
+        <div>
+          <i :class="link.icon" style="min-width: 2rem;"></i>
+          <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
         </div>
-      </template>
+        <div id="add-folder-btn" @click.stop="addFolder()">
+          <i class="fas fa-plus" style="font-size: 16px;"></i>
+        </div>
+      </div>
     </div>
 
     <collapse-transition>
       <div
         v-if="$slots.default || this.isMenu"
-        v-show="!collapsed"
         class="collapse show">
         <ul class="nav nav-sm flex-column">
           <slot></slot>
@@ -47,7 +39,7 @@
         :class="{ active: link.active }"
         :target="link.target"
         :href="link.path">
-        <template v-if="addLink" >
+        <template v-if="addLink" >   <!-- each directory -->
           <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
             <div @click.self="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding:4px 20px 4px 32px">
               <div style="padding-left: 30px;">
@@ -64,7 +56,8 @@
             </div>
           </div>
         </template>
-        <template v-else>
+        
+        <template v-else>   <!-- if not directory -->
           <template v-if="category == 'all'">
             <div class="cont2" @click="getAllNote">
               <i :class="link.icon" ></i>
@@ -286,23 +279,23 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },
-    collapseMenu() {
-      this.collapsed = !this.collapsed;
-    },
-    collapseSubMenu(link) {
-      link.collapsed = !link.collapsed;
-    }
+    // collapseMenu() {
+    //   this.collapsed = !this.collapsed;
+    // },
+    // collapseSubMenu(link) {
+    //   link.collapsed = !link.collapsed;
+    // }
   },
   mounted() {
     if (this.addLink) {
       this.addLink(this);
     }
-    if (this.link.collapsed !== undefined) {
-      this.collapsed = this.link.collapsed;
-    }
-    if (this.isActive && this.isMenu) {
-      this.collapsed = false;
-    }
+    // if (this.link.collapsed !== undefined) {
+    //   this.collapsed = this.link.collapsed;
+    // }
+    // if (this.isActive && this.isMenu) {
+    //   this.collapsed = false;
+    // }
   },
   destroyed() {
     if (this.$el && this.$el.parentNode) {

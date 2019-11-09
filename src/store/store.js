@@ -8,7 +8,7 @@ import router from '../router'
 import Swal from 'sweetalert2';
 import { Editor, EditorContent, } from 'tiptap'
 import {
-  Blockquote, CodeBlock, HardBreak, Heading, OrderedList, BulletList, ListItem, TodoItem, TodoList, Bold, Code, Italic, Link, Strike, Underline, History, HorizontalRule, Focus,
+  Blockquote, CodeBlock, HardBreak, Heading, OrderedList, BulletList, ListItem, TodoItem, TodoList, Bold, Code, Italic, Link, Strike, Underline, History, HorizontalRule, Focus, Placeholder
 } from 'tiptap-extensions'
 
 
@@ -88,6 +88,11 @@ export const store = new Vuex.Store({
         new History(),
         new HorizontalRule(),
         new Focus(),
+        new Placeholder({
+          emptyNodeClass: 'is-empty',
+          emptyNodeText: '상단의 녹음 버튼을 누르면, 주변 음성이 텍스트로 변환됩니다.\n음식 인식 중에 이곳에 노트를 작성할 수 있습니다.',
+          showOnlyWhenEditable: false,
+        }),
       ],
       content: "",
       // autoFocus: true,
