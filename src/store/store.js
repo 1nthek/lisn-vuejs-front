@@ -61,6 +61,8 @@ export const store = new Vuex.Store({
     user_name: null,
     user_email: null,
     user_picture_url: null,
+    user_audio_usage: null,
+    user_num_of_notes: null,
 
     interval_stt: null,
     colored_stt_id: null,
@@ -367,7 +369,11 @@ export const store = new Vuex.Store({
       state.user_name = data.user_name;
       state.user_email = data.user_email;
       state.user_picture_url = data.user_picture_url;
-    }
+    },
+    SET_USAGE(state, data) {
+      state.user_audio_usage = data.user_audio_usage;
+      state.user_num_of_notes = data.user_num_of_notes;
+    },
   },
   actions: {
     FETCH_LISTS({ state, commit }) {
@@ -583,6 +589,12 @@ export const store = new Vuex.Store({
     FETCH_PROFILE({ state, commit }) {
       return api.profile.fetch(state.user_id).then(data => {
         commit('SET_PROFILE', data);
+      })
+    },
+
+    FETCH_USAGE({ state, commit }) {
+      return api.usage.fetch(state.user_id).then(data => {
+        commit('SET_USAGE', data);
       })
     }
   }

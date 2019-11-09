@@ -57,7 +57,7 @@
                     </div>
                   </div>
                   <div class="dropdown-divider"></div>
-                  <div @click.prevent="$router.push('profile')" class="dropdown-item" style="display: flex;">
+                  <div @click.prevent="$router.push('/profile')" class="dropdown-item" style="display: flex;">
                     <div class="navbar-icon">
                       <i class="fas fa-user-edit"></i>
                     </div>

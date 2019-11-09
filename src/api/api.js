@@ -102,6 +102,12 @@ export const profile = {
   }
 }
 
+export const usage = {
+  fetch(user_id) {
+    return request('get', `/profile/usage?user_id=${user_id}`)
+  }
+}
+
 export const trash = {
   fetch(user_id){
     return request('get', `/list/note/trash?user_id=${user_id}`)

@@ -5,7 +5,7 @@ import Note from '../src/views/Note'
 import NoteEdit from '../src/views/NoteEdit'
 import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
-import Profile from '../src/views/Profile'
+import Profile from '../src/components/Profile'
 
 import AllNotes from '../src/components/List/allNotes'
 import SharedNotes from '../src/components/List/sharedNotes'
@@ -47,7 +47,11 @@ export default new Router({
         {
           path: '/folder/:fid/:name',
           component: Directory,
-        }
+        },
+        {
+          path: '/profile',
+          component: Profile,
+        },
       ]
     },
     {
@@ -58,11 +62,6 @@ export default new Router({
     {
       path: '/noteEdit/:nid',
       component: NoteEdit,
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/profile',
-      component: Profile,
       beforeEnter: requireAuth
     },
     {
