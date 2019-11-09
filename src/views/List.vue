@@ -25,7 +25,7 @@
             <vuescroll>
               <div style="margin-bottom:30px;width: 100%;background: white;">
                   <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;">
-                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">{{ directory_name }}</div>
+                    <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">{{ directory_name }}</div>
                     <button class="create-btn" @click.prevent="CREATE_NOTE" style="outline: 0">
                       <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
                         + 새 노트
@@ -41,13 +41,11 @@
                     <stats-card :title="p.title"
                                 :note_id="p.note_id"
                                 :summary="p.summary"
-                                type="gradient-orange"
                                 id="noteList"
-                                icon="fas fa-trash"
                                 v-on:openNote="openNote()">
 
                       <template slot="footer">
-                        <div class="note-date ns-kr" style="font-weight: bold;">
+                        <div class="note-date ns-kr" style="font-weight: bold;color:#666666">
                           <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
                           <span class="text-nowrap">{{ p.created_at }}</span>
                         </div>
@@ -204,7 +202,7 @@ div{
 }
 .nav-link-text{
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
 }
 a {
     text-decoration: none !important;
@@ -221,7 +219,7 @@ a {
     /* background: #098db3a1; */
     /* box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.04); */
     color: black;
-    font-size: 20px;
+    font-size: 22px;
     transition: background 300ms ease-in 0s;
     box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
     border-radius: 3px;

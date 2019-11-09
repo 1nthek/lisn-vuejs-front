@@ -1,136 +1,96 @@
 <template>
   <base-nav container-classes="container-fluid" class="navbar-top border-bottom navbar-expand" style="z-index: 100;background: white !important;box-shadow: 0px 0px 8px -1px rgba(0, 0, 0, 0.06);">
-    <!-- Search form -->
-    <form class="navbar-search form-inline mr-sm-3"
-          :class="{'navbar-search-light': type === 'light', 'navbar-search-dark': type === 'default'}"
-          id="navbar-search-main">
-      <div class="form-group mb-0">
-        <div class="input-group input-group-alternative input-group-merge">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-search"></i></span>
-          </div>
-          <input class="form-control" placeholder="Search" type="text">
-        </div>
-      </div>
-      <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
-    </form>
-
+    
     <!-- Navbar links -->
-    <ul class="navbar-nav align-items-center ml-md-auto" style="margin-right: 1rem;">
+    <ul class="navbar-nav align-items-center" style="margin-right: 1rem;">
       <li class="nav-item d-xl-none">
         <!-- Sidenav toggler -->
-        <div class="pr-3 sidenav-toggler"
-             :class="{active: $sidebar.showSidebar, 'sidenav-toggler-dark': type === 'default', 'sidenav-toggler-light': type === 'light'}"
-             @click="toggleSidebar">
-          <div class="sidenav-toggler-inner">
-            <i class="fas fa-bars"></i>
+        <div style="display:flex;">
+          <div class="sidenav-toggler" style="margin-left: 12px;margin-right: 18px;display: flex;align-items: center;"
+              :class="{active: $sidebar.showSidebar, 'sidenav-toggler-dark': type === 'default', 'sidenav-toggler-light': type === 'light'}"
+              @click="toggleSidebar">
+            <div class="sidenav-toggler-inner" style="font-size:24px">
+              <i class="fas fa-bars"></i>
+            </div>
           </div>
+          <div id="sidenav-logo" style="padding: 0px 14px; width:200px;cursor: default;">
+                <logo></logo>
+          </div>
+
         </div>
       </li>
-      <!-- <li class="nav-item dropdown">
-        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="ni ni-ungroup"></i>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default dropdown-menu-right">
-          <div class="row shortcuts px-4">
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-red">
-                      <i class="ni ni-calendar-grid-58"></i>
-                    </span>
-              <small>Calendar</small>
-            </a>
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-orange">
-                      <i class="ni ni-email-83"></i>
-                    </span>
-              <small>Email</small>
-            </a>
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-info">
-                      <i class="ni ni-credit-card"></i>
-                    </span>
-              <small>Payments</small>
-            </a>
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-green">
-                      <i class="ni ni-books"></i>
-                    </span>
-              <small>Reports</small>
-            </a>
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-purple">
-                      <i class="ni ni-pin-3"></i>
-                    </span>
-              <small>Maps</small>
-            </a>
-            <a href="#!" class="col-4 shortcut-item">
-                    <span class="shortcut-media avatar rounded-circle bg-gradient-yellow">
-                      <i class="ni ni-basket"></i>
-                    </span>
-              <small>Shop</small>
-            </a>
+    </ul>
+
+    <div style="display:flex;">
+      <!-- Search form -->
+      <form class="navbar-search form-inline mr-sm-3"
+            :class="{'navbar-search-light': type === 'light', 'navbar-search-dark': type === 'default'}"
+            id="navbar-search-main">
+        <div class="form-group mb-0">
+          <div class="input-group input-group-alternative input-group-merge">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
+            </div>
+            <input class="form-control" placeholder="Search" type="text">
           </div>
         </div>
-      </li> -->
-    </ul>
-    <ul class="navbar-nav align-items-center ml-auto ml-md-0">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
-            <img :src="user_picture_url" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
-            <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;">
-                <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
-                  <div>
-                    <div style="font-weight: bold;margin-bottom: 3px;">
-                      {{user_name}}
-                    </div>
+        <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </form>
+
+      <ul class="navbar-nav align-items-center">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 0 .5rem">
+              <img :src="user_picture_url" class="rounded-circle z-depth-0" alt="avatar image" style="height: 34px;">
+          </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
+              <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;">
+                  <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
                     <div>
-                      {{user_email}}
+                      <div style="font-weight: bold;margin-bottom: 3px;">
+                        {{user_name}}
+                      </div>
+                      <div>
+                        {{user_email}}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="dropdown-divider"></div>
-                <div @click.prevent="$router.push('profile')" class="dropdown-item" style="display: flex;">
-                  <div class="navbar-icon">
-                    <i class="fas fa-user-edit"></i>
+                  <div class="dropdown-divider"></div>
+                  <div @click.prevent="$router.push('profile')" class="dropdown-item" style="display: flex;">
+                    <div class="navbar-icon">
+                      <i class="fas fa-user-edit"></i>
+                    </div>
+                    <span class="ns-kr navbar-txt">프로필</span>
                   </div>
-                  <span class="ns-kr navbar-txt">프로필</span>
-                </div>
-                <!-- <div class="dropdown-item" style="display: flex;">
-                  <div class="navbar-icon">
-                    <i class="fas fa-cog"></i>
+                  <div @click="signOut()" class="dropdown-item" style="display: flex;">
+                    <div class="navbar-icon">
+                      <i class="fas fa-running" style="font-size: 1.4em;"></i>
+                    </div>
+                      <span class="ns-kr navbar-txt">로그아웃</span>
                   </div>
-                  <span class="ns-kr navbar-txt">설정</span>
-                </div> -->
-                <!-- <div class="dropdown-divider"></div> -->
-                <div @click="signOut()" class="dropdown-item" style="display: flex;">
-                  <div class="navbar-icon">
-                    <i class="fas fa-running" style="font-size: 1.4em;"></i>
+                  <div class="dropdown-divider"></div>
+                  <div style="display: flex;cursor: default;padding: 0rem 1rem;font-size: 12px;color: #bababa;font-weight: normal;">
+                    <span class="ns-kr">LISN 웹 v1.4.1</span>
                   </div>
-                    <span class="ns-kr navbar-txt">로그아웃</span>
-                </div>
-            </ul>
-        </div>
-      </li>
-    </ul>
+              </ul>
+          </div>
+        </li>
+      </ul>
+
+    </div>
   </base-nav>
 </template>
 <script>
-// import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
-import axios from 'axios'
+import Logo from "../assets/Logo"
 import { mapState, mapMutations, mapActions } from 'vuex'
-
-
-// import { BaseNav, Modal } from '@/components';
 
 export default {
   components: {
     // CollapseTransition,
     BaseNav,
+    Logo,
     // Modal
   },
   props: {
@@ -181,25 +141,37 @@ export default {
         })
       })
     },
-    capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    },
-    toggleNotificationDropDown() {
-      this.activeNotifications = !this.activeNotifications;
-    },
-    closeDropDown() {
-      this.activeNotifications = false;
-    },
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    hideSidebar() {
-      this.$sidebar.displaySidebar(false);
-    }
   }
 };
 </script>
 <style scoped>
+.dropdown-item{
+  transition: all 300ms ease-in 0s;
+}
+.dropdown-item:hover {
+    background-color: #ececec;
+}
+@media (max-width: 767px){
+  #sidenav-logo {
+    display: none;
+  }
+}
+#sidenav-logo g.logo-color1{
+  fill: #000;
+}
+#sidenav-logo g.logo-color2{
+  fill: black;
+}
+@media (max-width: 575.98px){
+  .navbar-search {
+      display: block;
+      width: 70vw;
+      transform: translateX(0);
+  }
+}
 .dropdown-title{
   font-size: 13px;
   font-weight: 400;

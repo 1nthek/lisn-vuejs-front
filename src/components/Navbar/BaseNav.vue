@@ -1,33 +1,12 @@
 <template>
   <nav :class="classes" class="navbar">
     <div :class="containerClasses">
-      <slot name="brand"></slot>
-
-      <slot name="toggle-button">
-        <button
-          class="navbar-toggler collapsed"
-          v-if="hasMenu"
-          type="button"
-          @click="toggleMenu"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-          <span class="navbar-toggler-bar navbar-kebab"></span>
-        </button>
-      </slot>
-
-      <button class="navbar-toggler" @click.stop="toggleMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-        <div
+      <div
           class="navbar-collapse navbar-custom-collapse collapse show"
           :class="menuClasses"
-          v-show="show"
-          v-click-outside="closeMenu">
-          <slot :close-menu="closeMenu"></slot>
+          style="justify-content: space-between"
+          v-show="show">
+          <slot></slot>
         </div>
     </div>
   </nav>
@@ -41,11 +20,6 @@ export default {
       default: false,
       description:
         'Whether navbar menu is shown (valid for viewports < specified by `expand` prop)'
-    },
-    transparent: {
-      type: Boolean,
-      default: false,
-      description: 'Whether navbar is transparent'
     },
     expand: {
       type: String,
@@ -64,25 +38,6 @@ export default {
       description:
         'Container classes. Can be used to control container classes (contains both navbar brand and menu items)'
     },
-    type: {
-      type: String,
-      default: '',
-      validator(value) {
-        return [
-          '',
-          'dark',
-          'success',
-          'danger',
-          'warning',
-          'white',
-          'primary',
-          'light',
-          'info',
-          'vue'
-        ].includes(value);
-      },
-      description: 'Navbar color type'
-    }
   },
   model: {
     prop: 'show',
@@ -108,12 +63,6 @@ export default {
     }
   },
   methods: {
-    toggleMenu() {
-      this.$emit('change', !this.show);
-    },
-    closeMenu() {
-      this.$emit('change', false);
-    }
   }
 };
 </script>

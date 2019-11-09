@@ -1,24 +1,13 @@
 <template>
-  <div class="sidenav navbar navbar-vertical fixed-left navbar-expand-xs navbar-light bg-white" style="overflow-x: hidden;padding:0" :data="backgroundColor">
-    <!-- @mouseenter="$sidebar.onMouseEnter()"@mouseleave="$sidebar.onMouseLeave()" -->
-    <div class="scrollbar-inner ns-kr" style="padding: 24px 12px;background:#f0f0f0" ref="sidebarScrollArea">
+<div class="tmp" v-on:click.stop="outside_clicked">
+  <div class="sidebar-cont sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
+    <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#f0f0f0" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
           <router-link to="/list">
-            <div id="sidenav-logo" class="navbar-brand" style="padding: 0px 14px">
+            <div id="sidenav-logo" style="padding: 0px 14px">
               <logo></logo>
             </div>
           </router-link>
-        <!-- <div class="ml-auto">
-          <div class="sidenav-toggler d-none d-xl-block"
-               :class="{'active': !$sidebar.isMinimized }"
-               @click="minimizeSidebar">
-            <div class="sidenav-toggler-inner">
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-            </div>
-          </div>
-        </div> -->
       </div>
       <slot></slot>
       <div class="navbar-inner" style="padding: 0 16px;">
@@ -40,6 +29,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import Logo from "../../assets/Logo"
@@ -49,41 +39,12 @@ export default {
     Logo,
   },
   props: {
-    backgroundColor: {
-      type: String,
-      default: 'vue',
-      validator: value => {
-        let acceptedValues = [
-          '',
-          'vue',
-          'blue',
-          'green',
-          'orange',
-          'red',
-          'primary'
-        ];
-        return acceptedValues.indexOf(value) !== -1;
-      },
-      description:
-        'Sidebar background color (vue|blue|green|orange|red|primary)'
-    },
     sidebarLinks: {
       type: Array,
       default: () => [],
       description:
         "List of sidebar links as an array if you don't want to use components for these."
     },
-    autoClose: {
-      type: Boolean,
-      default: true,
-      description:
-        'Whether sidebar should autoclose on mobile when clicking an item'
-    }
-  },
-  provide() {
-    return {
-      autoClose: this.autoClose
-    };
   },
   methods: {
     minimizeSidebar() {
@@ -92,7 +53,12 @@ export default {
         docClasses.add('g-sidenav-pinned')
         docClasses.add('g-sidenav-show')
       }
-    }
+    },
+    outside_clicked(){
+      let docClasses = document.body.classList
+      docClasses.remove('g-sidenav-open');
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    },
   },
   mounted() {
     this.$sidebar.isMinimized = this.$sidebar.breakpoint < window.innerWidth
@@ -106,6 +72,20 @@ export default {
 };
 </script>
 <style>
+.g-sidenav-pinned.g-sidenav-open .tmp{
+  z-index: 1000;
+  background: rgba(42,51,60,.4);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+@media (min-width:1200px){
+  .g-sidenav-pinned.g-sidenav-open .tmp{
+    z-index: 0;
+  }
+}
 .g-sidenav-hidden .sidenav:hover {
     max-width: 61px !important;
 }

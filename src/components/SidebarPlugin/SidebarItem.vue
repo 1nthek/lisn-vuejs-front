@@ -5,28 +5,24 @@
     class="nav-item"
     :class="{ active: isActive }"
     tag="li">
-    <a v-if="isMenu"
-      class="sidebar-menu-item nav-link"
-      :aria-expanded="!collapsed"
-      data-toggle="collapse"
-      @click.prevent="collapseMenu">
+    <div v-if="isMenu">
       <template v-if="addLink">
         <span class="nav-link-text">
           {{ link.name }} <b class="caret"></b>
         </span>
       </template>
       <template v-else>
-        <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding-right: 10px;">
+        <div class="cont1">
           <div>
             <i :class="link.icon" style="min-width: 2rem;"></i>
             <span class="nav-link-text">{{ link.name }} <b class="caret"></b></span>
           </div>
           <div id="add-folder-btn" @click.stop="addFolder()">
-            <i class="fas fa-plus" style="font-size: 14px;"></i>
+            <i class="fas fa-plus" style="font-size: 16px;"></i>
           </div>
         </div>
       </template>
-    </a>
+    </div>
 
     <collapse-transition>
       <div
@@ -53,8 +49,8 @@
         :href="link.path">
         <template v-if="addLink" >
           <div id="folder-cont" style="display: flex;align-items: center;justify-content:space-between;width: 100%;">
-            <div @click.self="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding: 4px 16px 4px 52px">
-              <div>
+            <div @click.self="getFolderList()" style="display: flex;align-items: center;justify-content:space-between;width: 100%;padding:4px 20px 4px 32px">
+              <div style="padding-left: 30px;">
                 <span class="nav-link-text" @click.self="getFolderList()" >{{ link.name }}</span>            
               </div>
               <div style="font-size: 14px;display: flex;">
@@ -65,38 +61,24 @@
                   <i class="fas fa-trash" @click="deleteFolder()"></i>
                 </div>
               </div>
-              <!-- <div style="position: absolute;left: 150px;" v-show="folderModify" >
-                <div style="margin-left: 30px;" @mouseleave="folderModify = false">
-                    <div class="dropdown-item" style="background: white;box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px; border-radius: 3px;padding: 0" >
-                      <div class="navbar-icon" style="font-size: 15px;color:black;display: flex;">
-                        <div style="padding:0px 3px 1px 6px;border-radius: 3px 0px 0px 3px" class="fold-icon" @click="renameFolder()">
-                          <i class="fas fa-edit" @click="renameFolder()"></i>
-                        </div>
-                        <div style="padding:0px 6px 1px 3px;border-radius: 0px 3px 3px 0px;"  class="fold-icon" @click="deleteFolder()">
-                          <i class="fas fa-trash" @click="deleteFolder()"></i>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-              </div> -->
             </div>
           </div>
         </template>
         <template v-else>
           <template v-if="category == 'all'">
-            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getAllNote">
+            <div class="cont2" @click="getAllNote">
               <i :class="link.icon" ></i>
               <span class="nav-link-text" style="padding-left: 18px;" @click="getAllNote">{{ link.name }}</span>
             </div>
           </template>
           <template v-if="category == 'shared'">
-            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getSharedNote">
+            <div class="cont2" @click="getSharedNote">
               <i :class="link.icon" ></i>
               <span class="nav-link-text" style="padding-left: 18px;" @click="getSharedNote">{{ link.name }}</span>
             </div>
           </template>
           <template v-if="category == 'trash'">
-            <div class="cont2" style="display: flex;align-items: center;width: 100%;padding: 0.675rem 1.5rem;" @click="getTrashNote">
+            <div class="cont2" @click="getTrashNote">
               <i :class="link.icon" ></i>
               <span class="nav-link-text" style="padding-left: 18px;" @click="getTrashNote">{{ link.name }}</span>
             </div>
@@ -343,12 +325,10 @@ export default {
   cursor: pointer;
 }
 .sidebar-menu-item,.nav-link{
-  color: rgba(0, 0, 0, 0.6) !important;
+  /* color: rgba(0, 0, 0, 0.6)  */
+  color: #303133 !important;
 }
-.nav-item:hover #add-folder-btn{
-  visibility: visible !important;
-  opacity:1 !important;
-}
+
 #add-folder-btn,.modify-folder-btn{
   transition: all 200ms ease-in 0s;
   display: flex;
@@ -357,35 +337,52 @@ export default {
   width: 20px;
   height: 20px;
   border-radius: 2px;
-  visibility:hidden;
-  opacity:0
+}
+@media(hover: hover) and (pointer: fine) {
+  .modify-folder-btn{
+    /* visibility:hidden; */
+    opacity:0.3
+  }
+  #folder-cont:hover .modify-folder-btn{
+    /* visibility: visible !important; */
+    opacity:1 !important;
+  }
+  .nav-item:hover #add-folder-btn{
+    /* visibility: visible !important; */
+    opacity:1 !important;
+  }
 }
 #add-folder-btn{
   border: 1px solid rgba(55, 53, 57, 0.15);
+  margin-right: 4px;
 }
-.cont2{
+.cont1, .cont2{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 32px;
+  color: #303133;
+  transition: all 300ms ease-in 0s;
+}
+.cont1{
+  justify-content:space-between;
+  padding-right: 37px;
+}
+#folder-cont{
   transition: all 200ms ease-in 0s;
 }
-.cont2:hover{
-  background: rgb(233, 233, 233);
+.cont2:hover, #folder-cont:hover{
+  background: #dbdbdb;
+  /* padding-left: 30px; */
+}
+#folder-cont:hover{
+  background: #dbdbdb;
+  padding-left: 2px;
 }
 #add-folder-btn:hover{
   background: #DAD9D6;
 }
 .modify-folder-btn:hover{
   background: #DAD9D6;
-}
-#folder-cont:hover .modify-folder-btn{
-  visibility: visible !important;
-  opacity:1 !important;
-}
-/* .nav.nav-sm.flex-column #cont-folder{
-  padding: 0 !important;
-} */
-#folder-cont{
-  transition: all 200ms ease-in 0s;
-}
-#folder-cont:hover{
-  background: rgb(233, 233, 233);
 }
 </style>

@@ -26,7 +26,6 @@
 <script>
 import PlayerRead from '../components/PlayerRead'
 import Swal from 'sweetalert2';
-import axios from 'axios'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 
@@ -42,11 +41,13 @@ export default {
    methods: {
     ...mapActions([
       'SHARE_NOTE',
+      'UPDATE_EDIT',
     ]),
     isRecording(para){
       this.$emit('isRecording', para);
     },
     editNote(){
+      // this.UPDATE_EDIT(this.note_id);
       this.$router.push('/noteEdit/'+ this.note_id);
     },
     async shareNote(){

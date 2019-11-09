@@ -1,8 +1,8 @@
 <template>
   <vuescroll>
-    <div class="lisn-note-container">
+    <div class="lisn-note-container ns-kr">
       <div style="display: flex;justify-content: space-between;">
-        <input type="text" v-on:input="typing" v-model="noteTitle" placeholder="Untitled" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;">
+        <input type="text" v-on:input="typing" v-model="noteTitle" placeholder="제목을 입력하세요" style="font-size: 24px;font-weight: bold;margin-bottom: 10px;width: 100%;">
       </div>
       <div class="cell">
         <div class="date-cell">
@@ -19,7 +19,6 @@
             <div class="cell-data-container">
                 <div class="cell-data ns-kr" style="cursor: default;">
                   <div style="color:black">{{note_created_at}}</div>
-                    <!-- <date-pick v-model="note_started_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
                 </div>
             </div>
         </div>
@@ -39,92 +38,10 @@
             <div class="cell-data-container">
                 <div class="cell-data ns-kr" style="cursor: default;">
                   <div style="color:black">{{note_updated_at}}</div>
-
-                    <!-- <date-pick v-model="note_ended_at" format="YYYY.MM.DD ddd A hh:mm" :pickTime="true" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange"></date-pick> -->
                 </div>
             </div>
         </div>
       </div>
-        <!-- <template v-for="item in cellData" v-if="item.cellType === 'date'">
-            <div class="cell" v-bind:key='item.id'>
-                <div class="date-cell">
-                    <div class="cell-title-container">
-                        <div class="cell-title">
-                            <div class="cell-title-inner">
-                                <div class="cell-title-img">
-                                    <i class="far fa-clock"></i>
-                                </div>
-                                <div contenteditable="true" class="cell-title-text"> {{ item.cellTitle }} </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell-data-container">
-                        <div class="cell-data">
-                            <date-pick v-model="item.cellContent" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange" :format="format"></date-pick>
-                            <date-pick v-model="item.cellContent" :pickTime="pickTime" :key="id" :weekdays="weekdays" :months="months" :parseDate="parseDate" :formatDate="formatDate" :startWeekOnSunday="startWeekOnSunday" :nextMonthCaption="nextMonthCaption" :prevMonthCaption="prevMonthCaption" :setTimeCaption="setTimeCaption" :mobileBreakpointWidth="mobileBreakpointWidth" :selectableYearRange="selectableYearRange" :format="format"></date-pick>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-        <template v-else-if="item.cellType === 'text'">
-            <div class="cell">
-                <div class="text-cell">
-                    <div class="cell-title-container">
-                        <div class="cell-title">
-                            <div class="cell-title-inner">
-                                <div class="cell-title-img">
-                                    <i class="fas fa-align-left"></i>
-                                </div>
-                                <div contenteditable="true" class="cell-title-text">{{ item.cellTitle }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell-data-container">
-                        <div class="cell-data">
-                            <div contenteditable="true" placeholder="text" style="min-width: 10rem; line-height: 130%;">{{ item.cellContent }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template>
-        <template v-else-if="item.cellType === 'person'">
-            <div class="cell">
-                <div class="person-cell">
-                    <div class="cell-title-container">
-                        <div class="cell-title">
-                            <div class="cell-title-inner">
-                                <div class="cell-title-img">
-                                    <i class="fas fa-user-friends"></i>
-                                </div>
-                                <div contenteditable="true" class="cell-title-text">{{ item.cellTitle }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell-data-container">
-                      <div class="cell-data">
-                        <div class="people-container">
-                          <template v-for="item2 in item.cellContent">
-                            <div class="person-container" v-bind:key='item2.id'>
-                              <div class="person">
-                                <div contenteditable="true" placeholder="name">{{ item2.personName }}</div>
-                              </div>
-                            </div>
-                          </template>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-            </div>
-        </template> -->
-        <!-- <div style="cursor: pointer; user-select: none; transition: background 120ms ease-in 0s; display: flex; align-items: center; color: rgba(55, 53, 47, 0.4); border-radius: 3px; padding-left: 6px; padding-right: 6px; height: 34px; width: 160px;">
-            <div style="display: block; fill: rgba(55, 53, 47, 0.3); flex-shrink: 0; backface-visibility: hidden; margin-right: 11px; margin-top: 1px;">
-                <i class="fas fa-plus"></i>
-            </div>
-            <div @click="addCell">
-                Add a Property
-            </div>
-        </div> -->
     </div>
     <Editor ref="editor" :content="content"></Editor>
     </vuescroll>
@@ -135,7 +52,6 @@
 import DatePick from 'vue-date-pick'
 import 'vue-date-pick/dist/vueDatePick.css'
 import fecha from 'fecha'
-import axios from 'axios'
 import Editor from './Editor'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
@@ -155,37 +71,6 @@ export default {
   components: {
     DatePick,
     Editor,
-  },
-  props: {
-    // value: {type: String, default: ''},
-    // format: {type: String, default: 'YYYY-MM-DD'},
-    // displayFormat: {type: String},
-    // hasInputElement: {type: Boolean, default: true},
-    // inputAttributes: {type: Object},
-    selectableYearRange: {type: Number, default: 40},
-    pickTime: {type: Boolean, default: true},
-    // pickMinutes: {type: Boolean, default: true},
-    // pickSeconds: {type: Boolean, default: false},
-    // isDateDisabled: {type: Function, default: () => false},
-    nextMonthCaption: {type: String, default: '다음 달'},
-    prevMonthCaption: {type: String, default: '이전 달'},
-    setTimeCaption: {type: String, default: '시간 설정:'},
-    mobileBreakpointWidth: {type: Number, default: 500},
-    weekdays: {
-      type: Array,
-      default: () => ([
-        '월', '화', '수', '목', '금', '토', '일'
-      ])
-    },
-    months: {
-      type: Array,
-      default: () => ([
-        '1월', '2월', '3월', '4월',
-        '5월', '6월', '7월', '8월',
-        '9월', '10월', '11월', '12월'
-      ])
-    },
-    startWeekOnSunday: {type: Boolean, default: true}
   },
   data: () => ({
     format: 'YYYY.MM.DD ddd A hh:mm',
@@ -218,30 +103,6 @@ export default {
       this.noteTitle = e.target.value;
       this.$refs.editor.saveNote(this.noteTitle);
     },
-    // parse_started_at(){
-    //   var year = this.note_started_at.substr(0,4);
-    //   var month = parseInt(this.note_started_at.substr(5,2))-1;
-    //   var day = this.note_started_at.substr(8,2);
-    //   var ampm = this.note_started_at.substr(13,2);
-    //   var hour = this.note_started_at.substr(16,2);
-    //   var minute = this.note_started_at.substr(19,2);
-    //   if(ampm=="오후"){
-    //     hour= parseInt(hour)+12;
-    //   }
-    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss')
-    // },
-    // parse_ended_at(){
-    //   var year = this.note_ended_at.substr(0,4);
-    //   var month = parseInt(this.note_ended_at.substr(5,2))-1;
-    //   var day = this.note_ended_at.substr(8,2);
-    //   var ampm = this.note_ended_at.substr(13,2);
-    //   var hour = this.note_ended_at.substr(16,2);
-    //   var minute = this.note_ended_at.substr(19,2);
-    //   if(ampm == "오후"){
-    //     hour= parseInt(hour)+12;
-    //   }
-    //   return fecha.format(new Date(year, month, day, hour, minute, "00"), 'YYYY/MM/DD/HH/mm/ss');
-    // },
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)
     },
@@ -280,6 +141,8 @@ div[contenteditable="true"]:focus {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 16px;
+    color: #303133;
 }
 .text-cell, .person-cell, .date-cell{
     display: inherit;
@@ -305,19 +168,8 @@ div.vdpComponent.vdpWithInput :focus{
     visibility: collapse;
 }
 .lisn-note-container{
-    /* pointer-events: auto; */
     position: relative;
     z-index: 0;
-}
-.pop-up{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    /* background: rgba(0, 0, 0, 0.4); */
-    z-index: 99;
-    /* pointer-events: none; */
 }
 .cell{
     display: flex;
@@ -349,6 +201,8 @@ div.vdpComponent.vdpWithInput :focus{
 }
 .cell-title-img{
     margin-right: 10px;
+    font-size: 16px;
+    color: #303133;
 }
 .cell-data-container{
     display: flex;
@@ -367,8 +221,9 @@ div.vdpComponent.vdpWithInput :focus{
     width: 100%;
     min-height: 34px;
     padding: 6px 8px 7px;
+    text-overflow: ellipsis;
     font-size: 14px;
-    /* overflow: hidden; */
+    color: #303133;
 }
 .people-container{
     display: flex;

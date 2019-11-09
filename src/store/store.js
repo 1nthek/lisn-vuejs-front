@@ -35,12 +35,11 @@ export const store = new Vuex.Store({
     playTimer: null,
     audio: new Audio(),
     timeOffset: 0.000,
+    rec_length: 0,
     isPlaying: false,
 
     noteList: [],
     noteTitle: "",
-    note_started_at: "",
-    note_ended_at: "",
 
     note_created_at: "",
     note_updated_at: "",
@@ -96,15 +95,9 @@ export const store = new Vuex.Store({
 
 
     //dev server
-<<<<<<< HEAD
-    // domain: 'http://15.164.232.194/api'
-    //real server
-     domain: 'https://li-sn.io/api'
-=======
     //domain: 'http://15.164.232.194/api'
     //real server
     domain: 'https://li-sn.io/api'
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
 
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
@@ -116,7 +109,6 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-<<<<<<< HEAD
     clear_interval_stt(state){
       if (state.interval_stt != null) {
         clearInterval(state.interval_stt);
@@ -124,6 +116,7 @@ export const store = new Vuex.Store({
     },
     clear_playTimer(state){
       if (state.playTimer != null) {
+        state.rec_length = state.timeOffset
         clearInterval(state.playTimer);
       }
     },
@@ -132,6 +125,7 @@ export const store = new Vuex.Store({
       state.minute = '00';
       state.second = '00';
       state.timeOffset = 0;
+      state.rec_length = 0;
       state.audio_timestamp = [];
       state.sttText = [];
     },
@@ -146,15 +140,6 @@ export const store = new Vuex.Store({
     },
     set_noteTitle(state, val){
       state.noteTitle = val;
-    },
-    set_note_started_at(state, val){
-=======
-    set_note_started_at(state, val) {
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
-      state.note_started_at = val;
-    },
-    set_note_ended_at(state, val) {
-      state.note_ended_at = val;
     },
     onRefresh(state, { token, user_id }) {
       let self = this;
@@ -183,15 +168,9 @@ export const store = new Vuex.Store({
       delete localStorage.user_id;
       api.setTokenInHeader(null);
     },
-<<<<<<< HEAD
     initData(state){
       if (state.playTimer != null){
         clearInterval(state.playTimer);
-=======
-    initData(state) {
-      if (state.timerId != null) {
-        clearInterval(state.timerId);
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
       }
       state.audio.pause();
       state.hour = '0';
@@ -200,6 +179,7 @@ export const store = new Vuex.Store({
 
       state.audio = new Audio();
       state.timeOffset = 0.000;
+      state.rec_length = 0;
       state.isPlaying = false;
 
       // state.noteTitle = "";
@@ -221,6 +201,7 @@ export const store = new Vuex.Store({
 
       state.audio = new Audio();
       state.timeOffset = 0.000;
+      state.rec_length = 0;
       state.isPlaying = false;
       state.isRecordable = true;
       state.sttText = [];
@@ -230,8 +211,6 @@ export const store = new Vuex.Store({
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
-      state.note_started_at = fecha.format(new Date(value.started_at), 'YYYY.MM.DD ddd A hh:mm')
-      state.note_ended_at = fecha.format(new Date(value.ended_at), 'YYYY.MM.DD ddd A hh:mm')
 
       var date = new Date(value.created_at);
       state.note_created_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
@@ -251,32 +230,20 @@ export const store = new Vuex.Store({
           .then((res) => {
             state.audio.src = res.data.audio_url;
           })
-          .catch((ex) => {
-          })
       });
     },
-<<<<<<< HEAD
     pauseSound(state){
       state.isPlaying = false;
       state.audio.pause();
       state.timeOffset = state.audio.currentTime;
       clearInterval(state.playTimer);
-=======
-    clearInter(state) {
-      clearInterval(state.timerId);
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
     },
     playSound(state) {
       state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
-<<<<<<< HEAD
       
       state.playTimer = setInterval(() => {
-=======
-
-      state.timerId = setInterval(() => {
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
         var curTime = state.audio.currentTime;
         state.hour = Math.floor(curTime / 3600);
         state.hour = (state.hour >= 10) ? state.hour : state.hour;
@@ -320,6 +287,7 @@ export const store = new Vuex.Store({
 
     startCountingTimer(state) {
       state.timeOffset = 0;
+      state.rec_length = 0;
       state.playTimer = setInterval(() => {
         state.timeOffset = state.timeOffset + 1;
         var curTime = state.timeOffset;
@@ -476,10 +444,11 @@ export const store = new Vuex.Store({
       })
     },
 
-    CREATE_NOTE({ state }) {
+    CREATE_NOTE({ state, commit, dispatch }) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
       return api.note.create(formData).then(data => {
+        // dispatch('UPDATE_EDIT', data.note_id);
         router.push('/noteEdit/' + data.note_id);
       })
     },
@@ -507,32 +476,14 @@ export const store = new Vuex.Store({
           }
         })
     },
-<<<<<<< HEAD
     UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
-=======
-    UPDATE_NOTE({ state, commit, dispatch }, { title, content, started_at, ended_at, showMessage }) {
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
       var formData = new FormData();
       formData.append('note_id', state.note_id);
       formData.append('title', title);
       formData.append('content', content);
-      formData.append('started_at', "2000/01/02/01/00/00");
-      formData.append('ended_at', "2000/01/02/01/00/00");
 
       return api.note.update(formData)
         .then(data => {
-<<<<<<< HEAD
-=======
-          if (showMessage) {
-            Swal.fire({
-              position: 'center',
-              type: 'success',
-              title: '저장 완료',
-              showConfirmButton: false,
-              timer: 1000
-            })
-          }
->>>>>>> 658b4f213aa46e812f8f5b53ff154956b505c4b3
         })
         .catch(err => {
           console.log('저장 실패');
@@ -604,13 +555,31 @@ export const store = new Vuex.Store({
         })
     },
 
+    UPDATE_EDIT({ state, commit, dispatch }, note_id ) {
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      formData.append('note_id', note_id);       
+      return api.edit.update(formData);
+    },
+    DESTROY_EDIT({ state, commit, dispatch }, note_id ) {
+      var formData = new formData();
+      formData.append('user_id', state.user_id);
+      formData.append('note_id', note_id)
+      return api.edit.destroy(formData);
+    },
+    
+
+    FETCH_AUDIO({ state, commit }, audio_id) {
+      return api.audio.fetch(audio_id).then(data => {
+        state.audio.src = data.audio_url;
+      })
+    },
+
     FETCH_PROFILE({ state, commit }) {
       return api.profile.fetch(state.user_id).then(data => {
         commit('SET_PROFILE', data);
       })
     }
-
-
   }
 })
 

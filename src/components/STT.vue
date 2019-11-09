@@ -1,7 +1,12 @@
 <template>
 <div class="stt-container" ref="container" :class="{show: !isMinimized}">
   <div style="display: flex;margin-left: 8px;;font-size: 18px;">
-    <div class="bar-icon" @click="isMinimized =! isMinimized"><i v-if="isMinimized" class="fas fa-angle-double-right"></i><i v-if="!isMinimized" class="fas fa-angle-double-left"></i></div>
+    <div class="bar-icon" @click="isMinimized =! isMinimized">
+      <i v-if="isMinimized" class="fas fa-angle-double-right"></i>
+      <i v-if="!isMinimized" class="fas fa-angle-double-left">
+        <span class="ns-kr" style="padding-left: 12px;font-size: 19px;font-weight: bold;">실시간 음성 인식</span>
+      </i>
+    </div>
   </div>
   <vuescroll ref="vs">
         <div class="lisn-stt-container">
@@ -31,8 +36,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import Swal from 'sweetalert2';
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   data(){
@@ -43,6 +48,13 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setCurrentTime',
+      'playSound',
+    ]),
+    ...mapActions([
+      'FETCH_AUDIO',
+    ]),
     isRecording(para){
       this.isRecordingfromPlayer = para;
     },
@@ -53,7 +65,7 @@ export default {
       this.$refs['vs'].scrollTo(
         { y: this.$refs['vs'].$el.childNodes[0].childNodes[0].scrollHeight },1000);
     },
-    getAudioAndPlay(item) {
+    async getAudioAndPlay(item) {
       if(this.isRecordingfromPlayer){
         Swal.fire({
           toast: true,
@@ -66,14 +78,9 @@ export default {
       }
       else{
         this.audioId = JSON.parse(JSON.stringify(item.audioId))
-        axios.get(this.$store.state.domain + "/note/audio?audio_id=" + this.audioId)
-          .then((res) => {
-            this.$store.state.audio.src = res.data.audio_url;
-            this.$store.commit('setCurrentTime', item);
-            this.$store.commit('playSound');
-          })
-          .catch((ex) => {
-          })
+        await this.FETCH_AUDIO(this.audioId);
+        this.setCurrentTime(item);
+        this.playSound();
       }
     },
   }

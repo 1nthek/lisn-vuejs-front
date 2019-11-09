@@ -60,6 +60,24 @@ export const note = {
   }
 }
 
+export const edit = {
+  update(formData) {
+    return request('put', `/note/edited`, formData);
+  },
+  destroy(formData) {
+    return request('delete', `/note/edited`, formData);
+  }
+}
+
+export const audio = {
+  fetch(audio_id){
+    return request('get', `/note/audio?audio_id=${audio_id}`);
+  },
+  // create(formData){
+  //   return request('post', `note/audio`, formData);
+  // }
+}
+
 export const directory = {
   fetch(user_id) {
     return request('get', `/list/directory?user_id=${user_id}`)

@@ -1,5 +1,6 @@
 <template>
 <div>
+  <link href="https://fonts.googleapis.com/css?family=Jua|Staatliches&display=swap&subset=korean" rel="stylesheet">
   <div v-show="isLoading" class="home-isLoading">
     <div class="ani-isLoading">
       <logo style="fill:black"></logo>
@@ -15,7 +16,69 @@
                     <i class="fas fa-bars"></i>
                 </div>
               </div>
+              <Drawer @close="about_toggle" align="right" :maskClosable="true">
+                <div v-if="open01" class="about_detail">
+                  <div>
+                    <div class="about-intro">
+                      <h1 class="about-intro_title">LISN 서비스 소개</h1>
+                      <div class="about-sample" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/about_sample.png);"></div>
+                      <p class="about-intro_subtitle">
+                        LISN은 언제 어디서나 실시간으로 음성을 텍스트로 변환하고 정리 할 수 있는 서비스입니다. <br>나만의 음성 노트를 만들어 정리하고 공유해보세요.  
+                      </p>
+                    </div>
+                    <div class="introduction-section">
+                      <h1 class="about-intro_title">LISN 기능</h1>
+                      <div class="introduction-section_function">
+                        <div class="introduction-section_container">
+                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_01.png">
+                          <h1 class="function_title">녹음</h1>
+                        </div>
+                        <div class="introduction-section_container">
+                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_02.png">
+                          <h1 class="function_title">실시간 변환</h1>
+                        </div>
+                        <div class="introduction-section_container">
+                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_03.png">
+                          <h1 class="function_title">노트 관리</h1>
+                        </div>
+                        <div class="introduction-section_container">
+                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_04.png">
+                          <h1 class="function_title">공유</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="about_footer">
+                      <div class="about_footer_container">
+                        <div class="logo_section">
+                          <logo style="fill:black"></logo>
+                        </div>
+                        <div class="contact_section">
+                          <div class="help_section">
+                            <span class="help_email_title">CONTACT US</span>
+                            <span class="help_email_title">lisnhelp@gmail.com</span>
+                          </div>
+                          <div class="help_section">
+                            <span class="help_email_title">TEAM</span>
+                            <span class="help_email_title">ListenCarefully</span>
+                          </div>
+                          <div class="help_section">
+                            <span class="help_email_title">SUPPORT</span>
+                            <span class="help_email_title">SW Maestro</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                </div>
+              </Drawer>
               <ul class="nav__right ns-kr" :class="{'active': this.navOpen }">
+                  <li> 
+                    <div class="nav__link" @click="about_toggle"> 
+                      About 
+                    </div> 
+                  </li>
                   <li>
                     <div id="customBtn0">
                       <span class="nav__link nav__link--cta">로그인</span>
@@ -24,38 +87,26 @@
               </ul>
           </div>
       </div>
-      <transition appear appear-active-class="fade-enter-active">
+      
         <div class="lisn-wallpaper">
-          <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_1.jpg); background-size: cover;"></div>
+          <div class="lisn-background"><video autoplay loop muted style="width:100%"><source :src="selectVideo" type="video/mp4"></video></div>
        </div>
        
-      </transition>
+      
         <div class="home-cont-1">
-          <div style="max-width: 1200px;margin: 0 auto;padding: 26px 25px;display: flex;justify-content: flex-end;">
+          <div style="margin: 0 auto;padding: 26px 25px;display: flex;justify-content: center;">
             <!-- <div class="ani-slide-in"> -->
             <div>
-              <div class="wave__h ns-kr " style="color: white;font-size: 36px;font-weight: bold;padding-bottom: 30px;"> 대화를 쉽고 빠르게 정리하세요 </div>
-              <div style="display: flex;justify-content: flex-end;">
+              <div class="wave__h ns-kr " style="color: white; font-size:10rem;-webkit-font-smoothing: antialiased; text-align:center; font-family:'Staatliches'"> LISN </div>
+              <div style="color: white; font-size:2.5rem; text-align: center; font-family:'Jua', sans-serif;"> 손쉽게 음성을 녹음하고 나만의 노트를 만들어보세요.</div>
+              <div style="display: flex;justify-content: center;padding-top:50px;">
                 <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
-                    <div class="btn-inner--icon">
-                      <img src="../img/icons/common/google.svg">
-                    </div>
-                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 사용</div>
+                    
+                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">지금 시작하기</div>
               </div>
             </div>
             </div>
           </div>
-        </div>
-        <div class="lisn-intro">
-          <div class="lisn-background" style="background-image: url(https://src-lisn.s3.ap-northeast-2.amazonaws.com/wallpaper_2.jpg); background-size: cover;">
-          <div class="lisn-introtext" style="color: black; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; text-align: center; text-transform: uppercase;">How To Use LISN...</div>
-          <div align="center" class="lisn-introvideo">
-            <iframe id="lisn-video" src="https://www.youtube.com/embed/UAnnAvKzLCI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          </div>
-        </div>
-        <div class="lisn-function">
-
         </div>
   <!-- <app-footer></app-footer>  -->
 </div>
@@ -69,18 +120,30 @@ import Logo from '../assets/Logo'
 import axios from 'axios'
 import api from '../api/api'
 import { mapState, mapMutations } from 'vuex'
+import Drawer from "vue-simple-drawer"
 
 
 export default {
   components: {
     AppFooter,
     Logo,
+    Drawer,
   },
   data() {
     return {
       // scrolled: false,
       navOpen: false,
       isLoading: true,
+      videos: [
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video01.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video02.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video03.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video04.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video06.mp4',
+        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video07.mp4',
+      ],
+      selectVideo: null,
+      open01: false,
     }
   },
   computed: {
@@ -119,11 +182,20 @@ export default {
   destroyed () {
     // window.removeEventListener('scroll', this.handleScroll);
   },
+  created() {
+    this.selectVideo = this.randomItem(this.videos)
+  },
   methods: {
   ...mapMutations([
     'setUserId',
     'setAccessToken',
   ]),
+  about_toggle() {
+    this.open01 = !this.open01
+  },
+  randomItem (items) {
+    return items[Math.floor(Math.random()*items.length)];
+  },
   openbar(){
     this.navOpen = true;
   },
@@ -193,8 +265,141 @@ export default {
 
   }
 }
-
-
+.about_detail {
+  width:100%;
+  height: 100%;
+  margin-top: 30px;
+}
+.about-intro{
+  margin: 0 auto 2.5em;
+  max-width: calc( 1040px + 2.5em + 2.5em);
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+  padding-top: 3.4375em;
+}
+.about-intro .about-intro_title {
+  font-family:'Jua', sans-serif;
+  font-weight: 800;
+  color: #17181a;
+  font-size: 3.5em;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+}
+.about-intro_subtitle {
+  font-weight: bold;
+  font-family: "굴림";
+  color: #17181a;
+  font-size: 1.375em;
+  letter-spacing: -0.2px;
+  line-height: 1.3636363636em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 540px;
+  text-align: center;
+}
+p {
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+.about-sample {
+  position: relative;
+  width:750px;
+  height:400px;
+  display:block;
+  margin: 20px auto;
+}
+.introduction-section {
+  padding: 50px 20px 35px;
+}
+.introduction-section .about-intro_title {
+  font-family:'Jua', sans-serif;
+  font-weight: 600;
+  color: #17181a;
+  font-size: 2.5em;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin: 0;
+  text-align: center;
+}
+.introduction-section_function {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: stretch;
+  text-align: center;
+}
+.introduction-section_container {
+  position: relative;
+  box-sizing: content-box;
+  max-width: 300px;
+  margin: 0px;
+  flex: 1 1 100%;
+  padding: 40px 20px 20px 70px;
+  
+}
+.function_image {
+  max-width: 130px;
+  max-height: 130px;
+  object-fit: cover;
+}
+.function_title {
+  font-size: 24px;
+  line-height: 42px;
+  letter-spacing: -0.38px;
+  text-transform: uppercase;
+  margin: 30px auto;
+  font-family:'Jua', sans-serif;
+  text-align: center;
+}
+.about_footer {
+  background-color: #e2e2e2;
+  left: -5em;
+  min-height: 1.125em;
+  padding: 2.25em 0 2.625em;
+  position: relative;
+  text-align: center;
+  width: calc(100% + 10em);
+}
+.about_footer_container {
+  width: 960px;
+  max-width: 100%;
+  height: 100%;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+   margin: 0px auto;
+}
+.logo_section {
+  display: flex;
+  -webkit-box-align: center;
+}
+.help_section {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  margin-right: 70px;
+}
+.help_email_title {
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  letter-spacing: -0.2px;
+  line-height: 32px;
+  text-align: left;
+  font-weight: bold;
+}
+.contact_section {
+  flex-wrap: wrap;
+  display: flex;
+  flex: 0.7 1 0%;
+}
 /* @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
     100% { -webkit-transform: rotate(360deg); }
@@ -204,64 +409,10 @@ export default {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 } */
-
-.lisn-intro{
-  /*background: rgb(239, 240, 242);*/
-  /* border-radius: 10px; */
-  width: 100vw;
-    /* height: 100vh; */
-  height: 110vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
-.lisn-introvideo{
-  width: 100vw;
-    /* height: 100vh; */
-  height: 100vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
-.lisn-introtext{
-  position: relative;
-  top:15%;
-  z-index: 150;
-}
-
-#lisn-video{
-  position: relative;
-  width: 60%;
-  height: 70%;
-  top: 20%;
-}
-
-#lisn-videotext{
-  position: relative;
-  width: 60%;
-  height: 70%;
-  top: 20%;
-}
-
-.lisn-function{
-  background: rgb(239, 240, 242);
-  /* border-radius: 10px; */
-  width: 100vw;
-    /* height: 100vh; */
-  height: 100vh;
-  display: block;
-  position: relative;
-  overflow: hidden;
-}
-
 .home-cont-1{
-  background: #00000070;
-  /* border-radius: 10px; */
-  box-shadow: 0 0 12px 0 rgba(0,0,0,0.1), 0 10px 30px 0 rgba(0,0,0,0.2);
+  
   position: absolute;
-  top: 48%;
+  top: 25%;
   right: 0;
   left: 0;
   z-index: 30;
@@ -307,7 +458,7 @@ export default {
     height: 100vh;
     display: block;
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* opacity: 0; */
     /* transition: opacity .6s; */
 }
@@ -318,7 +469,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: -2;
-    background-repeat: no-repeat;
+    /* background-repeat: no-repeat; */
 }
 #home-header {
     position: fixed;
@@ -326,6 +477,7 @@ export default {
     top: 0;
     right: 0;
     left: 0;
+    /* background: white; */
 }
 #home-header.scrolled {
     position: fixed;
@@ -348,7 +500,7 @@ export default {
 }
 
 .home-nav {
-    max-width: 1200px;
+    
     margin: 0 auto;
     padding: 10px 15px;
     display: flex;
