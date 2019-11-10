@@ -3,11 +3,9 @@
   <div class="sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
     <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#e2e2e2" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
-          <router-link to="/">
-            <div id="sidenav-logo" style="padding: 0px 14px">
-              <logo></logo>
-            </div>
-          </router-link>
+          <div id="sidenav-logo" style="padding: 0px 14px">
+            <logo></logo>
+          </div>
       </div>
       <div class="navbar-inner" style="padding: 0 16px;">
         <ul class="navbar-nav">
@@ -65,7 +63,7 @@ export default {
 }
 .g-sidenav-pinned.g-sidenav-open .sidebar-cont{
   z-index: 1000;
-  background: rgba(42,51,60,.4);
+  background: rgba(42,51,60,.8);
   position: fixed;
   top: 0;
   bottom: 0;

@@ -5,9 +5,11 @@ import router from '../router'
 const domain = "https://li-sn.io/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
+  console.log('권한 없음!');
+  
   delete localStorage.token;
   delete localStorage.user_id;
-  router.replace('/');
+  router.replace('/home');
 }
 
 const request = (method, url, data) => {

@@ -351,8 +351,8 @@ export const store = new Vuex.Store({
         }
         var date1 = new Date(Date.parse(element.created_at));
         var date2 = new Date(Date.parse(element.updated_at));
-        element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-        element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+        element.created_at = date1.getFullYear() + '.' + (parseInt(date1.getMonth()) + 1) + '.' + date1.getDate() + '&nbsp;&nbsp;' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+        element.updated_at = date2.getFullYear() + '.' + (parseInt(date2.getMonth()) + 1) + '.' + date2.getDate() + '&nbsp;&nbsp;' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
       });
       state.noteList = notes;
     },

@@ -3,18 +3,20 @@
     <div style="display:flex;flex-basis: auto;">
       <div style="flex: auto;">
         <div class="row">
-          <div class="col">
+          <div class="col ns-kr">
             <slot>
-              <div class="mb-0 ns-kr" style="display: inline-block;font-weight: bold;width: 400px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" v-if="title">{{title}}</div>
-              <div class="mb-0 ns-kr summary">{{summary}}</div>
+              <div class="card-title" v-if="title">{{title}}</div>
+              <div class="card-summary">{{summary}}</div>
             </slot>
           </div>
         </div>
 
-        <p class="mt-3 mb-0 text-sm">
-          <slot name="footer">
-          </slot>
-        </p>
+        <!-- <div class="text-sm" style="margin: 0;"> -->
+          <div class="note-date ns-kr" style="font-weight: bold;color:#666666;font-size: 13px;display: flex;">
+              <!-- <div class="text-nowrap mr-5"> {{ updated_at }} </div> -->
+              <div class="text-nowrap" v-html="created_at"></div>
+          </div>
+        <!-- </div> -->
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
         <div class="ns-kr cont3">
@@ -63,6 +65,8 @@ export default {
     note_id: "",
     title: String,
     summary: String,
+    updated_at: String,
+    created_at: String,
     iconClasses: [String, Array]
   },
   methods: {
@@ -123,9 +127,48 @@ export default {
 }
 </script>
 <style>
-#noteList:hover .cont3{
-  color: black;
+.card-summary{
+  font-weight: bold;
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  height: 17px;
+  color: #617386;
+  margin-bottom: 14px;
 }
+.card-title{
+  font-weight: bold;
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+}
+@media ( max-width: 1599.98px ) {
+  .card-title, .card-summary{
+    width: 280px;
+  }
+}
+@media ( max-width: 1199.98px ) {
+  .card-title, .card-summary{
+    width: 280px;
+  }
+}
+@media (max-width: 991.98px){
+    .card-title, .card-summary{
+    width: 190px;
+  }
+}
+@media ( max-width: 767px ) {
+  .card-title, .card-summary{
+    width: 280px;
+  }
+}
+/* #noteList:hover .cont3{
+  color: darkgray;
+} */
 .summary{
   font-weight:600;
   font-size: 14px;
@@ -135,15 +178,14 @@ export default {
 #folder-move, #trash{
   transition: all 200ms ease-in 0s;
 }
-/* #folder-move:hover, #trash:hover{
-  padding-right: 8px;
-} */
+#folder-move:hover, #trash:hover{
+  /* transform: translateX(2px); */
+  color: black;
+}
 .card-stats .card-body {
     padding: 14px 20px !important; 
 }
 .swal2-content select {
-    -moz-appearance: menulist !important;
-    -webkit-appearance: menulist !important;
     border-style: solid !important;
 }
 </style>

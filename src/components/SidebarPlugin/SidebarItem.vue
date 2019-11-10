@@ -310,11 +310,9 @@ export default {
   transition: all 200ms ease-in 0s;
 }
 .cont2:hover, #folder-cont:hover{
-  background: #dbdbdb;
-  /* padding-left: 30px; */
+  background: #cecece;
 }
 #folder-cont:hover{
-  background: #dbdbdb;
   padding-left: 2px;
 }
 #add-folder-btn:hover{

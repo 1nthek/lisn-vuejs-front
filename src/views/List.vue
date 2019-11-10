@@ -2,6 +2,7 @@
     <div style="background:white;height: inherit;">
       <side-bar style="border: none;">
         <template slot="links">
+        <hr style="padding: 0 38px;margin: 0px 30px 6px 30px !important;">
           <sidebar-item :link="{ name: '모든 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
           <sidebar-item :link="{ name: '공유 받은 노트', path: '/sharedNotes', icon: 'ni ni-send' }"></sidebar-item>
 
@@ -12,8 +13,7 @@
               </div>
             </template>
           </sidebar-item>
-
-          <hr class="my-3">
+          <hr style="padding: 0 38px;margin: 14px 30px 6px 30px !important;">
           <sidebar-item :link="{ name: '휴지통', path: '/trash', icon: 'fas fa-trash' }"></sidebar-item>
         </template>
     </side-bar>
