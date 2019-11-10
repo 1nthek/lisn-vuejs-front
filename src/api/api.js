@@ -51,8 +51,11 @@ export const note = {
   create(formData){
     return request('post', `/note`, formData);
   },
-  share(formData){
+  share(formData) {
     return request('post', `/note/shared`, formData);
+  },
+  unshare(formData) {
+    return request('delete', `/note/shared`, formData);
   },
   update(formData) {
     return request('put', `/note`, formData)

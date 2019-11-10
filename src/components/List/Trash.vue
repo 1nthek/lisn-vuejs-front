@@ -35,8 +35,7 @@
                 <div class="trash-summary">
                 {{ p.summary }}
                 </div>
-                <div class="trash-bottom">
-                {{ p.created_at}}
+                <div class="trash-bottom" v-html="p.created_at">
                 </div>
                 
             </div>

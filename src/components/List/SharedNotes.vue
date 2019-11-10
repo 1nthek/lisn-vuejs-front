@@ -10,32 +10,32 @@
             </button>
             </div>
         </div>
-        <div v-if="isLoading" class="cont-isLoading" >
-        <div class="list-isLoading"></div>
+        <div v-if="isLoading" class="cont-isLoading">
+          <div class="list-isLoading"></div>
         </div>
         <div v-else class="row" style="margin:0" ref="contents">
             <div class="col-xl-3 col-md-6 ani-card"  v-for="p in noteList" :key="p.no" >
-            <stats-card :title="p.title"
+            <stats-card-shared :title="p.title"
                         :note_id="p.note_id"
                         :summary="p.summary"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
                         id="noteList"
                         v-on:openNote="openNote()">
-            </stats-card>
+            </stats-card-shared>
             </div>
         </div>
    </div>
 </template>
 
 <script>
-import StatsCard from '../Cards/StatsCard'
+import StatsCardShared from '../Cards/StatsCardShared'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
 
 export default {
   components: {
-    StatsCard,
+    StatsCardShared,
   },
   data() {
     return {

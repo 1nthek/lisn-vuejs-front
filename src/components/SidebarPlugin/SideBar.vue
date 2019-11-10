@@ -59,7 +59,7 @@ export default {
 </script>
 <style>
 .navbar-vertical {
-    box-shadow: 3px 0 8px 0 rgba(136, 152, 170, 0.4) !important;
+    box-shadow: 2px 0 8px 0 rgba(136, 152, 170, 0.6) !important;
 }
 .g-sidenav-pinned.g-sidenav-open .sidebar-cont{
   z-index: 1000;

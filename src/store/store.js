@@ -487,6 +487,24 @@ export const store = new Vuex.Store({
           }
         })
     },
+    UNSHARE_NOTE({ state, commit, dispatch }, note_id ) {
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('user_id', state.user_id);
+      return api.note.unshare(formData)
+        .then(data => {
+          dispatch('FETCH_SHARED_LISTS');
+          Swal.fire({
+            title: '공유를 해제 하였습니다.',
+            // type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          });
+        })
+        .catch(err => {
+          // console.log(err);
+        })
+    },
     UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
       var formData = new FormData();
       formData.append('note_id', state.note_id);
@@ -506,13 +524,13 @@ export const store = new Vuex.Store({
       return api.note.destroy(formData)
         .then(data => {
           dispatch('FETCH_LISTS');
-          Swal.fire({
-            title: '삭제',
-            text: `노트 '${title}'를 삭제 하였습니다.`,
-            type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
-          });
+          // Swal.fire({
+          //   title: '삭제',
+          //   text: `노트를 휴지통에 버렸습니다.`,
+          //   type: 'success',
+          //   confirmButtonClass: 'btn btn-success btn-fill',
+          //   buttonsStyling: false
+          // });
         })
         .catch(err => {
           Swal.fire({
