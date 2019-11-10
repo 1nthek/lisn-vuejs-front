@@ -22,10 +22,10 @@
                         v-on:openNote="openNote()">
 
                 <template slot="footer">
-                <div class="note-date ns-kr" style="font-weight: bold;color:#666666">
-                    <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
-                    <span class="text-nowrap">{{ p.created_at }}</span>
-                </div>
+                  <div class="note-date ns-kr" style="font-weight: bold;color:#666666">
+                      <span class="text-nowrap mr-5"><i class="fas fa-upload"></i> &nbsp; {{ p.updated_at }} </span>
+                      <span class="text-nowrap">{{ p.created_at }}</span>
+                  </div>
                 </template>
             </stats-card>
             </div>

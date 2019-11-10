@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col">
             <slot>
-              <span class="font-weight-bold mb-0 ns-kr" v-if="title">{{title}}</span>
+              <div class="mb-0 ns-kr" style="display: inline-block;font-weight: bold;width: 400px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;" v-if="title">{{title}}</div>
               <div class="mb-0 ns-kr summary">{{summary}}</div>
             </slot>
           </div>
