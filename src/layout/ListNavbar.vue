@@ -71,7 +71,7 @@
                   </div>
                   <div class="dropdown-divider"></div>
                   <div style="display: flex;cursor: default;padding: 0rem 1rem;font-size: 12px;color: #bababa;font-weight: normal;">
-                    <span class="ns-kr">LISN 웹 v1.4.1</span>
+                    <span class="ns-kr">LISN 웹 v0.4.2</span>
                   </div>
               </ul>
           </div>
@@ -168,7 +168,7 @@ export default {
 @media (max-width: 575.98px){
   .navbar-search {
       display: block;
-      width: 70vw;
+      /* width: 1; */
       transform: translateX(0);
   }
 }

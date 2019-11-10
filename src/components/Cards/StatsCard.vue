@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col ns-kr">
             <slot>
-              <div class="card-title" v-if="title">{{title}}</div>
-              <div class="card-summary">{{summary}}</div>
+              <div class="card-list-title" v-if="title">{{title}}</div>
+              <div class="card-list-summary">{{summary}}</div>
             </slot>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default {
 }
 </script>
 <style>
-.card-summary{
+.card-list-summary{
   font-weight: bold;
   width: 450px;
   white-space: nowrap;
@@ -137,7 +137,7 @@ export default {
   color: #617386;
   margin-bottom: 14px;
 }
-.card-title{
+.card-list-title{
   font-weight: bold;
   width: 450px;
   white-space: nowrap;
@@ -146,23 +146,23 @@ export default {
   margin-bottom: 0px;
 }
 @media ( max-width: 1599.98px ) {
-  .card-title, .card-summary{
+  .card-list-title, .card-list-summary{
     width: 280px;
   }
 }
 @media ( max-width: 1199.98px ) {
-  .card-title, .card-summary{
+  .card-list-title, .card-list-summary{
     width: 280px;
   }
 }
 @media (max-width: 991.98px){
-    .card-title, .card-summary{
-    width: 190px;
+  .card-list-title, .card-list-summary{
+      width: 24vw;
   }
 }
 @media ( max-width: 767px ) {
-  .card-title, .card-summary{
-    width: 280px;
+  .card-list-title, .card-list-summary{
+    width: 46vw;
   }
 }
 /* #noteList:hover .cont3{
