@@ -1,10 +1,10 @@
 <template>
   <div class="noteNavbar-container">
-    <router-link to="/" style="margin: 10px;">
+    <a @click="$router.go(-1)" style="margin: 10px;">
       <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
-        <i class="fas fa-chevron-left"></i>&nbsp;모든 노트
+        <i class="fas fa-chevron-left"></i>&nbsp;뒤로 가기
       </div>
-    </router-link>
+    </a>
 
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
 

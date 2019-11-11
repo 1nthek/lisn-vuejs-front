@@ -423,7 +423,7 @@ export const store = new Vuex.Store({
       return api.directory.move(formData).then(data => {
         Swal.fire({
           toast: true,
-          position: 'top',
+          position: 'center',
           showConfirmButton: false,
           timer: 1600,
           type: 'success',
