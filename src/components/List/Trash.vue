@@ -49,6 +49,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
+import Swal from 'sweetalert2';
 
 export default {
   data() {

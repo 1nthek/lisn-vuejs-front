@@ -550,11 +550,11 @@ export const store = new Vuex.Store({
         .then(data => {
           dispatch('FETCH_TRASH_LISTS');
           Swal.fire({
-            title: '삭제',
-            text: `노트를 삭제 하였습니다.`,
+            position: 'center',
             type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
+            title: '노트를 삭제 하였습니다.',
+            showConfirmButton: false,
+            timer: 1000
           });
         })
         .catch(err => {
