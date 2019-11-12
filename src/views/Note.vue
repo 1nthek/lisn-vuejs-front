@@ -44,11 +44,16 @@ export default {
         })
     }
   },
+  destroyed(){
+    this.clear_interval_stt();
+    this.clear_playTimer();
+  },
   methods: {
     ...mapMutations([
       'setNoteId',
       'initData',
       'clear_interval_stt',
+      'clear_playTimer',
     ]),
     ...mapActions([
       'FETCH_NOTE',
