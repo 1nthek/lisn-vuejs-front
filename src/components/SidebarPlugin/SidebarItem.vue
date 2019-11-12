@@ -168,13 +168,6 @@ export default {
       'DESTROY_DIRECTORY',
       'FETCH_DIRECTORY_LISTS',
     ]),
-    // async getFolderList(){
-    //   const directory_id = this.directory_id;
-    //   const directory_name = this.directory_name;
-    //   console.log('directory_name');
-      
-    //   await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
-    // },
     addFolder(){
       this.CREATE_DIRECTORY();
     },
