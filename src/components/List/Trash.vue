@@ -10,35 +10,31 @@
         </div>
         <div v-else class="row" style="margin:0" ref="contents">
         <table class="row" style="margin:0" ref="contents">
-            <tr class="deleted_conversation" style="padding: 0 15px; margin: 0 20px;">
+            <tr class="deleted_conversation" style="padding: 0 15px; margin: 20px 20px;">
             <th>
-                <input type="checkbox" id="main-checkbox" v-model="selectAll" class="mat-checkbox" @click="allSelected()">
-                <button class="deleted_conversation_button" @click="deleteNote()">
-                <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" >
-                    영구 삭제
-                </div>
-                </button>
-                <button class="deleted_conversation_button" @click="restoreNote()">
-                <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold" >
-                    복구
-                </div>
+                <input type="checkbox" id="main-checkbox" v-model="selectAll" class="all-checkbox" @click="allSelected()">
+                <button class="create-btn" @click="deleteNote()" style="outline: 0;">
+                    <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
+                      영구 삭제
+                    </div>
+                  </button>
+                  <button class="create-btn" @click="restoreNote()" style="outline: 0; margin-left: 10px">
+                    <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
+                      복구
+                    </div>
                 </button>
             </th>
             </tr>
             <tr class="card-list"  v-for="p in noteList" :key="p.no" >
             <input type="checkbox" :value="p.note_id" v-model="selected" class="mat-checkbox" @click="select()">
             
-            <div class="trash-list">
-                <div class="trash-title">
-                {{ p.title}}
-                </div>
-                <div class="trash-summary">
-                {{ p.summary }}
-                </div>
-                <div class="trash-bottom" v-html="p.created_at">
-                </div>
-                
-            </div>
+            <trash-card :title="p.title"
+                        :note_id="p.note_id"
+                        :summary="p.summary"
+                        :created_at="p.created_at"
+                        id="noteList"
+                        v-on:select="select()">
+            </trash-card>
                 
             </tr>
         </table>
@@ -50,8 +46,12 @@
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
 import Swal from 'sweetalert2';
+import TrashCard from '../Cards/TrashCard'
 
 export default {
+  components: {
+    TrashCard,
+  },
   data() {
     return {
       isLoading: true,
@@ -82,7 +82,6 @@ export default {
   methods: {
     ...mapActions([
       'FETCH_TRASH_LISTS',
-      'CREATE_NOTE',
       'RESTORE_NOTE',
       'TRASH_NOTE',
     ]),
@@ -151,7 +150,19 @@ export default {
     overflow: visible;
 }
 .mat-checkbox {
-  margin: .4rem 1.6rem .4rem;
+  margin: 0 1.7rem 1.7rem;
+  display: inline-block;
+  height: 16px;
+  line-height: 0;
+  order: 0;
+  position: relative;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 16px;
+  flex-shrink: 0;
+}
+.all-checkbox {
+  margin: 1.5rem 1.7rem 1.7rem;
   display: inline-block;
   height: 16px;
   line-height: 0;
@@ -164,9 +175,7 @@ export default {
 }
 .card-list {
     padding: 0 15px; 
-    margin: 20px 20px 0px 20px;
-    border-top: .1rem solid #adadad;
-    border-bottom: .1rem solid #adadad;
+    margin: 0px 20px 0px 20px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: flex-start;
