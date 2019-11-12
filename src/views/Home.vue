@@ -140,10 +140,8 @@ export default {
       navOpen: false,
       isLoading: true,
       videos: [
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video01.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video02.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video03.mp4',
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video04.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video06.mp4',
         'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video07.mp4',
       ],
@@ -670,6 +668,11 @@ p {
     max-width: none;
     padding: 40px 10px 20px;
   
+  }
+  .function_image {
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
   }
 }
 .menu-bar{
