@@ -3,7 +3,7 @@
       <side-bar style="border: none;">
         <template slot="links">
         <hr style="padding: 0 38px;margin: 0px 30px 6px 30px !important;">
-          <sidebar-item :link="{ name: '모든 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
+          <sidebar-item :link="{ name: '내 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
           <sidebar-item :link="{ name: '공유 받은 노트', path: '/sharedNotes', icon: 'ni ni-send' }"></sidebar-item>
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>

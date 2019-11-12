@@ -11,7 +11,7 @@
               </div>
             </template>
             <template v-else>
-              <NoteEdit ref="note"></NoteEdit>                
+              <NoteEdit></NoteEdit>                
             </template>
           </div>
       </div>
@@ -37,9 +37,6 @@ export default {
     },
     openSTT(){
       this.$refs.stt.openSTT();
-    },
-    saveNote(){
-      this.$refs.note.saveNote();
     },
     scrollSTT(){
       this.$refs.stt.scrollSTT();

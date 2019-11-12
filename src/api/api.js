@@ -66,6 +66,9 @@ export const note = {
 }
 
 export const edit = {
+  fetch(note_id) {
+    return request('get', `/note/edited?note_id=${note_id}`)
+  },
   update(formData) {
     return request('put', `/note/edited`, formData);
   },
