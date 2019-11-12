@@ -55,7 +55,6 @@ export default {
           self.$router.replace('/');
         }
       })
-      
     }
   },
     // 
@@ -64,6 +63,9 @@ export default {
     window.addEventListener('beforeunload', this.notification);
   },
   destroyed(){
+    this.clear_interval_stt();
+    this.clear_playTimer();
+    this.clear_recordTimer();
     if(this.isEditable == true){
       this.DESTROY_EDIT(this.note_id);
     }
@@ -74,6 +76,8 @@ export default {
       'setNoteId',
       'initData',
       'clear_interval_stt',
+      'clear_playTimer',
+      'clear_recordTimer',
     ]),
     ...mapActions([
       'FETCH_NOTE',

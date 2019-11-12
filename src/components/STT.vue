@@ -44,8 +44,12 @@ export default {
     return{
       audioId: -1,
       isMinimized: true,
-      isRecordingfromPlayer: false,
     }
+  },
+  computed:{
+    ...mapState([
+      'isRecording',
+    ])
   },
   methods: {
     ...mapMutations([
@@ -55,9 +59,6 @@ export default {
     ...mapActions([
       'FETCH_AUDIO',
     ]),
-    isRecording(para){
-      this.isRecordingfromPlayer = para;
-    },
     openSTT(){
       this.isMinimized = false;
     },
@@ -66,7 +67,7 @@ export default {
         { y: this.$refs['vs'].$el.childNodes[0].childNodes[0].scrollHeight },1000);
     },
     async getAudioAndPlay(item) {
-      if(this.isRecordingfromPlayer){
+      if(this.isRecording == true){
         Swal.fire({
           toast: true,
           position: 'center',
