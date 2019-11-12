@@ -478,8 +478,6 @@ export const store = new Vuex.Store({
           Swal.fire('공유 성공: ' + email)
         })
         .catch(err => {
-          console.log(err);
-
           if (err.status == 400 && err.data == "Already Exist") {
             Swal.fire('이미 공유된 이메일: ' + email)
           }
@@ -503,7 +501,6 @@ export const store = new Vuex.Store({
           });
         })
         .catch(err => {
-          // console.log(err);
         })
     },
     UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
@@ -592,8 +589,6 @@ export const store = new Vuex.Store({
             resolve("editable");
           }
           else{
-            console.log(data);
-            
             Swal.fire({
               position: 'center',
               // type: 'error',
