@@ -10,21 +10,22 @@ import { Editor, EditorContent, } from 'tiptap'
 import {
   Blockquote, CodeBlock, HardBreak, Heading, OrderedList, BulletList, ListItem, TodoItem, TodoList, Bold, Code, Italic, Link, Strike, Underline, History, HorizontalRule, Focus, Placeholder
 } from 'tiptap-extensions'
+// import { resolve } from 'dns'
 
 
 Vue.use(Vuex);
 
-fecha.i18n = {
-  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
-  dayNames: ['Sunday', 'Monday', '화요일', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-  monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-  monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  amPm: ['오전', '오후'],
-  // D is the day of the month, function returns something like...  3rd or 11th
-  DoFn: function (D) {
-    return D + ['th', 'st', 'nd', 'rd'][D % 10 > 3 ? 0 : (D - D % 10 !== 10) * D % 10]
-  }
-}
+// fecha.i18n = {
+//   dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+//   dayNames: ['Sunday', 'Monday', '화요일', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+//   monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//   monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+//   amPm: ['오전', '오후'],
+//   // D is the day of the month, function returns something like...  3rd or 11th
+//   DoFn: function (D) {
+//     return D + ['th', 'st', 'nd', 'rd'][D % 10 > 3 ? 0 : (D - D % 10 !== 10) * D % 10]
+//   }
+// }
 
 export const store = new Vuex.Store({
   state: {
@@ -459,7 +460,7 @@ export const store = new Vuex.Store({
       var formData = new FormData();
       formData.append('user_id', state.user_id);
       return api.note.create(formData).then(data => {
-        // dispatch('UPDATE_EDIT', data.note_id);
+        dispatch('UPDATE_EDIT', data.note_id);
         router.push('/noteEdit/' + data.note_id);
       })
     },
@@ -584,6 +585,31 @@ export const store = new Vuex.Store({
         })
     },
 
+    FETCH_EDIT({ state, commit, dispatch }, note_id) {
+      return new Promise(function (resolve, reject) {
+        api.edit.fetch(note_id).then(data => {
+          if (data.edit_user_id === "None" || data.edit_user_id == state.user_id) {
+            resolve("editable");
+          }
+          else{
+            console.log(data);
+            
+            Swal.fire({
+              position: 'center',
+              // type: 'error',
+              title: "동시 수정 불가",
+              html: data.edit_user_name + "&nbsp;&lt;" + data.edit_user_email + "&gt;<br>님이 수정중입니다.",
+              confirmButtonClass: 'btn btn-danger btn-fill',
+              confirmButtonText: '닫기',
+              buttonsStyling: false
+            });
+            resolve("not-editable");
+          }
+        })
+      });
+
+
+    },
     UPDATE_EDIT({ state, commit, dispatch }, note_id ) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
@@ -591,12 +617,11 @@ export const store = new Vuex.Store({
       return api.edit.update(formData);
     },
     DESTROY_EDIT({ state, commit, dispatch }, note_id ) {
-      var formData = new formData();
+      var formData = new FormData();
       formData.append('user_id', state.user_id);
       formData.append('note_id', note_id)
       return api.edit.destroy(formData);
     },
-    
 
     FETCH_AUDIO({ state, commit }, audio_id) {
       return api.audio.fetch(audio_id).then(data => {

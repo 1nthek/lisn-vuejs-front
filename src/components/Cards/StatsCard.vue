@@ -133,9 +133,9 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  height: 17px;
+  height: 20px;
   color: #617386;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .card-list-title{
   font-weight: bold;

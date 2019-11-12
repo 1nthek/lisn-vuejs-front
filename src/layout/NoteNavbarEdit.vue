@@ -1,37 +1,38 @@
 <template>
   <div class="noteNavbar-container">
-    <a @click="$router.go(-1)" style="margin: 10px;">
+    <a v-on:click="$router.go(-1)" style="margin: 10px;">
       <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
         <i class="fas fa-chevron-left"></i>&nbsp;작성 완료
       </div>
     </a>
 
     <player-edit v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></player-edit>
-    <!-- <button class="save-btn" style="position: relative;" @click="$emit('saveNote')">
-      <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;"><i class="fas fa-save"></i>&nbsp;저장</div>
-    </button> -->
     </div>
 </template>
 
 <script>
-// import { CollapseTransition } from 'vue2-transitions';
 import BaseNav from '../components/Navbar/BaseNav';
-import PlayerEdit from '../components/PlayerEdit'
-
-// import { BaseNav, Modal } from '@/components';
+import PlayerEdit from '../components/PlayerEdit';
+import { mapState, mapMutations, mapActions } from 'vuex';
 
 export default {
   components: {
-    // CollapseTransition,
     BaseNav,
     PlayerEdit,
-    // Modal
   },
-   methods: {
+  computed: {
+    ...mapState([
+      'note_id',
+    ]),
+  },
+  methods: {
+    ...mapActions([
+      'DESTROY_EDIT',
+    ]),
     isRecording(para){
       this.$emit('isRecording', para);
     },
-   }
+  }
 };
 </script>
 <style scoped>

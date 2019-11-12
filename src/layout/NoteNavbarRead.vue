@@ -1,6 +1,6 @@
 <template>
   <div class="noteNavbar-container">
-    <a @click="$router.go(-1)" style="margin: 10px;">
+    <a v-on:click="$router.go(-1)" style="margin: 10px;">
       <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
         <i class="fas fa-chevron-left"></i>&nbsp;뒤로 가기
       </div>
@@ -28,7 +28,6 @@ import PlayerRead from '../components/PlayerRead'
 import Swal from 'sweetalert2';
 import { mapState, mapMutations, mapActions } from 'vuex'
 
-
 export default {
   components: {
     PlayerRead,
@@ -42,13 +41,19 @@ export default {
     ...mapActions([
       'SHARE_NOTE',
       'UPDATE_EDIT',
+      'FETCH_EDIT',
     ]),
     isRecording(para){
       this.$emit('isRecording', para);
     },
     editNote(){
-      // this.UPDATE_EDIT(this.note_id);
-      this.$router.push('/noteEdit/'+ this.note_id);
+      let self = this;
+      this.FETCH_EDIT(this.note_id).then(data =>{
+        if( data === "editable" ){
+          self.UPDATE_EDIT(self.note_id);
+          self.$router.push('/noteEdit/'+ self.note_id);
+        }
+      })
     },
     async shareNote(){
       const { value: email } = await Swal.fire({

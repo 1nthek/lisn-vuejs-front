@@ -1,6 +1,6 @@
 <template>
   <div style="background:#f0f0f0;height: 100vh;">
-    <NoteNavbarEdit @scrollSTT="scrollSTT" @saveNote="saveNote" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarEdit>
+    <NoteNavbarEdit @scrollSTT="scrollSTT" @openSTT="openSTT" @isRecording="isRecording"></NoteNavbarEdit>
     <WorkspaceEdit ref="workspace" :isLoading="isLoading"></WorkspaceEdit>
   </div>
 </template>
@@ -19,12 +19,14 @@ export default {
   data(){
     return{
       isLoading: true,
+      isEditable: false,
     }
   },
   computed: {
     ...mapState([
       'token',
       'user_id',
+      'note_id',
     ]), 
   },
   created() {
@@ -36,13 +38,36 @@ export default {
       self.$router.replace('/');
     }
     else{
+      let self = this;
       self.setNoteId(self.$route.params.nid);
-      self.initData();
-      self.FETCH_NOTE()
-        .then(() => {
-          this.isLoading = false;
-        })
+      this.FETCH_EDIT(this.note_id).then(data =>{
+        if( data === "editable" ){
+          self.isEditable = true;
+          self.initData();
+          self.UPDATE_EDIT(self.note_id);
+          self.FETCH_NOTE()
+            .then(() => {
+              this.isLoading = false;
+            })
+        }
+        else{
+          self.isEditable = false;
+          self.$router.replace('/');
+        }
+      })
+      
     }
+  },
+    // 
+  mounted() {
+    //IE에서는 addEventListener를 지원 안함.
+    window.addEventListener('beforeunload', this.notification);
+  },
+  destroyed(){
+    if(this.isEditable == true){
+      this.DESTROY_EDIT(this.note_id);
+    }
+    window.removeEventListener('beforeunload', this.notification);
   },
   methods: {
     ...mapMutations([
@@ -52,7 +77,16 @@ export default {
     ]),
     ...mapActions([
       'FETCH_NOTE',
+      'DESTROY_EDIT',
+      'FETCH_EDIT',
+      'UPDATE_EDIT',
     ]),
+    notification(event){
+      // Cancel the event
+      event.preventDefault();
+      // Chrome requires returnValue to be set
+      event.returnValue = '';
+    },
     isRecording(para){
       this.$refs.workspace.isRecording(para);
     },
@@ -62,9 +96,6 @@ export default {
     scrollSTT(){
       this.$refs.workspace.scrollSTT();
     },
-    saveNote(){
-      this.$refs.workspace.saveNote();
-    }
   }
 }
 </script>
