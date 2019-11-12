@@ -455,12 +455,12 @@ export const store = new Vuex.Store({
 
       return api.directory.move(formData).then(data => {
         Swal.fire({
-          toast: true,
+          // toast: true,
           position: 'center',
           showConfirmButton: false,
-          timer: 1600,
+          timer: 1200,
           type: 'success',
-          title: '폴더가 이동 되었습니다.'
+          title: '노트가 이동 되었습니다'
         })
         if (state.directory_id != null) {
           const directory_id = state.directory_id
