@@ -1,31 +1,17 @@
 <template>
 <div class="sidebar-cont" v-on:click.stop="outside_clicked">
   <div class="sidenav navbar-vertical navbar-expand-xs" style="overflow-x: hidden;padding:0">
-    <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#f0f0f0" ref="sidebarScrollArea">
+    <div class="scrollbar-inner ns-kr" style="padding: 24px 0px;background:#e2e2e2" ref="sidebarScrollArea">
       <div style="padding-bottom: 20px;">
-          <router-link to="/">
-            <div id="sidenav-logo" style="padding: 0px 14px">
-              <logo></logo>
-            </div>
-          </router-link>
+          <div id="sidenav-logo" style="padding: 0px 14px">
+            <logo></logo>
+          </div>
       </div>
-      <slot></slot>
       <div class="navbar-inner" style="padding: 0 16px;">
         <ul class="navbar-nav">
           <slot name="links">
-            <sidebar-item
-              v-for="(link, index) in sidebarLinks"
-              :key="link.name + index"
-              :link="link">
-              <sidebar-item
-                v-for="(subLink, index) in link.children"
-                :key="subLink.name + index"
-                :link="subLink">
-              </sidebar-item>
-            </sidebar-item>
           </slot>
         </ul>
-        <slot name="links-after"></slot>
       </div>
     </div>
   </div>
@@ -72,9 +58,12 @@ export default {
 };
 </script>
 <style>
+.navbar-vertical {
+    box-shadow: 2px 0 8px 0 rgba(136, 152, 170, 0.6) !important;
+}
 .g-sidenav-pinned.g-sidenav-open .sidebar-cont{
   z-index: 1000;
-  background: rgba(42,51,60,.4);
+  background: rgba(42,51,60,.8);
   position: fixed;
   top: 0;
   bottom: 0;

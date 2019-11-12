@@ -61,6 +61,8 @@ export const store = new Vuex.Store({
     user_name: null,
     user_email: null,
     user_picture_url: null,
+    user_audio_usage: null,
+    user_num_of_notes: null,
 
     interval_stt: null,
     colored_stt_id: null,
@@ -349,8 +351,8 @@ export const store = new Vuex.Store({
         }
         var date1 = new Date(Date.parse(element.created_at));
         var date2 = new Date(Date.parse(element.updated_at));
-        element.created_at = date1.getFullYear() + '/' + (parseInt(date1.getMonth()) + 1) + '/' + date1.getDate() + ' ' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
-        element.updated_at = date2.getFullYear() + '/' + (parseInt(date2.getMonth()) + 1) + '/' + date2.getDate() + ' ' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
+        element.created_at = date1.getFullYear() + '.' + (parseInt(date1.getMonth()) + 1) + '.' + date1.getDate() + '&nbsp;&nbsp;' + date1.getHours() + ':' + (date1.getMinutes() < 10 ? '0' : '') + date1.getMinutes()
+        element.updated_at = date2.getFullYear() + '.' + (parseInt(date2.getMonth()) + 1) + '.' + date2.getDate() + '&nbsp;&nbsp;' + date2.getHours() + ':' + (date2.getMinutes() < 10 ? '0' : '') + date2.getMinutes()
       });
       state.noteList = notes;
     },
@@ -367,7 +369,11 @@ export const store = new Vuex.Store({
       state.user_name = data.user_name;
       state.user_email = data.user_email;
       state.user_picture_url = data.user_picture_url;
-    }
+    },
+    SET_USAGE(state, data) {
+      state.user_audio_usage = data.user_audio_usage;
+      state.user_num_of_notes = data.user_num_of_notes;
+    },
   },
   actions: {
     FETCH_LISTS({ state, commit }) {
@@ -417,7 +423,7 @@ export const store = new Vuex.Store({
       return api.directory.move(formData).then(data => {
         Swal.fire({
           toast: true,
-          position: 'top',
+          position: 'center',
           showConfirmButton: false,
           timer: 1600,
           type: 'success',
@@ -481,6 +487,24 @@ export const store = new Vuex.Store({
           }
         })
     },
+    UNSHARE_NOTE({ state, commit, dispatch }, note_id ) {
+      var formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('user_id', state.user_id);
+      return api.note.unshare(formData)
+        .then(data => {
+          dispatch('FETCH_SHARED_LISTS');
+          Swal.fire({
+            title: '공유를 해제 하였습니다.',
+            // type: 'success',
+            confirmButtonClass: 'btn btn-success btn-fill',
+            buttonsStyling: false
+          });
+        })
+        .catch(err => {
+          // console.log(err);
+        })
+    },
     UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
       var formData = new FormData();
       formData.append('note_id', state.note_id);
@@ -500,13 +524,13 @@ export const store = new Vuex.Store({
       return api.note.destroy(formData)
         .then(data => {
           dispatch('FETCH_LISTS');
-          Swal.fire({
-            title: '삭제',
-            text: `노트 '${title}'를 삭제 하였습니다.`,
-            type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
-          });
+          // Swal.fire({
+          //   title: '삭제',
+          //   text: `노트를 휴지통에 버렸습니다.`,
+          //   type: 'success',
+          //   confirmButtonClass: 'btn btn-success btn-fill',
+          //   buttonsStyling: false
+          // });
         })
         .catch(err => {
           Swal.fire({
@@ -526,11 +550,11 @@ export const store = new Vuex.Store({
         .then(data => {
           dispatch('FETCH_TRASH_LISTS');
           Swal.fire({
-            title: '삭제',
-            text: `노트를 삭제 하였습니다.`,
+            position: 'center',
             type: 'success',
-            confirmButtonClass: 'btn btn-success btn-fill',
-            buttonsStyling: false
+            title: '노트를 삭제 하였습니다.',
+            showConfirmButton: false,
+            timer: 1000
           });
         })
         .catch(err => {
@@ -583,6 +607,12 @@ export const store = new Vuex.Store({
     FETCH_PROFILE({ state, commit }) {
       return api.profile.fetch(state.user_id).then(data => {
         commit('SET_PROFILE', data);
+      })
+    },
+
+    FETCH_USAGE({ state, commit }) {
+      return api.usage.fetch(state.user_id).then(data => {
+        commit('SET_USAGE', data);
       })
     }
   }

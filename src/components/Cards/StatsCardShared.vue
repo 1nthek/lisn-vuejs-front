@@ -5,8 +5,8 @@
         <div class="row">
           <div class="col ns-kr">
             <slot>
-              <div class="card-list-title" v-if="title">{{title}}</div>
-              <div class="card-list-summary">{{summary}}</div>
+              <div class="card-title" v-if="title">{{title}}</div>
+              <div class="card-summary">{{summary}}</div>
             </slot>
           </div>
         </div>
@@ -18,20 +18,12 @@
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
         <div class="ns-kr cont3">
-          <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;width: max-content;">
+          <div id="trash" @click.stop="unshareNote(note_id, title)" style="display: flex;cursor: pointer;width: max-content;">
             <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
               <i class="fas fa-trash"></i>
             </div>
             <div style="font-weight: bold;font-size: 15px;margin-left: 8px">
-              노트 삭제
-            </div>
-          </div>
-          <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;width: max-content;">
-            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 18px;">
-              <i class="fas fa-sign-in-alt"></i>
-            </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">            
-              폴더 이동
+              공유 해제
             </div>
           </div>
         </div>
@@ -69,64 +61,30 @@ export default {
   },
   methods: {
     ...mapActions([
-      'DESTROY_NOTE',
-      'MOVE_DIRECTORY'
+      'UNSHARE_NOTE',
     ]),
-    moveDirectory(note_id){
-      var directory = {};
-      this.directories.forEach(element => {
-        directory[element.directory_id] = element.name;
-      });
-      
+    unshareNote(note_id, title) {   
       Swal.fire({
-        title: '해당 폴더로 이동',
-        input: 'select',
-        inputOptions: directory,
-        inputPlaceholder: '폴더 선택',
+        title: '공유 해제',
+        text: '"' + title + '"의 공유를 해제합니다.',
+        // type: 'warning',
         showCancelButton: true,
-        confirmButtonClass: 'btn btn-success btn-fill',
+        confirmButtonClass: 'btn btn-danger btn-fill',
         cancelButtonClass: 'btn btn-secondary btn-fill',
-        confirmButtonText: '이동',
+        confirmButtonText: '해제',
         cancelButtonText: '취소',
-        buttonsStyling: false,
-        inputValidator: (value) => {
-          return new Promise((resolve) => {
-            if (value === '') {
-              resolve('폴더를 선택해야 합니다')
-            } else {
-              const directory_id = value;
-              this.MOVE_DIRECTORY({note_id, directory_id});
-              resolve();
-            }
-          })
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.UNSHARE_NOTE(note_id);
         }
-      })
-    },
-    deleteNote(note_id, title) {
-      this.DESTROY_NOTE({note_id, title});
-      // Swal.fire({
-      //   // title: '휴지통으로 이동',
-      //   // text: `휴지통에서 완전히 삭제할 수 있습니다`,
-      //   title: '노트 삭제',
-      //   text: '"' + title + '"를 휴지통으로 이동합니다.',
-      //   // type: 'warning',
-      //   showCancelButton: true,
-      //   confirmButtonClass: 'btn btn-danger btn-fill',
-      //   cancelButtonClass: 'btn btn-secondary btn-fill',
-      //   confirmButtonText: '삭제',
-      //   cancelButtonText: '취소',
-      //   buttonsStyling: false
-      // }).then(result => {
-      //   if (result.value) {
-      //     this.DESTROY_NOTE({note_id, title});
-      //   }
-      // });
+      });
     },
   }
 }
 </script>
 <style>
-.card-list-summary{
+.card-summary{
   font-weight: bold;
   width: 450px;
   white-space: nowrap;
@@ -137,7 +95,7 @@ export default {
   color: #617386;
   margin-bottom: 14px;
 }
-.card-list-title{
+.card-title{
   font-weight: bold;
   width: 450px;
   white-space: nowrap;
@@ -146,23 +104,23 @@ export default {
   margin-bottom: 0px;
 }
 @media ( max-width: 1599.98px ) {
-  .card-list-title, .card-list-summary{
+  .card-title, .card-summary{
     width: 280px;
   }
 }
 @media ( max-width: 1199.98px ) {
-  .card-list-title, .card-list-summary{
+  .card-title, .card-summary{
     width: 280px;
   }
 }
 @media (max-width: 991.98px){
-  .card-list-title, .card-list-summary{
-      width: 24vw;
+    .card-title, .card-summary{
+    width: 190px;
   }
 }
 @media ( max-width: 767px ) {
-  .card-list-title, .card-list-summary{
-    width: 46vw;
+  .card-title, .card-summary{
+    width: 280px;
   }
 }
 /* #noteList:hover .cont3{

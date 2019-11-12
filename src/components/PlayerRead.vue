@@ -13,7 +13,6 @@
               <div class="cont-mic" @click="recBtnPressed()">
                 <i class="fas fa-microphone" style="font-size:18px"></i>
               </div>
-              <!-- <i class="far fa-dot-circle" @click="recBtnPressed()"></i> -->
             </template>
           </div>
         </template>
@@ -54,16 +53,6 @@
 <script>
 import Swal from 'sweetalert2';
 import { mapState, mapActions, mapMutations } from 'vuex'
-
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-var recognition = new SpeechRecognition();
-var recorder;
-var localstream;
-
-recognition.continuous = true;
-recognition.interimResults = true;
-recognition.lang = 'ko-KR';
-recognition.maxAlternatives = 1;
 
 const Toast_save_fail = Swal.mixin({
     toast: true,
@@ -106,34 +95,6 @@ export default {
       'audio',
     ]),
   },
-  watch: {
-    // isRecording: function (newVal) {
-    //   this.$emit('isRecording', newVal);
-    // }
-  },
-  created() {
-    let self = this;
-  //   window.addEventListener('keydown', function (e) {
-  //     if (e.keyCode == 32) {
-  //       if(self.$store.state.isPlaying){
-  //         self.$store.state.isPlaying = false;
-  //         self.$store.state.audio.pause();
-  //         self.$store.state.timeOffset = self.$store.state.audio.currentTime;
-  //       } else{
-  //         var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
-  //         axios.get(self.$store.state.domain + "/note/audio?audio_id=" + audioId)
-  //           .then((res) => {
-  //             self.$store.state.audio.src = res.data.data_url;
-  //             // self.$store.commit('setCurrentTime', {begin:0});
-  //             self.$store.commit('playSound');
-  //             self.$store.state.audio.play();
-  //           })
-  //           .catch((ex) => {
-  //           })
-  //       }
-  //     }
-  // });
-  },
   methods: {
     ...mapMutations([
       'clear_player_data',
@@ -152,7 +113,7 @@ export default {
         showConfirmButton: false,
         timer: 3000,
         type: 'error',
-        title: '녹음은 Edit 모드에서만 가능합니다.'
+        title: '녹음은 수정 모드에서만 가능합니다.'
         })
     },
     playSoundClicked() {
@@ -173,11 +134,6 @@ export default {
     },
   },
   beforeDestroy() {
-    if(this.isRecording){
-      recognition.stop();
-      recorder.stop();
-      this.isRecording = false;
-    }
     this.set_isPlaying(false);
     this.clear_playTimer();
     this.clear_interval_stt();

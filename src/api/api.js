@@ -5,9 +5,11 @@ import router from '../router'
 const domain = "https://li-sn.io/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
+  console.log('권한 없음!');
+  
   delete localStorage.token;
   delete localStorage.user_id;
-  router.replace('/');
+  router.replace('/home');
 }
 
 const request = (method, url, data) => {
@@ -49,8 +51,11 @@ export const note = {
   create(formData){
     return request('post', `/note`, formData);
   },
-  share(formData){
+  share(formData) {
     return request('post', `/note/shared`, formData);
+  },
+  unshare(formData) {
+    return request('delete', `/note/shared`, formData);
   },
   update(formData) {
     return request('put', `/note`, formData)
@@ -99,6 +104,12 @@ export const directory = {
 export const profile = {
   fetch(user_id){
     return request('get', `/profile?user_id=${user_id}`)
+  }
+}
+
+export const usage = {
+  fetch(user_id) {
+    return request('get', `/profile/usage?user_id=${user_id}`)
   }
 }
 

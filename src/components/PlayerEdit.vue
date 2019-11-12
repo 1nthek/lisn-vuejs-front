@@ -56,15 +56,20 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 import { mapState, mapActions, mapMutations } from 'vuex'
 
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
-var recognition = new SpeechRecognition();
-var recorder;
-var localstream;
+try{
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var recognition = new SpeechRecognition();
+  var recorder;
+  var localstream;
+  
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'ko-KR';
+  recognition.maxAlternatives = 1;
+}
+catch(ex){
 
-recognition.continuous = true;
-recognition.interimResults = true;
-recognition.lang = 'ko-KR';
-recognition.maxAlternatives = 1;
+}
 
 const alert_upload_rec_fail = Swal.mixin({
     toast: true,
@@ -123,32 +128,6 @@ export default {
       'audio',
       'rec_length',
     ]),
-  },
-  watch: {
-    // isRecording: function (newVal) {
-    //   this.$emit('isRecording', newVal);
-    // }
-  },
-  created() {
-    let self = this;
-    // window.addEventListener('keydown', function (e) {
-    //   if (e.keyCode == 32) {
-    //     if(self.$store.state.isPlaying){
-    //       self.$store.state.isPlaying = false;
-    //       self.$store.state.audio.pause();
-    //       self.$store.state.timeOffset = self.$store.state.audio.currentTime;
-    //     } else{
-    //       var audioId = JSON.parse(JSON.stringify(self.$store.state.sttText))[0].audioId;
-    //       axios.get(self.domain + "/note/audio?audio_id=" + audioId)
-    //         .then((res) => {
-    //           self.$store.state.audio.src = res.data.data_url;
-    //           self.$store.commit('playSound');
-    //         })
-    //         .catch((ex) => {
-    //         })
-    //     }
-    //   }
-  // });
   },
   methods: {
     ...mapMutations([

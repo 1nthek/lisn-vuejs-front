@@ -2,6 +2,7 @@
     <div style="background:white;height: inherit;">
       <side-bar style="border: none;">
         <template slot="links">
+        <hr style="padding: 0 38px;margin: 0px 30px 6px 30px !important;">
           <sidebar-item :link="{ name: '모든 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
           <sidebar-item :link="{ name: '공유 받은 노트', path: '/sharedNotes', icon: 'ni ni-send' }"></sidebar-item>
 
@@ -12,8 +13,7 @@
               </div>
             </template>
           </sidebar-item>
-
-          <hr class="my-3">
+          <hr style="padding: 0 38px;margin: 14px 30px 6px 30px !important;">
           <sidebar-item :link="{ name: '휴지통', path: '/trash', icon: 'fas fa-trash' }"></sidebar-item>
         </template>
     </side-bar>
@@ -31,14 +31,12 @@
 </template>
 
 <script>
-import StatsCard from '../components/Cards/StatsCard'
 import ListNavbar from '../layout/ListNavbar'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
     ListNavbar,
-    StatsCard,
   },
   data() {
     return {
@@ -164,8 +162,9 @@ a {
 #noteList:hover{
     /* border: 1px solid navajowhite; */
     background: navajowhite;
-    background: #EFEFEF;
-    /* box-shadow: 0px 6px 10px 4px rgba(0, 0, 0, 0.16); */
+    background: #efefef;
+    transform:translateY(-1px);
+    box-shadow: rgba(15, 15, 15, 0.12) 0px 4px 8px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 }
 #noteList{
     /* border: 1px solid rgba(0, 0, 0, 0.03); */
@@ -174,7 +173,7 @@ a {
     /* box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.04); */
     color: black;
     font-size: 22px;
-    transition: background 300ms ease-in 0s;
+    transition: all 300ms ease-in-out 0s;
     box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
     border-radius: 3px;
     background: white;

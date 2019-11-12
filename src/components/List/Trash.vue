@@ -35,8 +35,7 @@
                 <div class="trash-summary">
                 {{ p.summary }}
                 </div>
-                <div class="trash-bottom">
-                {{ p.created_at}}
+                <div class="trash-bottom" v-html="p.created_at">
                 </div>
                 
             </div>
@@ -50,6 +49,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
+import Swal from 'sweetalert2';
 
 export default {
   data() {
