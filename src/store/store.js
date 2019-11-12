@@ -634,6 +634,10 @@ export const store = new Vuex.Store({
       return api.usage.fetch(state.user_id).then(data => {
         commit('SET_USAGE', data);
       })
+    },
+
+    HELP_SEND({ state, commit }) {
+      return
     }
   }
 })
