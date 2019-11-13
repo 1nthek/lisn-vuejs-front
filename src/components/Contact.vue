@@ -1,27 +1,21 @@
 <template>
     <div class="help-page">
-            <div class="container">
-                <div class="help-title">
-                    <div class="help-list">
-                        <span>제목</span>
-                    </div>
-                    <input type="text" class="help-title-text" v-model="contact_title">  
+          <div class="container">
+              <div class="card" style="box-shadow: 0 0 1rem 0 rgba(0,0,0,.05)!important;border: 1px solid rgba(0,0,0,.05);background: #F0F0F0;">
+                <div class="help-title ns-kr">
+                    <div class="help-list">제목</div>
+                    <input type="text" class="ns-kr help-title-text" v-model="contact_title">  
                 </div>
-                <div class="help-content">
-                    <div class="help-list">
-                        <span>내용</span>
-                    </div>
-                    
-                    <textarea class="help-content-text" v-model="contact_content"></textarea>
-                    
+                <div class="help-content ns-kr">
+                    <div class="help-list" >내용</div>
+                    <textarea class="ns-kr help-content-text" v-model="contact_content"></textarea>
                 </div>
                 <div class="help-send">
                     <button class="create-btn" @click.prevent="sendHelp(contact_title, contact_content)" style="outline: 0;">
-                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
-                            보내기
-                        </div>
+                        <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">보내기</div>
                   </button>
                 </div>
+            </div>
             </div>
     </div>
 </template>
@@ -42,13 +36,21 @@ export default {
             'CREATE_CONTACT'
         ]),
         sendHelp(title, content) {
+          if(title == ""){
+            Swal.fire('제목을 입력해주세요.')
+            return;
+          }
+           if(content == ""){
+            Swal.fire('내용을 입력해주세요.')
+            return;
+          }
           this.CREATE_CONTACT({title, content});
           Swal.fire({
             position: 'center',
             type: 'success',
-            title: '소중한 의견 감사합니다.',
+            title: '소중한 의견 감사합니다! (꾸벅)',
             showConfirmButton: false,
-            timer: 1000
+            timer: 2500
           })
         }
     }
@@ -56,7 +58,7 @@ export default {
 </script>
 
 <style>
-.container {
+/* .container {
     width: 80%;
     height: 80%;
     overflow: hidden;
@@ -64,9 +66,15 @@ export default {
     background:#F0F0F0;
     box-shadow: 0 0 1rem 0 rgba(0,0,0,.05)!important;
     border: 1px solid rgba(0,0,0,.05);
+} */
+input:focus {
+    outline: none;
+}
+textarea:focus {
+    outline: none;
 }
 .help-list {
-    font-size: 2rem;
+    font-size: 20px;
     font-weight: bold;
     color:black;
     float: left;
@@ -74,13 +82,14 @@ export default {
 .help-title {
     margin: 20px;
     position:relative;
+    font-size: 20px;
 }
 .help-content {
     margin: 20px;
     position:relative;
 }
 .help-title-text {
-    font-size: 2rem;
+    font-size: 20px;
     color:black;
     background: white;
     margin-left:10%;
@@ -90,7 +99,7 @@ export default {
     justify-content: space-between;
 }
 .help-content-text {
-    font-size: 1.5rem;
+    font-size: 20px;
     color:black;
     background: white;
     margin-left:10%;
@@ -102,13 +111,6 @@ export default {
 .help-send {
     display:block;
     text-align: center;
-}
-.txt1{
-    font-size: 14px;
-    color: #adb5bd;
-}
-.txt2{
-    font-size: 18px;
-    font-weight: bold;
+    margin-bottom: 20px;
 }
 </style>

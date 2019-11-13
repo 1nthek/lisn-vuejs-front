@@ -33,11 +33,11 @@
                             <!-- <div><i class="ni education_hat mr-2"></i>University of Computer Science</div> -->
                         </div>
                         <div class="mt-5 py-5 text-center" style="border-top: 1px solid #e4e4e4 !important;">
-                            <div class="row justify-content-center">
+                            <!-- <div class="row justify-content-center">
                                 <div class="col-lg-9">
                                     <p>i'm ......</p>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

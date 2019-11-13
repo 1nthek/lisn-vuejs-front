@@ -63,17 +63,18 @@
                     </div>
                     <span class="ns-kr navbar-txt">프로필</span>
                   </div>
-                  <div @click.prevent="$router.push('/contact')" class="dropdown-item" style="display: flex;">
-                    <div class="navbar-icon">
-                      <i class="fas fa-info-circle"></i>
-                    </div>
-                    <span class="ns-kr navbar-txt">피드백</span>
-                  </div>
                   <div @click="signOut()" class="dropdown-item" style="display: flex;">
                     <div class="navbar-icon">
                       <i class="fas fa-running" style="font-size: 1.4em;"></i>
                     </div>
                       <span class="ns-kr navbar-txt">로그아웃</span>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <div @click.prevent="$router.push('/contact')" class="dropdown-item" style="display: flex;">
+                    <div class="navbar-icon">
+                      <i class="fas fa-info-circle"></i>
+                    </div>
+                    <span class="ns-kr navbar-txt">의견 보내기</span>
                   </div>
                   <div class="dropdown-divider"></div>
                   <div style="display: flex;cursor: default;padding: 0rem 1rem;font-size: 12px;color: #bababa;font-weight: normal;">
@@ -154,6 +155,9 @@ export default {
 };
 </script>
 <style scoped>
+.dropdown-divider {
+    margin: 3px 0 !important;
+}
 .dropdown-item{
   transition: all 300ms ease-in 0s;
 }

@@ -47,8 +47,11 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+
     sharedUserList: [],
     sharedUserListAll: [],
+
+    searchedPeople: [],
 
     note_created_at: "",
     note_updated_at: "",
@@ -128,6 +131,9 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    clear_searched_people(state) {
+      state.searchedPeople = [];
+    },
     clear_interval_stt(state){
       if (state.interval_stt != null) {
         clearInterval(state.interval_stt);
@@ -459,8 +465,6 @@ export const store = new Vuex.Store({
         else{
           state.sharedUserList = data.users.slice(0, 6);
           state.sharedUserListAll = data.users;
-          console.log(state.sharedUserListAll);
-          
         }
       })
     },
@@ -704,6 +708,12 @@ export const store = new Vuex.Store({
       formData.append('content', content);
       return api.contact.create(formData);
     },
+
+    FETCH_SEARCH_USER({state, commit}, query){
+      return api.search.fetch_user(query).then(data =>{
+        state.searchedPeople = data.users;
+      })
+    }
   }
 })
 

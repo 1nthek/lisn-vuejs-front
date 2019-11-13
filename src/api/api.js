@@ -143,3 +143,9 @@ export const auth = {
     return request.post('/login', google_token)
   }
 }
+
+export const search = {
+  fetch_user(query) {
+    return request('get', `/search/user?query=${query}`)
+  },
+}

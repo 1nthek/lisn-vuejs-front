@@ -9,60 +9,63 @@
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
 
     <div style="display:flex;">
-      
-
-  <base-nav style="display: flex;align-items: center;">
-        <li class="nav-item dropdown">
-          <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <div style="display: flex; align-items: center; position: relative; flex-direction: row-reverse; margin-right: 12px; transform: translateZ(0px);">
-              <div v-for="user in sharedUserList" :key="user.user_email" >
-                <div class="shared-people-cont1">
-                  <div class="shared-people-cont2">
-                    <div class="shared-people-cont3">
-                      <div style="width: 100%; height: 100%;">
-                        <img :src="user.user_picture_url" style="border-radius: 100%;width:30px">
+        <base-nav style="display: flex;align-items: center;">
+            <li class="nav-item dropdown">
+              <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div style="display: flex; align-items: center; position: relative; flex-direction: row-reverse; margin-right: 12px; transform: translateZ(0px);">
+                  <div v-for="user in sharedUserList" :key="user.user_email" >
+                    <div class="shared-people-cont1">
+                      <div class="shared-people-cont2">
+                        <div class="shared-people-cont3">
+                          <div style="width: 100%; height: 100%;">
+                            <img :src="user.user_picture_url" style="border-radius: 100%;width:30px">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
-              <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;cursor: default;">
-                  <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
-                    <div>
-                      <div style="font-weight: normal;font-size: 16px;">
-                        노트를 공유중...
+              </a>
+              <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
+                  <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;cursor: default;">
+                      <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
+                        <div>
+                          <div style="font-weight: normal;font-size: 16px;">
+                            노트를 공유중...
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="dropdown-divider"></div>
-                  <div v-for="user in sharedUserListAll" :key="user.user_email" class="dropdown-item" style="display: flex;align-items: center;">
-                    <div class="navbar-icon">
-                        <img :src="user.user_picture_url" style="border-radius: 100%;width:22px">
-                    </div>
-                    <span class="ns-kr navbar-txt" style="font-size: 14px;">{{user.user_name}}</span>
-                  </div>
-              </ul>
+                      <div class="dropdown-divider"></div>
+                      <div v-for="user in sharedUserListAll" :key="user.user_email" class="dropdown-item" style="display: flex;align-items: center;">
+                        <div class="navbar-icon">
+                            <img :src="user.user_picture_url" style="border-radius: 100%;width:22px">
+                        </div>
+                        <span class="ns-kr navbar-txt" style="font-size: 14px;">{{user.user_name}}</span>
+                      </div>
+                  </ul>
+              </div>
+            </li>
+        </base-nav>
+
+        <button class="share-btn" style="position: relative;" @click="shareNote()">
+          <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 40px;">공유</div>
+        </button>
+        <button class="edit-btn" style="position: relative;" @click="editNote()">
+          <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 60px;">수정하기</div>
+        </button>
+      </div>
+      <div v-if="openSearch" class="search-email-cont1" @click.self="openSearch=false">
+        <div class="search-email-cont2 ">
+          <div class="search-email-header ns-kr">노트 공유하기</div>
+          <input v-on:input="typing" class="swal2-input" placeholder="공유할 사용자의 이메일을 적으세요" type="email" style="display: flex;">
+          <div v-for="person in searchedPeople" :key="person.user_id">
+            <div class="search-email-person" @click="selectPerson(person)">
+              <img :src="person.user_picture_url" style="border-radius: 100%;width: 24px;cursor: pointer;">
+              <div class="ns-kr" style="margin-left: 10px;font-size: 16px;cursor: pointer;">{{person.user_email}}</div>
+            </div>
           </div>
-        </li>
-  </base-nav>
-
-
-      <!-- <button class="share-pelple-btn" style="position: relative;" @click="sharedPeople()">
-        <div class="ns-kr" style="font-size: 16px; margin: 8px 10px;font-weight: bold;"><i class="fas fa-users"></i>&nbsp;</div>
-      </button> -->
-      <button class="share-btn" style="position: relative;" @click="shareNote()">
-        <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 40px;">공유</div>
-        <!-- <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;"><i class="fas fa-share"></i>&nbsp;공유</div> -->
-      </button>
-      <button class="edit-btn" style="position: relative;" @click="editNote()">
-        <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 60px;">수정하기</div>
-        <!-- <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;"><i class="fas fa-pencil-alt"></i>&nbsp;수정</div> -->
-      </button>
-    </div>
-
+        </div>
+      </div>
     </div>
 </template>
 
@@ -75,21 +78,61 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   components: {
     PlayerRead,
+    BaseNav,
+  },
+  data(){
+    return{
+      openSearch: false,
+    }
   },
   computed: {
     ...mapState([
       'note_id',
       'sharedUserList',
       'sharedUserListAll',
+      'searchedPeople',
+      'user_id',
     ]),
   },
    methods: {
+     ...mapMutations([
+       'clear_searched_people',
+     ]),
     ...mapActions([
       'SHARE_NOTE',
       'UPDATE_EDIT',
       'FETCH_EDIT',
       'FETCH_SHAREDUSER_LISTS',
+      'FETCH_SEARCH_USER',
     ]),
+    selectPerson(person){
+      if(person.user_id == this.user_id){
+          Swal.fire("자신에게는 공유를 할 수 없습니다.");
+          return;
+      }
+      let self = this;
+      this.openSearch = false;
+      Swal.fire({
+        title: '노트 공유',
+        text: person.user_email+' 님께 노트를 공유하겠습니까?',
+        // type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success btn-fill',
+        cancelButtonClass: 'btn btn-danger btn-fill',
+        confirmButtonText: '공유',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          self.SHARE_NOTE(person.user_email);
+        }
+      });
+    },
+    typing(e) {
+      if(e.target.value != ""){
+        this.FETCH_SEARCH_USER(e.target.value);
+      }
+    },
     isRecording(para){
       this.$emit('isRecording', para);
     },
@@ -102,32 +145,66 @@ export default {
         }
       })
     },
-    async shareNote(){
-      const { value: email } = await Swal.fire({
-        title: '노트 공유하기',
-        input: 'email',
-        showCancelButton: true,
-        confirmButtonClass: 'btn btn-success btn-fill',
-        cancelButtonClass: 'btn btn-secondary btn-fill',
-        confirmButtonText: '공유',
-        cancelButtonText: '취소',
-        buttonsStyling: false,
-        inputPlaceholder: '공유할 사용자의 이메일을 적으세요',
-        inputValidator: (value) => {
-          if (!value) {
-            return '이메일을 입력하세요'
-          }
-        }
-      })
-
-      if (email) {
-        this.SHARE_NOTE(email);
-      }
+    shareNote(){
+      this.clear_searched_people();
+      this.openSearch = true;
     },
    }
 };
 </script>
 <style scoped>
+.navbar{
+  padding: 0px;
+}
+.search-email-person{
+  padding: 3px;
+  display:flex;
+  width: fit-content;
+  transition: all 200ms ease-in 0s;
+  border-radius: 6px;
+}
+.search-email-person:hover{
+  background: #ebebeb
+}
+.search-email-cont1{
+  display: flex;
+  position: fixed;
+  z-index: 1060;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: .625em;
+  overflow-x: hidden;
+  background-color: rgba(0,0,0,.4);
+  transition: background-color .1s;
+}
+.search-email-cont2{
+  display: flex;
+    position: relative;
+    box-sizing: border-box;
+    flex-direction: column;
+    justify-content: center;
+    width: 32em;
+    max-width: 100%;
+    padding: 1.25em;
+    border: none;
+    border-radius: .3125em;
+    background: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+}
+.search-email-header{
+  font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 21px;
+}
+
 .shared-people-cont1{
   border-radius: 30px; 
   margin-left: -10px; 
