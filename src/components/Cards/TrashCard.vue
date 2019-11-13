@@ -5,17 +5,15 @@
         <div class="row">
           <div class="col ns-kr">
             <slot>
-              <div class="card-title" v-if="title">{{title}}</div>
-              <div class="card-summary">{{summary}}</div>
+              <div class="trash-card-title" v-if="title">{{title}}</div>
+              <div class="trash-card-summary">{{summary}}</div>
             </slot>
           </div>
         </div>
-
-        
       </div>
       <div class="note-date ns-kr" style="font-weight: bold;color:#666666;font-size: 13px;display: flex;">
             <!-- <div class="text-nowrap mr-5"> {{ updated_at }} </div> -->
-            <div class="text-nowrap" v-html="created_at"></div>
+      <div class="text-nowrap" v-html="created_at"></div>
     </div>
     </div>
   </card>
@@ -56,8 +54,8 @@ export default {
   }
 }
 </script>
-<style>
-.card-summary{
+<style scoped>
+.trash-card-summary{
   font-weight: bold;
   width: 1080px;
   white-space: nowrap;
@@ -68,7 +66,7 @@ export default {
   color: #617386;
   margin-bottom: 14px;
 }
-.card-title{
+.trash-card-title{
   font-weight: bold;
   width: 1080px;
   white-space: nowrap;
@@ -77,27 +75,27 @@ export default {
   margin-bottom: 0px;
 }
 @media ( max-width: 1599.98px ) {
-  .card-title, .card-summary{
+  .trash-card-title, .trash-card-summary{
     width: 950px;
   }
 }
 @media ( max-width: 1399.98px ) {
-  .card-title, .card-summary{
+  .trash-card-title, .trash-card-summary{
     width: 700px;
   }
 }
 @media ( max-width: 1199.98px ) {
-  .card-title, .card-summary{
+  .trash-card-title, .trash-card-summary{
     width: 580px;
   }
 }
 @media (max-width: 991.98px){
-    .card-title, .card-summary{
+    .trash-card-title, .trash-card-summary{
     width: 380px;
   }
 }
 @media ( max-width: 767px ) {
-  .card-title, .card-summary{
+  .trash-card-title, .trash-card-summary{
     width: 240px;
   }
 }

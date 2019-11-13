@@ -83,7 +83,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .card-summary{
   font-weight: bold;
   width: 450px;

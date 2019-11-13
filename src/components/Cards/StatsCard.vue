@@ -125,7 +125,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .card-list-summary{
   font-weight: bold;
   width: 450px;
