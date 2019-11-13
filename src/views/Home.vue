@@ -10,7 +10,9 @@
   <div v-show="!isLoading" @click="closebar()" ref="contents">
       <div class="header" id="home-header">
           <div class="home-nav">
+            <div style="width: 240px;">
               <logo style="fill:white"></logo>
+            </div>
               <div style="display: flex;align-items: center;justify-content: center; margin: 0 10px 0 auto;">
                 <div class="menu-bar" @click.stop="openbar()">
                     <i class="fas fa-bars"></i>
@@ -94,16 +96,17 @@
         <div class="lisn-background">
           <video autoplay loop muted id="BackgroundVideo"><source :src="selectVideo" type="video/mp4"></video>
         </div>
-      
+      <div style="position: absolute;width: 100vw;height: 100vh;background: rgba(0, 0, 0, 0.51)">
+      </div>
        
       
         <div class="home-cont-1">
           <div style="margin: 0 auto;padding: 26px 25px;display: flex;justify-content: center;">
             <!-- <div class="ani-slide-in"> -->
             <div>
-              <div class="home_title ns-kr"> AI Voice Note </div>
-              <div class="home_subtitle ns-kr"> 손쉽게 음성을 녹음하고 나만의 노트를 만들어보세요.</div>
-              <div style="display: flex;justify-content: center;padding-top:50px;">
+              <div class="home_title merienda-one"> AI Voice Note </div>
+              <div class="home_subtitle ns-kr"> 손쉽게 음성을 녹음하고, 나만의 노트를 만들어보세요.</div>
+              <div style="display: flex;justify-content: center;padding-top: 20px;">
                 <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
                     <div class="btn-inner--icon">
                       <img src="../img/icons/common/google.svg">
@@ -286,16 +289,17 @@ export default {
 }
 .home_title {
   color: white; 
-  font-size:10rem;
-  -webkit-font-smoothing: antialiased; 
+  font-size: 80px;
   text-align:center; 
-  font-family: 'Gotham'; 
+  padding-top: 100px;
+  padding-bottom: 30px;
   font-weight:700;
 }
 .home_subtitle {
   color: white; 
   font-size:2.5rem; 
   text-align: center;
+  font-weight: bold;
 }
 .about_detail {
   width:100%;
@@ -521,9 +525,9 @@ p {
 }
 
 .home-nav {
-    
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 30px;
+    padding: 14px 30px;
     display: flex;
     justify-content: space-between;
 }
@@ -570,10 +574,8 @@ p {
 @media ( max-width: 1000px ) {
   .home_title {
   color: white; 
-  font-size:7.5rem;
-  -webkit-font-smoothing: antialiased; 
+  font-size:60px;
   text-align:center; 
-  font-family: 'Gotham'; 
   font-weight:700;
   }
   .home_subtitle {
@@ -622,15 +624,12 @@ p {
   }
   .logo_section {
     display: flex;
-    -webkit-box-align: center;
     margin-left: 20px;
   }
   .home_title {
   color: white; 
-  font-size:5rem;
-  -webkit-font-smoothing: antialiased; 
+  font-size:40px;
   text-align:center; 
-  font-family: 'Gotham'; 
   font-weight:700;
   }
   .home_subtitle {
