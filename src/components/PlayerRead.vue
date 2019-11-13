@@ -35,7 +35,7 @@
         {{hour}}:{{minute}}:{{second}}
       </div>
       <div class="soundVol">
-        <div id="vol0" class="vol"></div> 
+        <!-- <div id="vol0" class="vol"></div> 
         <div id="vol1" class="vol"></div>
         <div id="vol2" class="vol"></div>
         <div id="vol3" class="vol"></div>
@@ -44,7 +44,7 @@
         <div id="vol6" class="vol"></div>
         <div id="vol7" class="vol"></div>
         <div id="vol8" class="vol"></div>
-        <div id="vol9" class="vol"></div>
+        <div id="vol9" class="vol"></div> -->
       </div>
     </div>
   </div>
@@ -196,7 +196,7 @@ export default {
   background: #ffffff;
   /* border: 1px solid #dbdbdb; */
   /* border-radius: 100px; */
-  min-width: 20rem;
+  min-width: 16rem;
   height: 3rem;
   font-size: 24px;
   padding: 0 1.4rem;

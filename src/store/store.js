@@ -701,8 +701,6 @@ export const store = new Vuex.Store({
 
     FETCH_USAGE({ state, commit }) {
       return api.usage.fetch(state.user_id).then(data => {
-        console.log(data);
-        
         commit('SET_USAGE', data);
       })
     },
