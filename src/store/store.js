@@ -641,7 +641,6 @@ export const store = new Vuex.Store({
       formData.append('user_id', state.user_id);
       formData.append('title', title);
       formData.append('content', content);
-      //console.log(title, content);
       return api.contact.create(formData);
     },
   }

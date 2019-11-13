@@ -16,7 +16,7 @@
                     
                 </div>
                 <div class="help-send">
-                    <button class="create-btn" @click="sendHelp()" style="outline: 0;">
+                    <button class="create-btn" @click.prevent="sendHelp(contact_title, contact_content)" style="outline: 0;">
                         <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
                             보내기
                         </div>
@@ -31,12 +31,6 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import Swal from 'sweetalert2';
 
 export default {
-    computed: {
-        ...mapState([
-
-        ]),
-        
-    },
     data() {
         return {
             contact_title:'',
@@ -47,17 +41,15 @@ export default {
         ...mapActions([
             'CREATE_CONTACT'
         ]),
-        sendHelp() {
-            Swal.fire({
+        sendHelp(title, content) {
+          this.CREATE_CONTACT({title, content});
+          Swal.fire({
             position: 'center',
             type: 'success',
             title: '소중한 의견 감사합니다.',
             showConfirmButton: false,
             timer: 1000
-            }).then(result => {
-                this.CREATE_CONTACT(this.contact_title, this.contact_content);
-                //console.log(this.contact_title, this.contact_content);
-            });
+          })
         }
     }
 }
