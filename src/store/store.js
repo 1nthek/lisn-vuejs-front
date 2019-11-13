@@ -29,10 +29,16 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   state: {
+    //real server
+    domain: 'https://lisn.ai/api',
+    // baseDomain: 'http://54.180.86.133/',
+    // baseURL=`${baseDomain}/api`,
+
     hour: '0',
     minute: '00',
     second: '00',
 
+    recordTimer: null,
     playTimer: null,
     audio: new Audio(),
     timeOffset: 0.000,
@@ -46,6 +52,7 @@ export const store = new Vuex.Store({
     note_updated_at: "",
 
     content: "",
+    isRecording: false,
     isRecordable: true,
     error: false,
     directories: [],
@@ -102,6 +109,7 @@ export const store = new Vuex.Store({
     }),
 
 
+
     //dev server
     //domain: 'http://15.164.232.194/api'
     //real server
@@ -110,6 +118,7 @@ export const store = new Vuex.Store({
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
     //domain: 'http://localhost:8000/api'
+
   },
   getters: {
     isAuth(state) {
@@ -120,6 +129,12 @@ export const store = new Vuex.Store({
     clear_interval_stt(state){
       if (state.interval_stt != null) {
         clearInterval(state.interval_stt);
+      }
+    },
+    clear_recordTimer(state) {
+      if (state.recordTimer != null) {
+        state.rec_length = state.timeOffset
+        clearInterval(state.recordTimer);
       }
     },
     clear_playTimer(state){
@@ -177,9 +192,16 @@ export const store = new Vuex.Store({
       api.setTokenInHeader(null);
     },
     initData(state){
-      if (state.playTimer != null){
+      if (state.interval_stt != null) {
+        clearInterval(state.interval_stt);
+      }
+      if (state.recordTimer != null) {
+        clearInterval(state.recordTimer);
+      }
+      if (state.playTimer != null) {
         clearInterval(state.playTimer);
       }
+
       state.audio.pause();
       state.hour = '0';
       state.minute = '00';
@@ -199,9 +221,16 @@ export const store = new Vuex.Store({
       // state.colored_stt_id = null;
     },
     initRecording(state) {
+      if (state.interval_stt != null) {
+        clearInterval(state.interval_stt);
+      }
+      if (state.recordTimer != null) {
+        clearInterval(state.recordTimer);
+      }
       if (state.playTimer != null) {
         clearInterval(state.playTimer);
       }
+
       state.audio.pause();
       state.hour = '0';
       state.minute = '00';
@@ -244,9 +273,24 @@ export const store = new Vuex.Store({
       state.isPlaying = false;
       state.audio.pause();
       state.timeOffset = state.audio.currentTime;
-      clearInterval(state.playTimer);
+      if (state.interval_stt != null) {
+        clearInterval(state.interval_stt);
+      }
+      if (state.playTimer != null) {
+        clearInterval(state.playTimer);
+      }
     },
     playSound(state) {
+      if (state.interval_stt != null) {
+        clearInterval(state.interval_stt);
+      }
+      if (state.recordTimer != null) {
+        clearInterval(state.recordTimer);
+      }
+      if (state.playTimer != null) {
+        clearInterval(state.playTimer);
+      }
+
       state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
@@ -273,7 +317,7 @@ export const store = new Vuex.Store({
           if (state.sttText[i].begin > curTime){
             break;  //없음
           }
-          else if (state.sttText[i].begin <= curTime && state.sttText[i].end >= curTime){
+          else if (state.sttText[i].begin <= curTime && state.sttText[i].end-200 >= curTime){
             document.getElementById("stt-" + state.sttText[i].id).style.backgroundColor = "#4089FF";
             document.getElementById("stt-" + state.sttText[i].id).style.color = "white";
             document.getElementById("stt-" + state.sttText[i].id).style.fontWeight = "bold";
@@ -293,10 +337,10 @@ export const store = new Vuex.Store({
       state.note_id = note_id;
     },
 
-    startCountingTimer(state) {
+    recordingTimer(state) {
       state.timeOffset = 0;
       state.rec_length = 0;
-      state.playTimer = setInterval(() => {
+      state.recordTimer = setInterval(() => {
         state.timeOffset = state.timeOffset + 1;
         var curTime = state.timeOffset;
         state.hour = Math.floor(curTime / 3600);

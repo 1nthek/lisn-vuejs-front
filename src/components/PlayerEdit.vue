@@ -101,7 +101,6 @@ export default {
     return {
       audio_id:-1,
 
-      isRecording: false,
       timerId: null,
       chunks: null,
 
@@ -123,6 +122,7 @@ export default {
       'minute',
       'second',
       'isPlaying',
+      'isRecording',
       'isRecordable',
       'sttText',
       'audio',
@@ -134,6 +134,7 @@ export default {
       'clear_player_data',
       'clear_interval_stt',
       'clear_playTimer',
+      'clear_recordTimer',
       'pauseSound',
       'set_isRecording',
       'set_isRecordable',
@@ -234,7 +235,7 @@ export default {
     },
     startRecording(stream) {
         this.$emit('openSTT');
-        this.isRecording = true;
+        this.set_isRecording(true);
         var self = this;
        
         recorder = new MediaRecorder(stream);
@@ -246,7 +247,7 @@ export default {
         recognition.start();
 
         recorder.onstart = () => {
-          self.$store.commit('startCountingTimer');
+          self.$store.commit('recordingTimer');
           self.audio_start_time = Date.now();
         };
 
@@ -321,7 +322,8 @@ export default {
     },
     recBtnPressed(){
       if(this.isRecording){
-        this.isRecording = false;
+        this.clear_recordTimer();
+        this.set_isRecording(false);
         this.set_isRecordable(false);
 
         recognition.stop();
@@ -374,10 +376,11 @@ export default {
     if(this.isRecording){
       recognition.stop();
       recorder.stop();
-      this.isRecording = false;
+      this.set_isRecording(false);
     }
     this.set_isPlaying(false);
     this.clear_playTimer();
+    this.clear_recordTimer();
     this.clear_interval_stt();
     this.audio.pause();
   },
