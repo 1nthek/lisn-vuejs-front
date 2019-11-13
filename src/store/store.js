@@ -76,6 +76,8 @@ export const store = new Vuex.Store({
     user_picture_url: null,
     user_audio_usage: null,
     user_num_of_notes: null,
+    user_num_of_shared:null,
+    user_num_of_sharing:null,
 
     interval_stt: null,
     colored_stt_id: null,
@@ -428,6 +430,8 @@ export const store = new Vuex.Store({
     SET_USAGE(state, data) {
       state.user_audio_usage = data.user_audio_usage;
       state.user_num_of_notes = data.user_num_of_notes;
+      state.user_num_of_shared = data.user_num_of_shared;
+      state.user_num_of_sharing = data.user_num_of_sharing;
     },
   },
   actions: {
@@ -697,6 +701,8 @@ export const store = new Vuex.Store({
 
     FETCH_USAGE({ state, commit }) {
       return api.usage.fetch(state.user_id).then(data => {
+        console.log(data);
+        
         commit('SET_USAGE', data);
       })
     },
