@@ -96,7 +96,7 @@
         <div class="lisn-background">
           <video autoplay loop muted id="BackgroundVideo"><source :src="selectVideo" type="video/mp4"></video>
         </div>
-      <div style="position: absolute;width: 100vw;height: 100vh;background: rgba(0, 0, 0, 0.51)">
+      <div style="position: absolute;width: 100vw;height: 100vh;background: rgba(0, 0, 0, 0.58)">
       </div>
        
       
@@ -104,7 +104,7 @@
           <div style="margin: 0 auto;padding: 26px 25px;display: flex;justify-content: center;">
             <!-- <div class="ani-slide-in"> -->
             <div>
-              <div class="home_title merienda-one"> AI Voice Note </div>
+              <div class="home_title cabin"> AI Voice Note </div>
               <div class="home_subtitle ns-kr"> 손쉽게 음성을 녹음하고, 나만의 노트를 만들어보세요.</div>
               <div style="display: flex;justify-content: center;padding-top: 20px;">
                 <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
