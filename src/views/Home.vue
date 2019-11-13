@@ -192,7 +192,8 @@ export default {
     // window.removeEventListener('scroll', this.handleScroll);
   },
   created() {
-    this.selectVideo = this.randomItem(this.videos)
+    this.selectVideo = this.randomItem(this.videos);
+    this.$amplitude.logEvent('Acess_Main');
   },
   methods: {
   ...mapMutations([
@@ -201,7 +202,6 @@ export default {
   ]),
   about_toggle() {
     this.open01 = !this.open01;
-    this.$amplitude.logEvent('about_toggle')
   },
   randomItem (items) {
     return items[Math.floor(Math.random()*items.length)];
