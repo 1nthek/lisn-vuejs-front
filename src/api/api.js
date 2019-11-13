@@ -2,7 +2,7 @@ import axios from 'axios'
 import router from '../router'
 
 // const domain = "http://15.164.232.194/api";
-// const domain = "https://li-sn.io/api";
+
 const domain = "https://lisn.ai/api";
 const Unauthorized = 401
 const onUnauthorized = () => {
@@ -127,6 +127,12 @@ export const trash = {
   restore(formData) {
     return request('delete', `/note/trash`, formData);
   }
+}
+
+export const contact = {
+  create(formData) {
+    return request('post', `/contact`, formData);
+  },
 }
 
 export const auth = {

@@ -107,6 +107,18 @@ export const store = new Vuex.Store({
       content: "",
       // autoFocus: true,
     }),
+
+
+
+    //dev server
+    //domain: 'http://15.164.232.194/api'
+    //real server
+    domain: 'https://lisn.ai/api'
+
+    // baseDomain: 'http://54.180.86.133/',
+    // baseURL=`${baseDomain}/api`,
+    //domain: 'http://localhost:8000/api'
+
   },
   getters: {
     isAuth(state) {
@@ -666,7 +678,15 @@ export const store = new Vuex.Store({
       return api.usage.fetch(state.user_id).then(data => {
         commit('SET_USAGE', data);
       })
-    }
+    },
+
+    CREATE_CONTACT({ state, commit }, { title, content}){
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      formData.append('title', title);
+      formData.append('content', content);
+      return api.contact.create(formData);
+    },
   }
 })
 

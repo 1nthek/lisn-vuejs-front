@@ -78,12 +78,12 @@
               <ul class="nav__right ns-kr" :class="{'active': this.navOpen }">
                   <li> 
                     <div @click="about_toggle">
-                      <span class="nav__link nav__link--cta" style="background:blue">About</span>
+                      <span class="nav__link nav__link--cta">About</span>
                     </div>
                   </li>
                   <li>
                     <div id="customBtn0">
-                      <span class="nav__link nav__link--cta" style="background:blue">Login</span>
+                      <span class="nav__link nav__link--cta">Login</span>
                     </div>
                   </li>
               </ul>
@@ -104,9 +104,11 @@
               <div class="home_title ns-kr"> AI Voice Note </div>
               <div class="home_subtitle ns-kr"> 손쉽게 음성을 녹음하고 나만의 노트를 만들어보세요.</div>
               <div style="display: flex;justify-content: center;padding-top:50px;">
-                <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: blue;border: none;display: flex;align-items: center;justify-content: center;">
-                    
-                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">지금 시작하기</div>
+                <div id="customBtn1" class="btn-user btn btn-neutral btn-icon" style="cursor:pointer;background: #273559;border: none;display: flex;align-items: center;justify-content: center;">
+                    <div class="btn-inner--icon">
+                      <img src="../img/icons/common/google.svg">
+                    </div>
+                <div class="btn-inner--text ns-kr" @done="onSignIn" @error="onSignInError" style="font-size: 18px;color: white;">Google 계정으로 시작</div>
               </div>
             </div>
             </div>
@@ -126,13 +128,17 @@ import axios from 'axios'
 import api from '../api/api'
 import { mapState, mapMutations } from 'vuex'
 import Drawer from "vue-simple-drawer"
+import VueAmplitude from 'vue-amplitude'
+import Vue from 'vue'
 
+Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
 
 export default {
   components: {
     AppFooter,
     Logo,
     Drawer,
+    VueAmplitude,
   },
   data() {
     return {
@@ -194,7 +200,8 @@ export default {
     'setAccessToken',
   ]),
   about_toggle() {
-    this.open01 = !this.open01
+    this.open01 = !this.open01;
+    this.$amplitude.logEvent('about_toggle')
   },
   randomItem (items) {
     return items[Math.floor(Math.random()*items.length)];
