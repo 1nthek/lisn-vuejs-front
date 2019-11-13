@@ -23,7 +23,7 @@
 
     <div style="display:flex;">
       <!-- Search form -->
-      <form class="navbar-search form-inline mr-sm-3"
+      <!-- <form class="navbar-search form-inline mr-sm-3"
             :class="{'navbar-search-light': type === 'light', 'navbar-search-dark': type === 'default'}"
             id="navbar-search-main">
         <div class="form-group mb-0">
@@ -37,7 +37,7 @@
         <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
-      </form>
+      </form> -->
 
       <ul class="navbar-nav align-items-center">
         <li class="nav-item dropdown">
