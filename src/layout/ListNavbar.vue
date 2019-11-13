@@ -63,9 +63,9 @@
                     </div>
                     <span class="ns-kr navbar-txt">프로필</span>
                   </div>
-                  <div @click.prevent="$router.push('/help')" class="dropdown-item" style="display: flex;">
+                  <div @click.prevent="$router.push('/contact')" class="dropdown-item" style="display: flex;">
                     <div class="navbar-icon">
-                      <i class="fas fa-info"></i>
+                      <i class="fas fa-info-circle"></i>
                     </div>
                     <span class="ns-kr navbar-txt">피드백</span>
                   </div>

@@ -6,7 +6,7 @@ import NoteEdit from '../src/views/NoteEdit'
 import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
 import Profile from '../src/components/Profile'
-import Help from '../src/components/Help'
+import Contact from '../src/components/Contact'
 
 import AllNotes from '../src/components/List/allNotes'
 import SharedNotes from '../src/components/List/sharedNotes'
@@ -54,8 +54,8 @@ export default new Router({
           component: Profile,
         },
         {
-          path: '/help',
-          component: Help,
+          path: '/contact',
+          component: Contact,
         },
       ]
     },

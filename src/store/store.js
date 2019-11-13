@@ -105,7 +105,7 @@ export const store = new Vuex.Store({
     //dev server
     //domain: 'http://15.164.232.194/api'
     //real server
-    domain: 'https://li-sn.io/api'
+    domain: 'https://lisn.ai/api'
 
     // baseDomain: 'http://54.180.86.133/',
     // baseURL=`${baseDomain}/api`,
@@ -636,9 +636,14 @@ export const store = new Vuex.Store({
       })
     },
 
-    HELP_SEND({ state, commit }) {
-      return
-    }
+    CREATE_CONTACT({ state, commit }, { title, content}){
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      formData.append('title', title);
+      formData.append('content', content);
+      //console.log(title, content);
+      return api.contact.create(formData);
+    },
   }
 })
 
