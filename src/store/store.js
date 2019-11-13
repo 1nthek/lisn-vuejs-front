@@ -47,6 +47,8 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+    sharedUserList: [],
+    sharedUserListAll: [],
 
     note_created_at: "",
     note_updated_at: "",
@@ -202,6 +204,8 @@ export const store = new Vuex.Store({
         clearInterval(state.playTimer);
       }
 
+      state.sharedUserList = [];
+      state.sharedUserListAll = [];
       state.audio.pause();
       state.hour = '0';
       state.minute = '00';
@@ -447,6 +451,19 @@ export const store = new Vuex.Store({
         commit('SET_DIRECTORY_NAME', "휴지통")
       })
     },
+    FETCH_SHAREDUSER_LISTS({ state, commit }, note_id ) {
+      return api.list.fetch_sharedUser(note_id).then(data => {
+        if (data.users.length == 1 && data.users[0].is_master == true){
+          state.sharedUserList = [];
+        }
+        else{
+          state.sharedUserList = data.users.slice(0, 6);
+          state.sharedUserListAll = data.users;
+          console.log(state.sharedUserListAll);
+          
+        }
+      })
+    },
 
     FETCH_DIRECTORIES({ state, commit }) {
       return api.directory.fetch(state.user_id).then(data => {
@@ -467,12 +484,12 @@ export const store = new Vuex.Store({
 
       return api.directory.move(formData).then(data => {
         Swal.fire({
-          toast: true,
+          // toast: true,
           position: 'center',
           showConfirmButton: false,
-          timer: 1600,
+          timer: 1200,
           type: 'success',
-          title: '폴더가 이동 되었습니다.'
+          title: '노트가 이동 되었습니다'
         })
         if (state.directory_id != null) {
           const directory_id = state.directory_id

@@ -25,6 +25,7 @@ export default {
     ...mapState([
       'token',
       'user_id',
+      'note_id'
     ]), 
   },
   created() {
@@ -38,6 +39,7 @@ export default {
     else{
       self.setNoteId(self.$route.params.nid);
       self.initData();
+      self.FETCH_SHAREDUSER_LISTS(self.note_id);
       self.FETCH_NOTE()
         .then(() => {
           this.isLoading = false;
@@ -57,6 +59,7 @@ export default {
     ]),
     ...mapActions([
       'FETCH_NOTE',
+      'FETCH_SHAREDUSER_LISTS',
     ]),
     isRecording(para){
       this.$refs.workspace.isRecording(para);

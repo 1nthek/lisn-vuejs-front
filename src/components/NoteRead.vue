@@ -93,8 +93,6 @@ export default {
       'note_updated_at',
     ]),
   },
-  created(){
-  },
   methods: {
     parseDate (dateString, format) {
       return fecha.parse(dateString, format)

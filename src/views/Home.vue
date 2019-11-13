@@ -235,11 +235,12 @@ export default {
     var formData = new FormData();
     formData.append('google_token', googleUser.getAuthResponse().id_token);
     axios.post( this.$store.state.domain + '/token/google', formData)
-      .then((res) => {
+      .then(async res => {
         localStorage.setItem('token', res.data.access_token);
         localStorage.setItem('user_id', res.data.user_id);
         self.setAccessToken();
         self.setUserId();
+        axios.defaults.headers.common['Authorization'] = `Bearer ` + res.data.access_token;
         self.$router.push('/');
       })
       .catch((ex) => {
