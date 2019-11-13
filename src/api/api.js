@@ -34,7 +34,7 @@ export const list = {
   fetch(user_id) {
     return request('get', `/list/note/all?user_id=${user_id}`)
   },
-  fetch_shared(user_id) {
+  fetch_shared(user_id) { //공유 받은 노트 리스트
     return request('get', `/list/note/shared?user_id=${user_id}`)
   },
   fetch_directory(directory_id){
@@ -42,7 +42,10 @@ export const list = {
   },
   fetch_trash(user_id) {
     return request('get', `/list/note/trash?user_id=${user_id}`)
-  }
+  },
+  fetch_sharedUser(note_id) { //노트를 공유하고 있는 사람들
+    return request('get', `/list/user/shared?note_id=${note_id}`)
+  },
 }
 
 export const note = {
