@@ -2,7 +2,7 @@
    <div>
         <div style="margin-bottom:30px;width: 100%;background: white;">
             <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;height: 40px;">
-                <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:#3e4861;font-weight: bold;">휴지통</div>
+                <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">휴지통</div>
             </div>
         </div>
         <div v-if="isLoading" class="cont-isLoading" >
@@ -10,7 +10,7 @@
         </div>
         <div v-else class="row" style="margin:0" ref="contents">
         <table class="row" style="margin:0" ref="contents">
-            <tr class="deleted_conversation" style="padding: 0 15px; margin: 20px 20px;">
+            <tr class="deleted_conversation" style="padding: 0 15px; margin: 0 20px 20px;">
             <th>
                 <input type="checkbox" id="main-checkbox" v-model="selectAll" class="all-checkbox" @click="allSelected()">
                 <button class="create-btn" @click="deleteNote()" style="outline: 0;">
@@ -172,6 +172,15 @@ export default {
   white-space: nowrap;
   width: 16px;
   flex-shrink: 0;
+}
+@media ( max-width: 767px ) {
+  .mat-checkbox {
+    margin-left:0.5rem;
+  
+  }
+  .all-checkbox {
+    margin-left:0.5rem;
+  }
 }
 .card-list {
     padding: 0 15px; 
