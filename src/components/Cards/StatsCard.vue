@@ -6,7 +6,7 @@
           <div class="col ns-kr">
             <slot>
               <div class="card-list-title" v-if="title">{{title}}</div>
-              <div class="card-list-summary">{{summary}}</div>
+              <div class="card-list-summary" v-html="summary"></div>
             </slot>
           </div>
         </div>
