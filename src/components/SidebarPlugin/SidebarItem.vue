@@ -46,11 +46,11 @@
                 <span class="nav-link-text" >{{ link.name }}</span>            
               </div>
               <div style="font-size: 14px;display: flex;">
-                <div class="modify-folder-btn" @click="renameFolder()">
-                  <i class="fas fa-edit" @click="renameFolder()"></i>
+                <div class="modify-folder-btn" @click.prevent="renameFolder()">
+                  <i class="fas fa-edit" @click.prevent="renameFolder()"></i>
                 </div>
-                <div class="modify-folder-btn" @click="deleteFolder()">
-                  <i class="fas fa-trash" @click="deleteFolder()"></i>
+                <div class="modify-folder-btn" @click.prevent="deleteFolder()">
+                  <i class="fas fa-trash" @click.prevent="deleteFolder()"></i>
                 </div>
               </div>
             </div>
@@ -159,14 +159,11 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setDirectoryName',
-      'getDirectoryNoteList'
     ]),
     ...mapActions([
       'CREATE_DIRECTORY',
       'UPDATE_DIRECTORY',
       'DESTROY_DIRECTORY',
-      'FETCH_DIRECTORY_LISTS',
     ]),
     addFolder(){
       this.CREATE_DIRECTORY();
