@@ -27,7 +27,7 @@
                 </div>
               </a>
               <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0">
-                  <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;cursor: default;">
+                  <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 180px;cursor: default;width: calc(100% + 20px);" @click.stop="">
                       <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
                         <div>
                           <div style="font-weight: normal;font-size: 16px;">
@@ -40,7 +40,14 @@
                         <div class="navbar-icon">
                             <img :src="user.user_picture_url" style="border-radius: 100%;width:22px">
                         </div>
-                        <span class="ns-kr navbar-txt" style="font-size: 14px;">{{user.user_name}}</span>
+                        <div style="justify-content: space-between;display: flex;width: 100%;margin-left: 8px;">
+                          <span class="ns-kr navbar-txt" style="font-size: 14px;">{{user.user_name}}</span>
+                          <div v-if="noteUserId == user_id" class="remove-share-cont" @click.stop="removeSharedPerson(user.user_name, user.user_id)">
+                            <template v-if="!user.is_master">
+                              <i class="fas fa-ban"></i>
+                            </template>
+                          </div>
+                        </div>
                       </div>
                   </ul>
               </div>
@@ -96,6 +103,7 @@ export default {
       'sharedUserListAll',
       'searchedPeople',
       'user_id',
+      'noteUserId',
     ]),
   },
    methods: {
@@ -108,7 +116,28 @@ export default {
       'FETCH_EDIT',
       'FETCH_SHAREDUSER_LISTS',
       'FETCH_SEARCH_USER',
+      'MASTER_UNSHARE_NOTE',
     ]),
+    removeSharedPerson(user_name, remove_user_id){
+      let self = this;
+      Swal.fire({
+        title: '공유 해제',
+        text: '"' + user_name + '" 를 공유 해제합니다',
+        // type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-danger btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '해제',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          const note_id = self.note_id;
+          self.MASTER_UNSHARE_NOTE({note_id, remove_user_id});
+        }
+      });
+
+    },
     selectPerson(person){
       if(person.user_id == this.user_id){
           Swal.fire("자신에게는 공유를 할 수 없습니다.");
@@ -163,6 +192,22 @@ export default {
 };
 </script>
 <style scoped>
+.remove-share-cont{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: darkgray;
+  cursor: pointer;
+  transition: all 200ms ease-in 0s;
+  margin-left: 10px;
+}
+.remove-share-cont:hover{
+  color: black;
+}
+.dropdown-item:hover {
+    background-color: #fff;
+}
 .navbar{
   padding: 0px;
 }

@@ -61,6 +61,9 @@ export const note = {
   unshare(formData) {
     return request('delete', `/note/shared`, formData);
   },
+  masterUnshare(formData) {
+    return request('delete', `/note/shared/master`, formData);
+  },
   update(formData) {
     return request('put', `/note`, formData)
   },

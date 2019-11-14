@@ -47,6 +47,7 @@ export const store = new Vuex.Store({
 
     noteList: [],
     noteTitle: "",
+    noteUserId: "",
 
     sharedUserList: [],
     sharedUserListAll: [],
@@ -260,6 +261,7 @@ export const store = new Vuex.Store({
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
+      state.noteUserId = value.user_id;
 
       var date = new Date(value.created_at);
       state.note_created_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
@@ -583,6 +585,14 @@ export const store = new Vuex.Store({
         })
         .catch(err => {
         })
+    },
+    MASTER_UNSHARE_NOTE({ state, commit, dispatch }, { note_id, remove_user_id }){
+      let formData = new FormData();
+      formData.append('note_id', note_id);
+      formData.append('user_id', remove_user_id);
+      return api.note.masterUnshare(formData).then(data => {
+        dispatch('FETCH_SHAREDUSER_LISTS', note_id)
+      })
     },
     UPDATE_NOTE({ state, commit, dispatch }, { title, content}){
       var formData = new FormData();
