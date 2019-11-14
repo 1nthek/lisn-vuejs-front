@@ -129,7 +129,10 @@ export default {
       });
     },
     typing(e) {
-      if(e.target.value != ""){
+      if(e.target.value == ""){
+        this.clear_searched_people();
+      }
+      else{
         this.FETCH_SEARCH_USER(e.target.value);
       }
     },
