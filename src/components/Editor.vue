@@ -30,12 +30,12 @@
           <i class="fas fa-highlighter"></i>
         </button>
 
-        <button
+        <!-- <button
           class="menubar__button"
           :class="{ 'is-active': isActive.paragraph() }"
           @click="commands.paragraph">
           <i class="fas fa-paragraph"></i>
-        </button>
+        </button> -->
 
         <button
           class="menubar__button"
@@ -85,7 +85,7 @@
           <i class="fas fa-grip-lines"></i>
         </button>
 
-        <button
+        <!-- <button
           class="menubar__button"
           @click="commands.undo">
           <i class="fas fa-undo-alt"></i>
@@ -95,7 +95,7 @@
           class="menubar__button"
           @click="commands.redo">
           <i class="fas fa-redo-alt"></i>
-        </button>
+        </button> -->
 
       </div>
     </editor-menu-bar>
@@ -163,12 +163,19 @@ export default {
 </script>
 
 <style>
+code {
+  font-size: 95%;
+  color: #2781dd;
+  word-break: break-word;
+  font-family: 'Noto Sans KR', sans-serif;
+}
 .Swal2-container{
   font-family: 'Noto Sans KR', sans-serif;
 }
 .tiptap{
   height: 100px;
   color: #304455;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 .menubar__button{
     font-size: 15px;
@@ -178,14 +185,9 @@ export default {
     height: 24px;
     background: antiquewhite;
 }
-/*.has-focus { */
-  /* border-radius: 3px; */
-  /* box-shadow: 0 0 0 1px #3ea4ffe6; */
-  /* border: 1px solid #BCBEC0; */
-/*}*/
 div.tiptap p{
     font-size: 16px !important;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
 }
 div.tiptap strong{
   font-weight: bold;
