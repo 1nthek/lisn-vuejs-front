@@ -122,9 +122,10 @@ export default {
         confirmButtonText: '공유',
         cancelButtonText: '취소',
         buttonsStyling: false
-      }).then(result => {
+      }).then(async(result) => {
         if (result.value) {
-          self.SHARE_NOTE(person.user_email);
+          await self.SHARE_NOTE(person.user_email);
+          await self.FETCH_SHAREDUSER_LISTS(self.note_id);
         }
       });
     },
