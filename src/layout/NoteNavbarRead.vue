@@ -59,7 +59,7 @@
           <div class="search-email-header ns-kr">노트 공유하기</div>
           <input v-on:input="typing" class="swal2-input" placeholder="공유할 사용자의 이메일을 적으세요" type="email" style="display: flex;">
           <div v-for="person in searchedPeople" :key="person.user_id">
-            <div class="search-email-person" @click="selectPerson(person)">
+            <div v-if="person.user_id != user_id" class="search-email-person" @click="selectPerson(person)">
               <img :src="person.user_picture_url" style="border-radius: 100%;width: 24px;cursor: pointer;">
               <div class="ns-kr" style="margin-left: 10px;font-size: 16px;cursor: pointer;">{{person.user_email}}</div>
             </div>
