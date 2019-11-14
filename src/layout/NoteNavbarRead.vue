@@ -130,10 +130,10 @@ export default {
         if (result.value) {
           await self.SHARE_NOTE(person.user_email);
           await self.FETCH_SHAREDUSER_LISTS(self.note_id);
+          this.$amplitude.setUserId(this.user_id);
+          this.$amplitude.logEvent('Share');  
         }
       });
-      this.$amplitude.setUserId(this.user_id);
-      this.$amplitude.logEvent('Share');   
     },
     typing(e) {
       if(e.target.value == ""){
