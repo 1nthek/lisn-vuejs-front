@@ -528,8 +528,20 @@ export const store = new Vuex.Store({
     CREATE_NOTE({ state, commit, dispatch }) {
       var formData = new FormData();
       formData.append('user_id', state.user_id);
-      return api.note.create(formData).then(data => {
-        dispatch('UPDATE_EDIT', data.note_id);
+      return api.note.create(formData).then(async data => {
+        await dispatch('UPDATE_EDIT', data.note_id);
+        router.push('/noteEdit/' + data.note_id);
+      })
+    },
+    CREATE_NOTE_AND_SET_DIRECTORY({ state, commit, dispatch }, directory_id ) {
+      var formData = new FormData();
+      formData.append('user_id', state.user_id);
+      return api.note.create(formData).then(async data => {
+        var formData2 = new FormData();
+        formData2.append('note_id', data.note_id);
+        formData2.append('directory_id', directory_id);
+        await api.directory.move(formData2);  //생성하는 노트를 생성한 폴더에 넣음
+        await dispatch('UPDATE_EDIT', data.note_id);
         router.push('/noteEdit/' + data.note_id);
       })
     },

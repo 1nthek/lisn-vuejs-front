@@ -75,7 +75,7 @@ export default {
   methods: {
     ...mapActions([
       'FETCH_DIRECTORY_LISTS',
-      'CREATE_NOTE',
+      'CREATE_NOTE_AND_SET_DIRECTORY'
     ]),
     async fetch(){
         const directory_id = this.$route.params.fid;
@@ -84,7 +84,7 @@ export default {
         this.isLoading = false;
     },
     create_note() {
-      this.CREATE_NOTE();
+      this.CREATE_NOTE_AND_SET_DIRECTORY(this.$route.params.fid);
       this.$amplitude.setUserId(this.user_id);
       this.$amplitude.logEvent('Create_Note');
     }
