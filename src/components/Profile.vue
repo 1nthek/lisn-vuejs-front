@@ -50,6 +50,10 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+import VueAmplitude from 'vue-amplitude'
+import Vue from 'vue'
+
+Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
 
 export default {
     computed: {
@@ -61,6 +65,7 @@ export default {
         'user_num_of_notes',
         'user_num_of_shared',
         'user_num_of_sharing',
+        'user_id',
         ]),
     },
     data() {
@@ -68,7 +73,9 @@ export default {
         }
     },
     created() {
-        this.FETCH_USAGE();        
+        this.FETCH_USAGE();     
+        this.$amplitude.setUserId(this.user_id);
+        this.$amplitude.logEvent('Profile');   
     },
     methods: {
         ...mapActions([
