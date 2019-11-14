@@ -92,7 +92,7 @@ export default {
   text-overflow: ellipsis;
   font-size: 14px;
   color: #617386;
-  margin-bottom: 14px;
+  height: 32px;
 }
 .card-title{
   font-weight: bold;

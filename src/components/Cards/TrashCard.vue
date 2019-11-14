@@ -62,9 +62,8 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  height: 17px;
   color: #617386;
-  margin-bottom: 14px;
+  height: 32px;
 }
 .trash-card-title{
   font-weight: bold;
