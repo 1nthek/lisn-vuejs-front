@@ -91,7 +91,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  height: 17px;
   color: #617386;
   margin-bottom: 14px;
 }
@@ -115,17 +114,14 @@ export default {
 }
 @media (max-width: 991.98px){
     .card-title, .card-summary{
-    width: 190px;
+      width: 24vw;
   }
 }
 @media ( max-width: 767px ) {
   .card-title, .card-summary{
-    width: 280px;
+    width: 46vw;
   }
 }
-/* #noteList:hover .cont3{
-  color: darkgray;
-} */
 .summary{
   font-weight:600;
   font-size: 14px;
@@ -136,7 +132,6 @@ export default {
   transition: all 200ms ease-in 0s;
 }
 #folder-move:hover, #trash:hover{
-  /* transform: translateX(2px); */
   color: black;
 }
 .card-stats .card-body {

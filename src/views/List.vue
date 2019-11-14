@@ -166,17 +166,13 @@ a {
     text-decoration: none !important;
 }
 #noteList:hover{
-    /* border: 1px solid navajowhite; */
     background: navajowhite;
     background: #efefef;
     transform:translateY(-1px);
     box-shadow: rgba(15, 15, 15, 0.12) 0px 4px 8px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 }
 #noteList{
-    /* border: 1px solid rgba(0, 0, 0, 0.03); */
     background: #fafafa;
-    /* background: #098db3a1; */
-    /* box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.04); */
     color: black;
     font-size: 22px;
     transition: all 300ms ease-in-out 0s;

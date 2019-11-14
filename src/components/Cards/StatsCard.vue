@@ -133,7 +133,6 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
-  height: 20px;
   color: #617386;
   margin-bottom: 10px;
 }
@@ -165,9 +164,6 @@ export default {
     width: 46vw;
   }
 }
-/* #noteList:hover .cont3{
-  color: darkgray;
-} */
 .summary{
   font-weight:600;
   font-size: 14px;
