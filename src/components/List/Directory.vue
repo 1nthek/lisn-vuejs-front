@@ -55,16 +55,18 @@ export default {
     ]),
     
   },
-  created() {
-    let self = this;
-    if(!self.user_id || !self.token){
+  async created() {
+    if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      this.$router.replace('/');
     }
     else{
-      setTokenInHeader(self.token);
-      this.fetch();
+      setTokenInHeader(this.token);
+      const directory_id = this.$route.params.fid;
+      const directory_name = this.$route.params.name;
+      await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
+      this.isLoading = false;
     }
   },
   watch: {
@@ -77,12 +79,6 @@ export default {
       'FETCH_DIRECTORY_LISTS',
       'CREATE_NOTE_AND_SET_DIRECTORY'
     ]),
-    async fetch(){
-        const directory_id = this.$route.params.fid;
-        const directory_name = this.$route.params.name;
-        await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
-        this.isLoading = false;
-    },
     create_note() {
       this.CREATE_NOTE_AND_SET_DIRECTORY(this.$route.params.fid);
       this.$amplitude.setUserId(this.user_id);

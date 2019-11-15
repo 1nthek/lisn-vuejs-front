@@ -166,13 +166,13 @@ export default {
         confirmButtonText: '삭제',
         cancelButtonText: '취소',
         buttonsStyling: false
-      }).then(result => {
+      }).then(async(result) => {
         if (result.value) {
+          await this.DESTROY_DIRECTORY(this.directory_id)
           let cur_path = this.$route.path.split('/');
           if(cur_path[2] == this.directory_id){
             this.$router.replace('/allNotes');
           }
-          this.DESTROY_DIRECTORY(this.directory_id);
         }
       });
     },

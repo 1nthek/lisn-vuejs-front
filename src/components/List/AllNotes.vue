@@ -54,16 +54,16 @@ export default {
     ]),
     
   },
-  created() {
-    let self = this;
-    if(!self.user_id || !self.token){
+  async created() {
+    if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      this.$router.replace('/');
     }
     else{
-      setTokenInHeader(self.token);
-      self.fetch();
+      setTokenInHeader(this.token)
+      await this.FETCH_LISTS()
+      this.isLoading = false
     }
   },
   methods: {
@@ -71,10 +71,6 @@ export default {
       'FETCH_LISTS',
       'CREATE_NOTE',
     ]),
-    async fetch(){
-      await this.FETCH_LISTS()
-      this.isLoading = false;
-    },
     create_note(){
       this.CREATE_NOTE();
       this.$amplitude.setUserId(this.user_id);
