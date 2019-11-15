@@ -20,6 +20,7 @@
                         :summary="p.summary"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
+                        :color="p.color"
                         id="noteList"
                         v-on:openNote="openNote()">
             </stats-card>

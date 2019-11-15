@@ -439,6 +439,8 @@ export const store = new Vuex.Store({
   actions: {
     FETCH_LISTS({ state, commit }) {
       return api.list.fetch(state.user_id).then(data => {
+        console.log(data.notes);
+        
         commit('SET_DIRECTORY_ID', null);
         commit('SET_LISTS', data.notes);
         commit('SET_DIRECTORY_NAME', "모든 노트")
@@ -494,10 +496,10 @@ export const store = new Vuex.Store({
 
       return api.directory.move(formData).then(data => {
         Swal.fire({
-          // toast: true,
+          toast: true,
           position: 'center',
           showConfirmButton: false,
-          timer: 1200,
+          timer: 800,
           type: 'success',
           title: '노트가 이동 되었습니다'
         })
@@ -517,6 +519,17 @@ export const store = new Vuex.Store({
         if (directory_id == state.directory_id) {
           commit('SET_DIRECTORY_NAME', directory_name)
         }
+      })
+    },
+    UPDATE_DIRECTORY_COLOR({ state, commit, dispatch }, { directory_id, color }) {
+      var formData = new FormData();
+      formData.append('directory_id', directory_id);
+      formData.append('color', color);
+      return api.directory.update_color(formData).then(data => {
+        // dispatch('FETCH_DIRECTORIES')
+        // if (directory_id == state.directory_id) {
+        //   commit('SET_DIRECTORY_NAME', directory_name)
+        // }
       })
     },
     DESTROY_DIRECTORY({ state, commit, dispatch }, directory_id) {

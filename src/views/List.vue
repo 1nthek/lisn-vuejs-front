@@ -3,7 +3,7 @@
       <side-bar style="border: none;">
         <template slot="links">
         <hr style="padding: 0 38px;margin: 0px 30px 6px 30px !important;">
-          <sidebar-item :link="{ name: '내 노트', path: '/allNotes', icon: 'ni ni-books' }" ></sidebar-item>
+          <sidebar-item :link="{ name: '내 노트', path: '/allNotes', icon: 'ni ni-books' }"></sidebar-item>
           <sidebar-item :link="{ name: '공유 받은 노트', path: '/sharedNotes', icon: 'ni ni-send' }"></sidebar-item>
 
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>
@@ -170,6 +170,7 @@ a {
     background: #efefef;
     transform:translateY(-1px);
     box-shadow: rgba(15, 15, 15, 0.12) 0px 4px 8px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
+    cursor: pointer;
 }
 #noteList{
     background: #fafafa;

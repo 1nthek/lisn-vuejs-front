@@ -106,6 +106,9 @@ export const directory = {
   update(formData) {
     return request('put', `/directory`, formData)
   },
+  update_color(formData) {
+    return request('put', `/directory/color`, formData)
+  },
   destroy(formData) {
     return request('delete', `/directory`, formData);
   }
