@@ -168,6 +168,10 @@ export default {
         buttonsStyling: false
       }).then(result => {
         if (result.value) {
+          let cur_path = this.$route.path.split('/');
+          if(cur_path[2] == this.directory_id){
+            this.$router.replace('/allNotes');
+          }
           this.DESTROY_DIRECTORY(this.directory_id);
         }
       });
