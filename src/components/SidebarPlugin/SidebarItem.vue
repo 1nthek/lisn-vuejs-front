@@ -3,7 +3,6 @@
     :is="baseComponent"
     :to="link.path ? link.path : '/'"
     class="nav-item"
-    :class="{ active: isActive }"
     tag="li">
     <div v-if="isMenu">    <!-- root directory -->
       <div class="cont1">
@@ -36,7 +35,6 @@
         @click.self="linkClick"
         :is="elementType(link, false)"
         class="nav-link"
-        :class="{ active: link.active }"
         :target="link.target"
         :href="link.path">
         <template v-if="addLink" >   <!-- each directory -->
@@ -47,7 +45,7 @@
               </div>
               <div style="font-size: 14px;display: flex;">
                 <div class="modify-folder-btn" @click.prevent="renameFolder()">
-                  <i class="fas fa-edit" @click.prevent="renameFolder()"></i>
+                  <i class="fas fa-edit" @click.prevent="renameFolder()" style="margin-left: 2px;"></i>
                 </div>
                 <div class="modify-folder-btn" @click.prevent="deleteFolder()">
                   <i class="fas fa-trash" @click.prevent="deleteFolder()"></i>
@@ -145,17 +143,6 @@ export default {
     isMenu() {
       return this.children.length > 0 || this.menu === true;
     },
-    isActive() {
-      if (this.$route && this.$route.path) {
-        let matchingRoute = this.children.find(c =>
-          this.$route.path.startsWith(c.link.path)
-        );
-        if (matchingRoute !== undefined) {
-          return true;
-        }
-      }
-      return false;
-    }
   },
   methods: {
     ...mapMutations([
@@ -243,6 +230,9 @@ export default {
 };
 </script>
 <style>
+.router-link-active{
+  background: #cecece;
+}
 .fold-icon{
   transition: all 200ms ease-in 0s;
 }
@@ -306,9 +296,11 @@ export default {
   padding-left: 2px;
 }
 #add-folder-btn:hover{
-  background: #DAD9D6;
+  background: #eaeaea;
+  box-shadow: rgba(15, 15, 15, 0.12) 0px 2px 4px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 }
 .modify-folder-btn:hover{
-  background: #DAD9D6;
+  background: #eaeaea;
+  box-shadow: rgba(15, 15, 15, 0.12) 0px 2px 4px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 }
 </style>
