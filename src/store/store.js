@@ -118,17 +118,10 @@ export const store = new Vuex.Store({
       // autoFocus: true,
     }),
 
+    domain: 'https://lisn.ai/api',
 
-
-    //dev server
-    //domain: 'http://15.164.232.194/api'
-    //real server
-    domain: 'https://lisn.ai/api'
-
-    // baseDomain: 'http://54.180.86.133/',
-    // baseURL=`${baseDomain}/api`,
-    //domain: 'http://localhost:8000/api'
-
+    // baseDomain: 'https://lisn.ai',
+    // baseURL:`${baseDomain}/api`,
   },
   getters: {
     isAuth(state) {
@@ -282,6 +275,8 @@ export const store = new Vuex.Store({
         })
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
+            console.log(res.data.audio_url);
+            
             state.audio.src = res.data.audio_url;
           })
       });

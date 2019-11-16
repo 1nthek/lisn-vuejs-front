@@ -71,9 +71,7 @@ try{
   recognition.lang = 'ko-KR';
   recognition.maxAlternatives = 1;
 }
-catch(ex){
-
-}
+catch(ex){}
 
 const alert_upload_rec_fail = Swal.mixin({
     toast: true,
@@ -145,6 +143,9 @@ export default {
       'set_isRecordable',
       'set_isPlaying',
       'playSound',
+    ]),
+    ...mapActions([
+      'FETCH_NOTE',
     ]),
     update_sentence_text(event_object_list) {
         var transcript = "";
@@ -236,7 +237,7 @@ export default {
           self.swal_saveingRec.close();
         }
       },300)
-      
+      self.FETCH_NOTE()
     },
     startRecording(stream) {
         this.$emit('openSTT');
