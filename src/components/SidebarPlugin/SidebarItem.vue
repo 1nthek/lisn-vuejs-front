@@ -207,7 +207,6 @@ export default {
       //   this.FETCH_SHARED_LISTS();
       // }
       else if(this.$route.name == "directory"){
-        console.log(this.$route.name);
         const directory_id = this.$route.params.fid
         const directory_name = this.$route.params.name
         await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})

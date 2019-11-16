@@ -22,6 +22,7 @@
                         :created_at="p.created_at"
                         :color="p.color"
                         :is_shared="p.is_shared"
+                        :num_of_share="p.num_of_share"
                         id="noteList"
                         v-on:openNote="openNote()">
             </stats-card-shared>

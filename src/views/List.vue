@@ -114,14 +114,18 @@ export default {
   width: 32px;
   transition: all 300ms ease-in 0s;
 }
+#noteList:hover .lisn-badge{
+    background-color: #d6d6d6;
+}
 .lisn-badge{
-    background-color: #e4e4e4;
-    color: #000;
+    background-color: #ececec;
+    color: #383838;
     font-weight: bold;
     font-size: 13px;
     padding: 1px 8px;
     border-radius: 6px;
     margin-left: 12px;
+    transition: all 300ms ease-in 0s;
 }
 @media ( max-width: 1599.98px ) {
   .card-list-title, .card-list-summary{

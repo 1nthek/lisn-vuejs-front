@@ -22,7 +22,7 @@
 
         <div class="note-date ns-kr" style="font-weight: bold;color:#666666;font-size: 13px;display: flex;display: flex;align-items: center;">
             <div class="text-nowrap" v-html="created_at"></div>
-            <div v-if="is_shared" class="lisn-badge ns-kr"><i class="fas fa-share"></i>&nbsp;공유</div>
+            <div v-if="is_shared" class="lisn-badge ns-kr"><i class="fas fa-share"></i>&nbsp;공유&nbsp;{{num_of_share+1}}</div>
         </div>
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
@@ -63,6 +63,7 @@ export default {
     title: String,
     summary: String,
     color: Number,
+    num_of_share: Number,
     is_shared: String,
     updated_at: String,
     created_at: String,
@@ -106,7 +107,6 @@ export default {
               //   this.FETCH_SHARED_LISTS();
               // }
               else if(this.$route.name == "directory"){
-                console.log(this.$route.name);
                 const directory_id = this.$route.params.fid
                 const directory_name = this.$route.params.name
                 await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})

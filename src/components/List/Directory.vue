@@ -18,9 +18,11 @@
             <stats-card :title="p.title"
                         :note_id="p.note_id"
                         :summary="p.summary"
-                        :color="p.color"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
+                        :color="p.color"
+                        :is_shared="p.is_shared"
+                        :num_of_share="p.num_of_share"
                         id="noteList"
                         v-on:openNote="openNote()">
             </stats-card>
