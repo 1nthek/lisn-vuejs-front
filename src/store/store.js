@@ -275,8 +275,6 @@ export const store = new Vuex.Store({
         })
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
-            console.log(res.data.audio_url);
-            
             state.audio.src = res.data.audio_url;
           })
       });
@@ -291,6 +289,7 @@ export const store = new Vuex.Store({
       if (state.playTimer != null) {
         clearInterval(state.playTimer);
       }
+      state.audio.removeEventListener("ended", audioEnded);
     },
     playSound(state) {
       if (state.interval_stt != null) {
@@ -302,10 +301,11 @@ export const store = new Vuex.Store({
       if (state.playTimer != null) {
         clearInterval(state.playTimer);
       }
-
       state.isPlaying = true;
       state.audio.currentTime = state.timeOffset;
       state.audio.play();
+
+      state.audio.addEventListener("ended", audioEnded);
       
       state.playTimer = setInterval(() => {
         var curTime = state.audio.currentTime;
@@ -749,6 +749,23 @@ export const store = new Vuex.Store({
     }
   }
 })
+function audioEnded() {
+  if (store.state.interval_stt != null) {
+    clearInterval(store.state.interval_stt);
+  }
+  if (store.state.recordTimer != null) {
+    clearInterval(store.state.recordTimer);
+  }
+  if (store.state.playTimer != null) {
+    clearInterval(store.state.playTimer);
+  }
+  store.state.isPlaying = false;
+  store.state.timeOffset = store.state.audio.currentTime;
+
+  store.state.hour = '0'
+  store.state.minute = '00'
+  store.state.second = '00'
+}
 
 const { token, user_id } = localStorage
 store.commit('onRefresh', { token, user_id })
