@@ -181,7 +181,6 @@ export const store = new Vuex.Store({
       state.noteTitle = val;
     },
     onRefresh(state, { token, user_id }) {
-      let self = this;
       if (!token || !user_id) {
         gapi.load('auth2', function () {
           gapi.auth2.init().then(function () {
@@ -262,7 +261,6 @@ export const store = new Vuex.Store({
       state.sttText = [];
     },
     setNoteData(state, value) {
-      let self = this;
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
@@ -623,19 +621,17 @@ export const store = new Vuex.Store({
           console.log('저장 실패');
         })
     },
-    DESTROY_NOTE({ commit, dispatch }, { note_id, title }) {
+    DESTROY_NOTE({ commit, dispatch }, { note_id, directory_id, directory_name, router_name }) {
       var formData = new FormData();
       formData.append('note_id', note_id);
       return api.note.destroy(formData)
         .then(data => {
-          dispatch('FETCH_LISTS');
-          // Swal.fire({
-          //   title: '삭제',
-          //   text: `노트를 휴지통에 버렸습니다.`,
-          //   type: 'success',
-          //   confirmButtonClass: 'btn btn-success btn-fill',
-          //   buttonsStyling: false
-          // });
+          if (router_name == "directory"){
+            dispatch('FETCH_DIRECTORY_LISTS', {directory_id, directory_name})
+          }
+          else if (router_name == "allNotes") {
+            dispatch('FETCH_LISTS');
+          }
         })
         .catch(err => {
           Swal.fire({

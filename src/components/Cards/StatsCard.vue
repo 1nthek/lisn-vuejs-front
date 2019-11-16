@@ -30,7 +30,7 @@
           <div id="folder-move" @click.stop="moveDirectory(note_id)" class="card-icon-cont">
               <i class="fas fa-folder"></i>
           </div>
-          <div id="trash" @click.stop="deleteNote(note_id, title)" class="card-icon-cont" style="margin-left: 4px;">
+          <div id="trash" @click.stop="deleteNote(note_id)" class="card-icon-cont" style="margin-left: 4px;">
               <i class="fas fa-trash"></i>
           </div>
         </div>
@@ -117,8 +117,12 @@ export default {
         }
       })
     },
-    deleteNote(note_id, title) {
-      this.DESTROY_NOTE({note_id, title});
+    deleteNote(note_id) {
+      const directory_id = this.$route.params.fid
+      const directory_name = this.$route.params.name
+      const router_name = this.$route.name
+
+      this.DESTROY_NOTE({note_id, directory_id, directory_name, router_name});
       // Swal.fire({
       //   // title: '휴지통으로 이동',
       //   // text: `휴지통에서 완전히 삭제할 수 있습니다`,
