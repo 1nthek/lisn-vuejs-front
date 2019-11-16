@@ -47,7 +47,6 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
 import Swal from 'sweetalert2';
 import TrashCard from '../Cards/TrashCard'
-
 export default {
   components: {
     TrashCard,
@@ -68,15 +67,14 @@ export default {
     
   },
   created() {
-    let self = this;
-    if(!self.user_id || !self.token){
+    if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      this.$router.replace('/');
     }
     else{
-      setTokenInHeader(self.token);
-      self.fetch();
+      setTokenInHeader(this.token);
+      this.fetch();
     }
   },
   methods: {
@@ -217,4 +215,3 @@ export default {
   margin-top: .4rem;
 }
 </style>
-

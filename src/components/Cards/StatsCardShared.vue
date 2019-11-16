@@ -5,8 +5,17 @@
         <div class="row">
           <div class="col ns-kr">
             <slot>
-              <div class="card-title" v-if="title">{{title}}</div>
-              <div class="card-summary">{{summary}}</div>
+              <div style="display:flex">
+                <div v-if="color==-1" class="lisn-flag color-9" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==0" class="lisn-flag color-0" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==1" class="lisn-flag color-1" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==2" class="lisn-flag color-2" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==3" class="lisn-flag color-3" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==4" class="lisn-flag color-4" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==5" class="lisn-flag color-5" @click.stop="moveDirectory(note_id)"></div>
+                <div class="card-list-title" v-if="title">{{title}}</div>
+              </div>
+              <div class="card-list-summary">{{summary}}</div>
             </slot>
           </div>
         </div>
@@ -55,6 +64,7 @@ export default {
     note_id: "",
     title: String,
     summary: String,
+    color: Number,
     updated_at: String,
     created_at: String,
     iconClasses: [String, Array]

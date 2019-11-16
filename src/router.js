@@ -35,27 +35,33 @@ export default new Router({
       children: [
         {
           path: 'allNotes',
-          component: AllNotes
+          component: AllNotes,
+          name: 'allNotes',
         },
         {
           path: 'sharedNotes',
-          component: SharedNotes
+          component: SharedNotes,
+          name: 'sharedNotes',
         },
         {
           path: 'trash',
-          component: Trash
+          component: Trash,
+          name: 'trash',
         },
         {
           path: '/folder/:fid/:name',
           component: Directory,
+          name: 'directory'
         },
         {
           path: '/profile',
           component: Profile,
+          name: 'profile',
         },
         {
           path: '/contact',
           component: Contact,
+          name: 'contact',
         },
       ]
     },

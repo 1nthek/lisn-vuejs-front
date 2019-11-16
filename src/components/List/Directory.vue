@@ -18,6 +18,7 @@
             <stats-card :title="p.title"
                         :note_id="p.note_id"
                         :summary="p.summary"
+                        :color="p.color"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
                         id="noteList"
@@ -34,9 +35,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
 import VueAmplitude from 'vue-amplitude'
 import Vue from 'vue'
-
 Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
-
 export default {
   components: {
     StatsCard,
@@ -56,14 +55,13 @@ export default {
     
   },
   created() {
-    let self = this;
-    if(!self.user_id || !self.token){
+    if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      this.$router.replace('/');
     }
     else{
-      setTokenInHeader(self.token);
+      setTokenInHeader(this.token);
       this.fetch();
     }
   },
@@ -94,6 +92,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
-

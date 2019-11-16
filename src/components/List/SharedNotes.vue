@@ -20,6 +20,7 @@
                         :summary="p.summary"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
+                        :color="p.color"
                         id="noteList"
                         v-on:openNote="openNote()">
             </stats-card-shared>
@@ -34,9 +35,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
 import VueAmplitude from 'vue-amplitude'
 import Vue from 'vue'
-
 Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
-
 export default {
   components: {
     StatsCardShared,
@@ -54,7 +53,7 @@ export default {
     ]),
     
   },
-  async created() {
+  created() {
     if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
@@ -62,8 +61,7 @@ export default {
     }
     else{
         setTokenInHeader(this.token);
-        await this.FETCH_SHARED_LISTS()
-        this.isLoading = false;
+        this.fetch();
     }
   },
   methods: {
@@ -71,6 +69,10 @@ export default {
       'FETCH_SHARED_LISTS',
       'CREATE_NOTE',
     ]),
+    async fetch(){
+      await this.FETCH_SHARED_LISTS()
+      this.isLoading = false;
+    },
     create_note(){
       this.CREATE_NOTE();
       this.$amplitude.setUserId(this.user_id);
@@ -81,6 +83,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
-

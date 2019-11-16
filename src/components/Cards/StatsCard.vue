@@ -5,7 +5,16 @@
         <div class="row">
           <div class="col ns-kr">
             <slot>
-              <div class="card-list-title" v-if="title">{{title}}</div>
+              <div style="display:flex">
+                <div v-if="color==-1" class="lisn-flag color-9" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==0" class="lisn-flag color-0" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==1" class="lisn-flag color-1" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==2" class="lisn-flag color-2" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==3" class="lisn-flag color-3" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==4" class="lisn-flag color-4" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==5" class="lisn-flag color-5" @click.stop="moveDirectory(note_id)"></div>
+                <div class="card-list-title" v-if="title">{{title}}</div>
+              </div>
               <div class="card-list-summary" v-html="summary"></div>
             </slot>
           </div>
@@ -63,6 +72,7 @@ export default {
     note_id: "",
     title: String,
     summary: String,
+    color: Number,
     updated_at: String,
     created_at: String,
     iconClasses: [String, Array]
@@ -70,7 +80,8 @@ export default {
   methods: {
     ...mapActions([
       'DESTROY_NOTE',
-      'MOVE_DIRECTORY'
+      'MOVE_DIRECTORY',
+      'FETCH_LISTS',
     ]),
     moveDirectory(note_id){
       var directory = {};
@@ -90,13 +101,26 @@ export default {
         cancelButtonText: '취소',
         buttonsStyling: false,
         inputValidator: (value) => {
-          return new Promise((resolve) => {
+          return new Promise(async(resolve) => {
             if (value === '') {
               resolve('폴더를 선택해야 합니다')
             } else {
-              const directory_id = value;
-              this.MOVE_DIRECTORY({note_id, directory_id});
-              resolve();
+              const directory_id = value
+              await this.MOVE_DIRECTORY({note_id, directory_id})
+
+              if(this.$route.name == "allNotes"){
+                await this.FETCH_LISTS();
+              }
+              // else if(this.$route.name == "sharedNotes"){
+              //   this.FETCH_SHARED_LISTS();
+              // }
+              else if(this.$route.name == "directory"){
+                console.log(this.$route.name);
+                const directory_id = this.$route.params.fid
+                const directory_name = this.$route.params.name
+                await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
+              }
+              resolve()
             }
           })
         }
@@ -126,44 +150,6 @@ export default {
 }
 </script>
 <style scoped>
-.card-list-summary{
-  font-weight: bold;
-  width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  color: #617386;
-  height: 32px;
-}
-.card-list-title{
-  font-weight: bold;
-  width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0px;
-}
-@media ( max-width: 1599.98px ) {
-  .card-list-title, .card-list-summary{
-    width: 280px;
-  }
-}
-@media ( max-width: 1199.98px ) {
-  .card-list-title, .card-list-summary{
-    width: 280px;
-  }
-}
-@media (max-width: 991.98px){
-  .card-list-title, .card-list-summary{
-      width: 24vw;
-  }
-}
-@media ( max-width: 767px ) {
-  .card-list-title, .card-list-summary{
-    width: 46vw;
-  }
-}
 .summary{
   font-weight:600;
   font-size: 14px;
