@@ -38,6 +38,8 @@ export const store = new Vuex.Store({
     minute: '00',
     second: '00',
 
+    isNewNote: true,
+
     recordTimer: null,
     playTimer: null,
     audio: new Audio(),
@@ -162,6 +164,9 @@ export const store = new Vuex.Store({
       state.rec_length = 0;
       state.audio_timestamp = [];
       state.sttText = [];
+    },
+    set_isNewNote(state, val){
+      state.isNewNote = val;
     },
     set_isPlaying(state, val){
       state.isPlaying = val;

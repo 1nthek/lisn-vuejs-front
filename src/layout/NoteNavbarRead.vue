@@ -1,10 +1,8 @@
 <template>
   <div class="noteNavbar-container">
-    <a v-on:click="$router.go(-1)" style="margin: 10px;">
-      <div class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;">
-        <i class="fas fa-chevron-left"></i>&nbsp;돌아가기
-      </div>
-    </a>
+    <div v-on:click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+      <i class="fas fa-chevron-left"></i>&nbsp;돌아가기
+    </div>
 
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
 
@@ -55,10 +53,10 @@
         </base-nav>
 
         <button class="share-btn" style="position: relative;" @click="shareNote()">
-          <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 40px;">공유</div>
+          <div class="ns-kr" style="font-size: 16px; margin: 8px 14px;font-weight: bold;width: 52px;">공유</div>
         </button>
         <button class="edit-btn" style="position: relative;" @click="editNote()">
-          <div class="ns-kr" style="font-size: 16px; margin: 8px 20px;font-weight: bold;width: 60px;">수정하기</div>
+          <div class="ns-kr" style="font-size: 16px; margin: 8px 14px;font-weight: bold;width: 72px;">수정하기</div>
         </button>
       </div>
       <div v-if="openSearch" class="search-email-cont1" @click.self="openSearch=false">
@@ -109,6 +107,7 @@ export default {
    methods: {
      ...mapMutations([
        'clear_searched_people',
+       'set_isNewNote',
      ]),
     ...mapActions([
       'SHARE_NOTE',
@@ -179,6 +178,7 @@ export default {
       let self = this;
       this.FETCH_EDIT(this.note_id).then(data =>{
         if( data === "editable" ){
+          this.set_isNewNote(false);
           self.UPDATE_EDIT(self.note_id);
           self.$router.push('/noteEdit/'+ self.note_id);
         }
@@ -323,14 +323,14 @@ export default {
     outline: 0;
     margin-left: 10px;
     transition: all 200ms ease-in 0s;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
 }
 .edit-btn:hover{
     background-color: #e1424c !important;
 }
 .share-btn{
-    background-color: #e5e5e5 !important;
-    border: 1px solid black;
-    border-color: #F0F0F0 !important;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
+    background-color: #e2e2e2;
     color: black !important;
     border-radius: 0.2rem;
     outline: 0;
@@ -338,7 +338,7 @@ export default {
     display: block !important;
 }
 .share-btn:hover{
-    background-color: #dddddd !important;
+    background-color: #d3d3d3 !important;
 }
 .share-pelple-btn{
     background-color: #F0F0F0 !important;

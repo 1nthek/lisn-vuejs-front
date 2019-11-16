@@ -61,7 +61,7 @@ export default {
     summary: String,
     color: Number,
     num_of_share: Number,
-    is_shared: String,
+    is_shared: Boolean,
     updated_at: String,
     created_at: String,
     iconClasses: [String, Array]

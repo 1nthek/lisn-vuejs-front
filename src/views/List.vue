@@ -344,13 +344,19 @@ a {
     display: flex;
     justify-content: space-between;
 }
-
 .create-btn{
     background-color: #f1404b !important;
     border-color: #f1404b !important;
     color: #fff !important;
     border-radius: 0.2rem;
     outline: 0;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
+}
+.create-btn-cont{
+  font-size: 16px;
+  margin: 8px 14px;
+  font-weight: bold;
+  width: 74px;
 }
 .lisn-navbar{
     position: fixed;

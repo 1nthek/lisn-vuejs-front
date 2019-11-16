@@ -3,8 +3,8 @@
         <div style="margin-bottom:30px;width: 100%;background: white;">
             <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;height: 40px;">
             <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">내 노트</div>
-            <button class="create-btn" @click.prevent="create_note()" style="outline: 0">
-                <div class="ns-kr" style="font-size: 16px;margin: 8px 20px;font-weight: bold">
+            <button class="create-btn" @click.prevent="create_note()">
+                <div class="ns-kr create-btn-cont">
                 + 새 노트
                 </div>
             </button>
@@ -67,6 +67,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'set_isNewNote',
+    ]),
     ...mapActions([
       'FETCH_LISTS',
       'CREATE_NOTE',
@@ -76,9 +79,10 @@ export default {
       this.isLoading = false
     },
     create_note(){
-      this.CREATE_NOTE();
-      this.$amplitude.setUserId(this.user_id);
-      this.$amplitude.logEvent('Create_Note');
+      this.set_isNewNote(true)
+      this.CREATE_NOTE()
+      this.$amplitude.setUserId(this.user_id)
+      this.$amplitude.logEvent('Create_Note')
     }
   }
 }
