@@ -61,8 +61,14 @@
                   </div>
                 </div>
                 <div v-if="showColors" style="background: rgba(0, 0, 0, 0.6);position: fixed;z-index: 1060;top: 0;right: 0;bottom: 0;left: 0;cursor: default; transition: all 100ms ease-in 0s;" @click.prevent="showColors = false"></div>
-                <div class="folder-color-cont">
-                  <div v-if="!showColors" @click.prevent="showColors = true" class="folder-color"></div>
+                <div class="folder-color-cont" v-if="!showColors" @click.prevent="showColors = true">
+                    <div v-if="directory_color==0" class="folder-color color-0"></div>
+                    <div v-if="directory_color==1" class="folder-color color-1"></div>
+                    <div v-if="directory_color==2" class="folder-color color-2"></div>
+                    <div v-if="directory_color==3" class="folder-color color-3"></div>
+                    <div v-if="directory_color==4" class="folder-color color-4"></div>
+                    <div v-if="directory_color==5" class="folder-color color-5"></div>
+                    <div v-if="directory_color==6" class="folder-color color-6"></div>
                 </div>
                 <div v-if="!showColors" class="nav-link-text" style="margin-left: 4px;" @click.self="menu_clicked()" >{{ link.name }}</div>            
               </div>
@@ -128,6 +134,10 @@ export default {
       type: String,
       default: "null",
     },
+    directory_color:{
+      type: Number,
+      default: -1,
+    },
   },
   provide() {
     return {
@@ -176,15 +186,32 @@ export default {
       'UPDATE_DIRECTORY',
       'DESTROY_DIRECTORY',
       'UPDATE_DIRECTORY_COLOR',
+      'FETCH_DIRECTORIES',
+      'FETCH_LISTS',
+      'FETCH_SHARED_LISTS',
+      'FETCH_DIRECTORY_LISTS',
     ]),
     menu_clicked(){
       let docClasses = document.body.classList
       docClasses.remove('g-sidenav-open');
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
     },
-    changeColor(color){
-      const directory_id = this.directory_id;
-      this.UPDATE_DIRECTORY_COLOR({directory_id, color});
+    async changeColor(color){
+      const directory_id = this.directory_id
+      await this.UPDATE_DIRECTORY_COLOR({directory_id, color})
+      await this.FETCH_DIRECTORIES()
+      if(this.$route.name == "allNotes"){
+        await this.FETCH_LISTS();
+      }
+      // else if(this.$route.name == "sharedNotes"){
+      //   this.FETCH_SHARED_LISTS();
+      // }
+      else if(this.$route.name == "directory"){
+        console.log(this.$route.name);
+        const directory_id = this.$route.params.fid
+        const directory_name = this.$route.params.name
+        await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
+      }
     },
     addFolder(){
       this.CREATE_DIRECTORY();
@@ -270,7 +297,7 @@ export default {
 <style>
 .folder-color-cont{
   width: 16px;
-  height: 14px;
+  height: 32px;
   margin-right: 6px;
   display: flex;
   align-items: center;
@@ -279,7 +306,6 @@ export default {
 .folder-color{
   width: 12px;
   height: 12px;
-  background: red;
   border-radius: 100%;
   margin-top: 2px;
   cursor: pointer;

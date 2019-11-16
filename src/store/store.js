@@ -439,8 +439,6 @@ export const store = new Vuex.Store({
   actions: {
     FETCH_LISTS({ state, commit }) {
       return api.list.fetch(state.user_id).then(data => {
-        console.log(data.notes);
-        
         commit('SET_DIRECTORY_ID', null);
         commit('SET_LISTS', data.notes);
         commit('SET_DIRECTORY_NAME', "모든 노트")

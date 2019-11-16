@@ -18,6 +18,7 @@
             <stats-card :title="p.title"
                         :note_id="p.note_id"
                         :summary="p.summary"
+                        :color="p.color"
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
                         id="noteList"
@@ -56,19 +57,19 @@ export default {
     
   },
   created() {
-    let self = this;
-    if(!self.user_id || !self.token){
+    if(!this.user_id || !this.token){
       delete localStorage.user_id;
       delete localStorage.token;
-      self.$router.replace('/');
+      this.$router.replace('/');
     }
     else{
-      setTokenInHeader(self.token);
+      setTokenInHeader(this.token);
       this.fetch();
     }
   },
   watch: {
     $route(to) {
+      this.isLoading = true;
       this.fetch();
     }
   },

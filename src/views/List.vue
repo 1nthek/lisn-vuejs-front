@@ -9,7 +9,7 @@
           <sidebar-item :link="{name: '폴더', icon: 'ni ni-folder-17'}" :menu='true'>
             <template>
               <div v-for="dir in directories" :key="dir.directory_id">
-                <sidebar-item :link="{ name: dir.name, path: '/folder/'+ dir.directory_id + '/' + dir.name }" :directory_id="dir.directory_id" :directory_name="dir.name"/>
+                <sidebar-item :link="{ name: dir.name, path: '/folder/'+ dir.directory_id + '/' + dir.name }" :directory_id="dir.directory_id" :directory_name="dir.name" :directory_color="dir.color"/>
               </div>
             </template>
           </sidebar-item>
@@ -75,6 +75,85 @@ export default {
 </script>
 
 <style>
+@media ( max-width: 1599.98px ) {
+  .card-list-title, .card-list-summary{
+    width: 220px !important;
+  }
+}
+@media ( max-width: 1199.98px ) {
+  .card-list-title, .card-list-summary{
+    width: 240px !important;
+  }
+}
+@media (max-width: 991.98px){
+  .card-list-title, .card-list-summary{
+      width: 20vw !important;
+  }
+}
+@media ( max-width: 767px ) {
+  .card-list-title, .card-list-summary{
+    width: 40vw !important;
+  }
+}
+.card-list-summary{
+  font-weight: bold;
+  width: 450px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: #617386;
+  height: 32px;
+  margin-top: 2px;
+}
+.card-list-title{
+  font-weight: bold;
+  width: 410px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+}
+.lisn-flag{
+  border-radius: 2px;
+  background-color: transparent !important; 
+  padding: 0px; 
+  margin-top: -15px;
+  margin-right: 12px;
+  height: 44px;
+  width: 0px;
+  border-width: 0px 8px 8px;
+  border-style: solid;
+  transition: all 300ms ease-in 0.3s;
+}
+.color-9{
+  border-color: #aaaaaa #aaaaaa transparent;
+  background-color: #aaaaaa;
+}
+.color-0{
+  border-color: #FF0033 #FF0033 transparent;
+  background-color: #FF0033;
+}
+.color-1{
+  border-color: #FF7700 #FF7700 transparent;
+  background-color: #FF7700 ;
+}
+.color-2{
+  border-color: #F0CA36 #F0CA36 transparent;
+  background-color: #F0CA36;
+}
+.color-3{
+  border-color: #AADD22 #AADD22 transparent;
+  background-color: #AADD22;
+}
+.color-4{
+  border-color: #0088FF #0088FF transparent;
+  background-color: #0088FF;
+}
+.color-5{
+  border-color: #9911AA #9911AA transparent;
+  background-color: #9911AA;
+}
 @media (min-width: 992px) { 
   .notes-container{
     padding-right: 2rem !important;

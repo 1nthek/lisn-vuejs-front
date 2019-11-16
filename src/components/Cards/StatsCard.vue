@@ -6,13 +6,13 @@
           <div class="col ns-kr">
             <slot>
               <div style="display:flex">
-                <div v-if="color==-1" class="lisn-flag color-0" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==0" class="lisn-flag color-1" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==1" class="lisn-flag color-2" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==2" class="lisn-flag color-3" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==3" class="lisn-flag color-4" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==4" class="lisn-flag color-5" @click.stop="moveDirectory(note_id)"></div>
-                <div v-if="color==5" class="lisn-flag color-6" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==-1" class="lisn-flag color-9" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==0" class="lisn-flag color-0" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==1" class="lisn-flag color-1" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==2" class="lisn-flag color-2" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==3" class="lisn-flag color-3" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==4" class="lisn-flag color-4" @click.stop="moveDirectory(note_id)"></div>
+                <div v-if="color==5" class="lisn-flag color-5" @click.stop="moveDirectory(note_id)"></div>
                 <div class="card-list-title" v-if="title">{{title}}</div>
               </div>
               <div class="card-list-summary" v-html="summary"></div>
@@ -80,7 +80,8 @@ export default {
   methods: {
     ...mapActions([
       'DESTROY_NOTE',
-      'MOVE_DIRECTORY'
+      'MOVE_DIRECTORY',
+      'FETCH_LISTS',
     ]),
     moveDirectory(note_id){
       var directory = {};
@@ -100,13 +101,26 @@ export default {
         cancelButtonText: '취소',
         buttonsStyling: false,
         inputValidator: (value) => {
-          return new Promise((resolve) => {
+          return new Promise(async(resolve) => {
             if (value === '') {
               resolve('폴더를 선택해야 합니다')
             } else {
-              const directory_id = value;
-              this.MOVE_DIRECTORY({note_id, directory_id});
-              resolve();
+              const directory_id = value
+              await this.MOVE_DIRECTORY({note_id, directory_id})
+
+              if(this.$route.name == "allNotes"){
+                await this.FETCH_LISTS();
+              }
+              // else if(this.$route.name == "sharedNotes"){
+              //   this.FETCH_SHARED_LISTS();
+              // }
+              else if(this.$route.name == "directory"){
+                console.log(this.$route.name);
+                const directory_id = this.$route.params.fid
+                const directory_name = this.$route.params.name
+                await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
+              }
+              resolve()
             }
           })
         }
@@ -136,77 +150,6 @@ export default {
 }
 </script>
 <style scoped>
-.lisn-flag{
-  border-radius: 2px;
-  background-color: transparent; 
-  padding: 0px; 
-  margin-top: -15px;
-  margin-right: 12px;
-  height: 44px;
-  width: 0px;
-  border-width: 0px 8px 8px;
-  border-style: solid;
-}
-.color-0{
-  border-color: #aaaaaa #aaaaaa transparent;
-}
-.color-1{
-  border-color: #FF0033 #FF0033 transparent;
-}
-.color-2{
-  border-color: #FF7700 #FF7700 transparent;
-}
-.color-3{
-  border-color: #F0CA36 #F0CA36 transparent;
-}
-.color-4{
-  border-color: #AADD22 #AADD22 transparent;
-}
-.color-5{
-  border-color: #0088FF #0088FF transparent;
-}
-.color-6{
-  border-color: #9911AA #9911AA transparent;
-}
-.card-list-summary{
-  font-weight: bold;
-  width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  color: #617386;
-  height: 32px;
-  margin-top: 2px;
-}
-.card-list-title{
-  font-weight: bold;
-  width: 410px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0px;
-}
-@media ( max-width: 1599.98px ) {
-  .card-list-title, .card-list-summary{
-    width: 220px;
-  }
-}
-@media ( max-width: 1199.98px ) {
-  .card-list-title, .card-list-summary{
-    width: 240px;
-  }
-}
-@media (max-width: 991.98px){
-  .card-list-title, .card-list-summary{
-      width: 20vw;
-  }
-}
-@media ( max-width: 767px ) {
-  .card-list-title, .card-list-summary{
-    width: 40vw;
-  }
-}
 .summary{
   font-weight:600;
   font-size: 14px;
