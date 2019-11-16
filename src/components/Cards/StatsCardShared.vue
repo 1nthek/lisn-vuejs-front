@@ -27,13 +27,8 @@
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
         <div class="ns-kr cont3">
-          <div id="trash" @click.stop="unshareNote(note_id, title)" style="display: flex;cursor: pointer;width: max-content;">
-            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
-              <i class="fas fa-trash"></i>
-            </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">
-              공유 해제
-            </div>
+          <div id="trash" @click.stop="unshareNote(note_id, title)" class="card-icon-cont">
+            <i class="fas fa-trash"></i>
           </div>
         </div>
       </div>
@@ -95,60 +90,4 @@ export default {
 }
 </script>
 <style scoped>
-.card-summary{
-  font-weight: bold;
-  width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  color: #617386;
-  height: 32px;
-}
-.card-title{
-  font-weight: bold;
-  width: 450px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0px;
-}
-@media ( max-width: 1599.98px ) {
-  .card-title, .card-summary{
-    width: 280px;
-  }
-}
-@media ( max-width: 1199.98px ) {
-  .card-title, .card-summary{
-    width: 280px;
-  }
-}
-@media (max-width: 991.98px){
-    .card-title, .card-summary{
-      width: 24vw;
-  }
-}
-@media ( max-width: 767px ) {
-  .card-title, .card-summary{
-    width: 46vw;
-  }
-}
-.summary{
-  font-weight:600;
-  font-size: 14px;
-  height: 17px;
-  color: #617386;
-}
-#folder-move, #trash{
-  transition: all 200ms ease-in 0s;
-}
-#folder-move:hover, #trash:hover{
-  color: black;
-}
-.card-stats .card-body {
-    padding: 14px 20px !important; 
-}
-.swal2-content select {
-    border-style: solid !important;
-}
 </style>

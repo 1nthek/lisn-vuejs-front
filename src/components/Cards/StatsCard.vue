@@ -26,22 +26,12 @@
         </div>
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
-        <div class="ns-kr cont3">
-          <div id="trash" @click.stop="deleteNote(note_id, title)" style="display: flex;cursor: pointer;width: max-content;">
-            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 17px;">
-              <i class="fas fa-trash"></i>
-            </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">
-              노트 삭제
-            </div>
-          </div>
-          <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;width: max-content;">
-            <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 18px;">
+        <div class="ns-kr cont3" style="display: flex;">
+          <div id="folder-move" @click.stop="moveDirectory(note_id)" class="card-icon-cont">
               <i class="fas fa-folder"></i>
-            </div>
-            <div style="font-weight: bold;font-size: 15px;margin-left: 8px">            
-              폴더 이동
-            </div>
+          </div>
+          <div id="trash" @click.stop="deleteNote(note_id, title)" class="card-icon-cont" style="margin-left: 4px;">
+              <i class="fas fa-trash"></i>
           </div>
         </div>
       </div>
@@ -151,32 +141,4 @@ export default {
 }
 </script>
 <style scoped>
-.lisn-badge{
-    background-color: #e4e4e4;
-    color: #000;
-    font-weight: bold;
-    font-size: 13px;
-    padding: 1px 8px;
-    border-radius: 6px;
-    margin-left: 12px;
-}
-.summary{
-  font-weight:600;
-  font-size: 14px;
-  height: 17px;
-  color: #617386;
-}
-#folder-move, #trash{
-  transition: all 200ms ease-in 0s;
-}
-#folder-move:hover, #trash:hover{
-  /* transform: translateX(2px); */
-  color: black;
-}
-.card-stats .card-body {
-    padding: 14px 20px !important; 
-}
-.swal2-content select {
-    border-style: solid !important;
-}
 </style>

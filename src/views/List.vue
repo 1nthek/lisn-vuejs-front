@@ -75,6 +75,54 @@ export default {
 </script>
 
 <style>
+#folder-move, #trash{
+  transition: all 100ms ease-in 0s !important;
+}
+#noteList:hover #folder-move{
+  background-color: #d0da96;
+}
+#noteList:hover #trash{
+  background-color: #ff8989;
+}
+#folder-move:hover{
+  background-color: #c1ca8b !important;
+}
+#trash:hover{
+  background-color: #ec7e7e !important;
+}
+
+.card-stats .card-body {
+    padding: 14px 20px !important; 
+}
+.swal2-content select {
+    border-style: solid !important;
+}
+#noteList:hover .card-icon-cont{
+  background: white;
+  color: #000;
+  transition: all 300ms ease-in 0s;
+}
+.card-icon-cont{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  border-radius: 100%;
+  background: #efefef;
+  height: 32px;
+  width: 32px;
+  transition: all 300ms ease-in 0s;
+}
+.lisn-badge{
+    background-color: #e4e4e4;
+    color: #000;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 1px 8px;
+    border-radius: 6px;
+    margin-left: 12px;
+}
 @media ( max-width: 1599.98px ) {
   .card-list-title, .card-list-summary{
     width: 220px !important;
@@ -244,6 +292,7 @@ div{
 a {
     text-decoration: none !important;
 }
+
 #noteList:hover{
     background: navajowhite;
     background: #efefef;
@@ -255,7 +304,7 @@ a {
     background: #fafafa;
     color: black;
     font-size: 22px;
-    transition: all 300ms ease-in-out 0s;
+    transition: all 300ms ease-in 0s;
     box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 2px 4px;
     border-radius: 3px;
     background: white;
