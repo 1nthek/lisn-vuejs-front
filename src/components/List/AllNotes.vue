@@ -21,6 +21,7 @@
                         :updated_at="p.updated_at"
                         :created_at="p.created_at"
                         :color="p.color"
+                        :is_shared="p.is_shared"
                         id="noteList"
                         v-on:openNote="openNote()">
             </stats-card>
@@ -71,7 +72,7 @@ export default {
     ]),
     async fetch(){
       await this.FETCH_LISTS()
-      this.isLoading = false;
+      this.isLoading = false
     },
     create_note(){
       this.CREATE_NOTE();

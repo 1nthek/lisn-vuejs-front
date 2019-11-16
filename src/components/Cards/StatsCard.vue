@@ -20,9 +20,9 @@
           </div>
         </div>
 
-        <div class="note-date ns-kr" style="font-weight: bold;color:#666666;font-size: 13px;display: flex;">
-            <!-- <div class="text-nowrap mr-5"> {{ updated_at }} </div> -->
+        <div class="note-date ns-kr" style="font-weight: bold;color:#666666;font-size: 13px;display: flex;display: flex;align-items: center;">
             <div class="text-nowrap" v-html="created_at"></div>
+            <div v-if="is_shared" class="lisn-badge ns-kr"><i class="fas fa-share"></i>&nbsp;공유</div>
         </div>
       </div>
       <div style="display: flex;align-items: center;margin-right: 10px;color:darkgray">
@@ -37,7 +37,7 @@
           </div>
           <div id="folder-move" @click.stop="moveDirectory(note_id)" style="display: flex;cursor: pointer;margin-top: 8px;width: max-content;">
             <div style="display: flex;align-items: center;justify-content: center;width:30px;font-size: 18px;">
-              <i class="fas fa-sign-in-alt"></i>
+              <i class="fas fa-folder"></i>
             </div>
             <div style="font-weight: bold;font-size: 15px;margin-left: 8px">            
               폴더 이동
@@ -73,6 +73,7 @@ export default {
     title: String,
     summary: String,
     color: Number,
+    is_shared: String,
     updated_at: String,
     created_at: String,
     iconClasses: [String, Array]
@@ -150,6 +151,15 @@ export default {
 }
 </script>
 <style scoped>
+.lisn-badge{
+    background-color: #e4e4e4;
+    color: #000;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 1px 8px;
+    border-radius: 6px;
+    margin-left: 12px;
+}
 .summary{
   font-weight:600;
   font-size: 14px;

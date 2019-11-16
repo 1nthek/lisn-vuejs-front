@@ -441,7 +441,7 @@ export const store = new Vuex.Store({
       return api.list.fetch(state.user_id).then(data => {
         commit('SET_DIRECTORY_ID', null);
         commit('SET_LISTS', data.notes);
-        commit('SET_DIRECTORY_NAME', "모든 노트")
+        commit('SET_DIRECTORY_NAME', "내 노트")
       })
     },
     FETCH_SHARED_LISTS({ state, commit }) {
