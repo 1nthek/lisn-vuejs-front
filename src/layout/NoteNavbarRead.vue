@@ -335,6 +335,7 @@ export default {
     border-radius: 0.2rem;
     outline: 0;
     transition: all 200ms ease-in 0s;
+    display: block !important;
 }
 .share-btn:hover{
     background-color: #dddddd !important;
