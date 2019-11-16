@@ -110,8 +110,8 @@ export const store = new Vuex.Store({
         new Focus(),
         new Placeholder({
           emptyNodeClass: 'is-empty',
-          emptyNodeText: '상단의 녹음 버튼을 누르면, 주변 음성이 텍스트로 변환됩니다.\n음식 인식 중에 이곳에 노트를 작성할 수 있습니다.',
-          showOnlyWhenEditable: false,
+          emptyNodeText: 'lisn이 처음이신가요??\n\n상단의 녹음 버튼을 누르면, 주변 음성이 텍스트로 변환됩니다.\n음성 인식 중에 이곳에 노트를 작성할 수 있습니다.\n\n녹음 완료 후, 상단의 녹음 중지 버튼을 누르면 녹음 파일이 업로드 됩니다.\n변환된 텍스트를 클릭하면, 해당 부분부터 음성이 재생됩니다!!\n\n업로드를 마친 후, "작성완료" 버튼을 누르면 노트 페이지로 이동합니다.\n\ntip)지인에게 노트를 공유하여 녹음 파일을 함께 듣고, 노트를 작성할 수 있습니다.',
+          showOnlyWhenEditable: true,
         }),
       ],
       content: "",

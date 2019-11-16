@@ -163,6 +163,14 @@ export default {
 </script>
 
 <style>
+p.is-empty:first-child:before {
+    content: attr(data-empty-text);
+    float: left;
+    color: #aaa;
+    pointer-events: none;
+    height: 0;
+    font-style: italic;
+}
 code {
   font-size: 95%;
   color: #2781dd;
