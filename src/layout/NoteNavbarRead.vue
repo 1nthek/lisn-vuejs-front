@@ -1,7 +1,7 @@
 <template>
   <div class="noteNavbar-container">
-    <div v-on:click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
-      <i class="fas fa-chevron-left"></i>&nbsp;돌아가기
+    <div v-on:click="$router.push('/allNotes')" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+      <i class="fas fa-chevron-left"></i>&nbsp;노트 리스트
     </div>
 
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
