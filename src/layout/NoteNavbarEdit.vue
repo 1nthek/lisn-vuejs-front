@@ -1,6 +1,6 @@
 <template>
   <div class="noteNavbar-container">
-      <div v-on:click="$router.push('/allNotes')" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+      <div @click="gotoLish()" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
         <i class="fas fa-chevron-left"></i>&nbsp;노트 리스트
       </div>
 
@@ -32,20 +32,18 @@ export default {
     ]),
   },
   methods: {
-    finishWriting(){
+    gotoLish(){
       if(this.isNewNote){
-        // this.$router.go(-1);
-        
+        this.$router.go(-1);
       }
       else{
         if(window.history.length <= 3){
-          this.$router.push('/note/'+{note_id})
+          // this.$router.push('/note/' + this.note_id)
         }
         else{
-          this.$router.go(-1);
+          this.$router.go(-2)
         }
       }
-      
     },
     isRecording(para){
       this.$emit('isRecording', para);

@@ -14,16 +14,18 @@
             <template v-for="(item, index) in this.$store.state.sttText">
               <div :key="index" style="padding: 0.5rem 0; margin:5px" >
                   <div class="single-stt-cont" style="display:flex;">
-                    <div v-show="!isMinimized" style="font-size: 26px;" class="stt-icon">
+                    <div v-show="!isMinimized" style="font-size: 23px;" class="stt-icon">
                       <i class="fas fa-user-circle"></i>
                     </div>
                     <div>
-                      <div style="margin: 8px 0 2px 10px;">
+                      <div style="margin: 8px 0 2px 10px;display:flex">
                         {{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.begin/1000)/3600)%60 }}{{ parseInt(parseInt(item.begin/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.begin/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.begin/1000)/60)%60 }}:{{ parseInt(item.begin/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.begin/1000)%60 }}
                         ~&nbsp;{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.end/1000)/3600)%60 }}{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.end/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.end/1000)/60)%60 }}:{{ parseInt(item.end/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.end/1000)%60 }}
+                      </div>
+                      <div v-show="!isMinimized">
+                        <div class="stt-content" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`">
+                          {{item.content}}
                         </div>
-                      <div v-show="!isMinimized" class="stt-content" style="padding: 6px 6px;border-radius: 5px;transition: all 0.3s linear;width: fit-content;cursor:pointer" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`">
-                        {{item.content}}
                       </div>
                     </div>
                   </div>
@@ -44,6 +46,7 @@ export default {
     return{
       audioId: -1,
       isMinimized: true,
+      isEditingSTT: false,
     }
   },
   computed:{
@@ -98,10 +101,16 @@ export default {
 .show.stt-container{
   flex: 1 !important;
 }
-
 span{
     font-weight: 400;
     width: fit-content;
+}
+.stt-content{
+  padding: 6px 7px;
+  border-radius: 5px;
+  transition: all 0.3s ease-in;
+  width: fit-content;
+  cursor:pointer;
 }
 .stt-content:hover {
     background-color: #4089FF !important;

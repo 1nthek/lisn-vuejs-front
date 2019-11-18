@@ -2,7 +2,7 @@
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
       <div class="lisn-workspace-container workspace-width">
-          <s-t-t ref="stt"></s-t-t>
+          <STTRead ref="stt"></STTRead>
           <div class="divider"></div>
           <div class="note-container">
             <template v-if="isLoading">
@@ -21,12 +21,12 @@
 
 <script>
 import NoteRead from './NoteRead.vue'
-import STT from './STT.vue'
+import STTRead from './STTRead.vue'
 
 export default {
   components: {
     NoteRead,
-    STT,
+    STTRead,
   },
   props: {
     isLoading: Boolean,
