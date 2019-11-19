@@ -179,7 +179,7 @@ export default {
     setTimeout(() => {
       this.loadingPlayer = false
     },500)
-    recognition.lang = ko-KR;  
+    recognition.lang = 'ko-KR';  
   },
   computed: {
     ...mapState([
