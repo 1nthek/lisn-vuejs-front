@@ -4,34 +4,27 @@
       <div class="btn-container">
         <template v-if="isRecordable">
           <div class="btn-record">
-            <template v-if="isRecording">
-              <div class="cont-mic blinkRed" @click="recBtnPressed()">
-                <i class="fas fa-square" style="font-size: 14px;"></i>
-              </div>
-            </template>
-            <template v-else>
-              <div class="cont-mic" @click="recBtnPressed()">
-                <i class="fas fa-microphone" style="font-size:18px"></i>
-              </div>
-            </template>
+            <div class="cont-mic-read" @click="recBtnPressed()">
+              <i class="fas fa-microphone" style="font-size:18px"></i>
+            </div>
           </div>
         </template>
         <template v-if="!isRecordable">
           <div class="btn-play">
             <template v-if="isPlaying">
-              <div class="cont-mic" style="background:#606060" @click.prevent="pauseSoundClicked()">
+              <div class="cont-mic-read" style="background:#606060" @click.prevent="pauseSoundClicked()">
                 <i class="fas fa-pause" style="font-size: 17px;padding-top: 1px;"></i>        
               </div>
             </template>
             <template v-else>
-              <div class="cont-mic" style="background:#606060" @click.prevent="playSoundClicked()">
+              <div class="cont-mic-read" style="background:#606060" @click.prevent="playSoundClicked()">
                 <i class="fas fa-play" style="font-size: 17px;padding-left: 3px;padding-top: 1px;"></i>
               </div>
             </template>
           </div>
         </template>
       </div>
-      <div class="time">
+      <div class="time" style="margin-right: 20px;">
         {{hour}}:{{minute}}:{{second}}
       </div>
       <div class="soundVol">
@@ -142,30 +135,23 @@ export default {
 }
 </script>
 <style>
-.blinkRed {
-    animation: blinkRed 1s ease infinite;
-    animation-direction: alternate;
-} 
-@keyframes blinkRed {
-    from { background-color: #f03;}
-    to {background-color: white;} 
-}
 
-.cont-mic{
-  color:white;display: block;
+.cont-mic-read{
+  color:white;
+  display: block;
   padding: 0;
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #f03;
+  background-color: #bdbdbd;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0 2px 4px 0 rgba(0,0,0,.2); */
   transition: all 300ms ease 0s;
+  cursor: default;
 }
-.cont-mic:hover{
-  background-color: rgb(224, 0, 45);
+.cont-mic-read:hover{
+  background-color: #bdbdbd;
 }
 .btn-container{
   display: flex;
