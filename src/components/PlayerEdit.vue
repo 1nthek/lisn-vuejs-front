@@ -55,10 +55,6 @@
 import axios from 'axios'
 import Swal from 'sweetalert2';
 import { mapState, mapActions, mapMutations } from 'vuex'
-import VueAmplitude from 'vue-amplitude'
-import Vue from 'vue'
-
-Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
 
 try{
   var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
@@ -307,7 +303,6 @@ export default {
               self.update_sentence_text(event_object_list);
             }
         };
-        
     },
     recBtnPressed(){
       if(this.isRecording){
@@ -323,15 +318,21 @@ export default {
         localstream.getTracks().forEach((track) => {
           track.stop();
         });
+        this.$amplitude.setUserId(this.user_id);
+        this.$amplitude.logEvent('stopRecording');
       }
       else{
         let self = this;
         navigator.getUserMedia({ audio: true, video: false },
             function(stream) {
-              localstream = stream;
-              self.startRecording(stream);
+              localstream = stream
+              self.startRecording(stream)
+              self.$amplitude.setUserId(this.user_id)
+              self.$amplitude.logEvent('startRecording')
             },
             function(ex) {
+              this.$amplitude.setUserId(this.user_id);
+              this.$amplitude.logEvent('err_no_mic');
               Swal.fire({
                 toast: true,
                 position: 'center',
@@ -343,14 +344,17 @@ export default {
             }
         );
       }
-      this.$amplitude.setUserId(this.user_id);
-      this.$amplitude.logEvent('recBtnPressed');
+
     },  
     playSoundClicked() {
       this.playSound();
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('playSound');
     },
     pauseSoundClicked() {
       this.pauseSound();
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('pauseSound');
     },
     printTime() {
       var curTime = this.audio.currentTime;

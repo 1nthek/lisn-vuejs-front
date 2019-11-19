@@ -1,6 +1,6 @@
 <template>
-  <card class="card-stats" :show-footer-line="true" :note_id="note_id">
-    <div style="display:flex;flex-basis: auto;">
+  <card2 class="card-stats" :show-footer-line="true" :note_id="note_id" :isTrash='true'>
+    <div style="display:flex;flex-basis: auto;" >
       <div style="flex: auto;">
         <div class="row">
           <div class="col ns-kr">
@@ -16,17 +16,17 @@
       <div class="text-nowrap" v-html="created_at"></div>
     </div>
     </div>
-  </card>
+  </card2>
 </template>
 <script>
-import Card from './Card.vue';
+import Card2 from './Card2.vue';
 import Swal from 'sweetalert2';
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'trash-card',
   components: {
-    Card
+    Card2
   },
   computed: {
     ...mapState([

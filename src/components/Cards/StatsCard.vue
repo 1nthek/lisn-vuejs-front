@@ -116,6 +116,8 @@ export default {
           })
         }
       })
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('moveFolder');
     },
     deleteNote(note_id) {
       const directory_id = this.$route.params.fid
@@ -140,6 +142,8 @@ export default {
       //     this.DESTROY_NOTE({note_id, title});
       //   }
       // });
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('sendNoteToTrash');
     },
   }
 }

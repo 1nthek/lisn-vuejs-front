@@ -205,11 +205,17 @@ export default {
         const directory_name = this.$route.params.name
         await this.FETCH_DIRECTORY_LISTS({directory_id, directory_name})
       }
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('changeFolderColor');
     },
     addFolder(){
       this.CREATE_DIRECTORY();
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('addFolder');
     },
     deleteFolder(){
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('deleteFolder');
       Swal.fire({
         title: '폴더 삭제',
         text: '포함된 노트는 삭제 되지 않습니다.',
@@ -252,6 +258,8 @@ export default {
           }
         }
       })
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('renameFolder');
     },
     addChild(item) {
       const index = this.$slots.default.indexOf(item.$vnode);

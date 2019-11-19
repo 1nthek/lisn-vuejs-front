@@ -35,9 +35,6 @@
 import StatsCard from '../Cards/StatsCard'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { setTokenInHeader } from '../../api/api.js'
-import VueAmplitude from 'vue-amplitude'
-import Vue from 'vue'
-Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
 export default {
   components: {
     StatsCard,
@@ -65,6 +62,8 @@ export default {
       setTokenInHeader(this.token);
       this.set_curDirectory('allNotes')
       this.fetch();
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('allNotesList');
     }
   },
   methods: {

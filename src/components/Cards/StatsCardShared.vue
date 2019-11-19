@@ -86,6 +86,8 @@ export default {
           this.UNSHARE_NOTE(note_id);
         }
       });
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('unshareNote');
     },
   }
 }
