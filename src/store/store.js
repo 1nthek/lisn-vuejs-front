@@ -437,9 +437,11 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
-    FETCH_SENTENCE({ state, commit }, { sentence_id, content }){
-      const objIndex = state.sttText.findIndex((obj => obj.id == sentence_id))
-      state.sttText[objIndex].content = content
+    FETCH_SENTENCE({ state, commit }, sentence_id){
+      return api.sentence.fetch(sentence_id).then(data => {
+        const objIndex = state.sttText.findIndex((obj => obj.id == sentence_id))
+        state.sttText[objIndex].content = data.content
+      })
     },
     UPDATE_SENTENCE({ }, { sentence_id, content}){
       var formData = new FormData()

@@ -78,7 +78,7 @@
                   </div>
                   <div class="dropdown-divider"></div>
                   <div style="display: flex;cursor: default;padding: 0rem 1rem;font-size: 12px;color: #bababa;font-weight: normal;">
-                    <span class="ns-kr">LISN 웹 v0.4.2</span>
+                    <span class="ns-kr">LISN 웹 v0.5.1</span>
                   </div>
               </ul>
           </div>

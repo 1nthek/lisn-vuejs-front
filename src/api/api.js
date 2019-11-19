@@ -31,6 +31,9 @@ export const setTokenInHeader = token => {
 }
 
 export const sentence = {
+  fetch(sentence_id) {
+    return request('get', `/note/sentence?sentence_id=${sentence_id}`)
+  },
   update(formData) {
     return request('put', `/note/sentence`, formData);
   },

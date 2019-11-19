@@ -84,7 +84,7 @@ export default {
         const sentence_id = item.id
         const content = ele.innerHTML
         await this.UPDATE_SENTENCE({sentence_id, content})
-        await this.FETCH_SENTENCE({sentence_id, content})
+        await this.FETCH_SENTENCE(sentence_id)
         document.getElementById('editSTT').remove()
         document.body.removeChild(ele2)
       };
