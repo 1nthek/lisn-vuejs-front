@@ -1,57 +1,112 @@
 <template>
   <div class="player-container" >
-    <div class="player">
-      <div class="btn-container">
+    <div class="player-edit">
+      <template v-if="!loadingPlayer">
+        <div class="btn-container">
+          <template v-if="isRecordable">
+            <div class="btn-record">
+              <template v-if="isRecording">
+                <div class="cont-mic blinkRed" @click="recBtnPressed()">
+                  <i class="fas fa-square" style="font-size: 14px;"></i>
+                </div>
+              </template>
+              <template v-else>
+                <div class="cont-mic" @click="recBtnPressed()">
+                  <i class="fas fa-microphone" style="font-size:18px"></i>
+                </div>
+                <!-- <i class="far fa-dot-circle" @click="recBtnPressed()"></i> -->
+              </template>
+            </div>
+          </template>
+          <template v-if="!isRecordable">
+            <div class="btn-play">
+              <template v-if="isPlaying">
+                <div class="cont-mic" style="background:#606060" @click.prevent="pauseSoundClicked()">
+                  <i class="fas fa-pause" style="font-size: 17px;padding-top: 1px;"></i>        
+                </div>
+              </template>
+              <template v-else>
+                <div class="cont-mic" style="background:#606060" @click.prevent="playSoundClicked()">
+                  <i class="fas fa-play" style="font-size: 17px;padding-left: 3px;padding-top: 1px;"></i>
+                </div>
+              </template>
+            </div>
+          </template>
+        </div>
         <template v-if="isRecordable">
-          <div class="btn-record">
-            <template v-if="isRecording">
-              <div class="cont-mic blinkRed" @click="recBtnPressed()">
-                <i class="fas fa-square" style="font-size: 14px;"></i>
-              </div>
-            </template>
-            <template v-else>
-              <div class="cont-mic" @click="recBtnPressed()">
-                <i class="fas fa-microphone" style="font-size:18px"></i>
-              </div>
-              <!-- <i class="far fa-dot-circle" @click="recBtnPressed()"></i> -->
-            </template>
+          <div class="time" style="margin-right: -20px;">
+            {{hour}}:{{minute}}:{{second}}
+          </div>
+          <div v-if="!isRecording" style="background-color: #ececec;color: #383838;font-weight: bold;font-size: 13px;border-radius: 6px;cursor: pointer;">
+              <base-nav style="display: flex;align-items: center;padding: 0;">
+                <li class="nav-item dropdown">
+                  <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div style="width: 58px;display: flex;align-items: center;justify-content: center;; position: relative; flex-direction: row-reverse; transform: translateZ(0px);padding: 1px 8px">{{sttLangTxt}}</div>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right dropdown-default" style="padding: 0" id="dropdown-menu-stt">
+                      <ul class="dropdown-menu show dropdown-menu-right" style="min-width: 100px;cursor: default;" >
+                          <div class="dropdown-header noti-title dropdown-title ns-kr" style="color:black;cursor: default;text-transform: none;">
+                            <div>
+                              <div style="font-weight: bold;font-size: 16px;">
+                                음성 인식 언어
+                              </div>
+                            </div>
+                          </div>
+                          <div class="dropdown-divider"></div>
+                          <div @click="changeSttLang('ko-KR', '한국어')" class="dropdown-item" style="display: flex;font-size: 14px;">
+                            <span class="ns-kr navbar-txt">한국어</span>
+                          </div>
+                          <div @click="changeSttLang('en-US', '영어')" class="dropdown-item" style="display: flex;font-size: 14px;">
+                            <span class="ns-kr navbar-txt">영어</span>
+                          </div>
+                          <div @click="changeSttLang('ja-JP', '일본어')" class="dropdown-item" style="display: flex;font-size: 14px;">
+                            <span class="ns-kr navbar-txt">일본어</span>
+                          </div>
+                      </ul>
+                  </div>
+                </li>
+            </base-nav>
+          </div>
+          <div v-else style="background-color: white;color: rgb(183, 183, 183);;font-weight: bold;font-size: 13px;padding: 1px 8px;border-radius: 6px;cursor: default;">
+            {{sttLangTxt}}
           </div>
         </template>
-        <template v-if="!isRecordable">
-          <div class="btn-play">
-            <template v-if="isPlaying">
-              <div class="cont-mic" style="background:#606060" @click.prevent="pauseSoundClicked()">
-                <i class="fas fa-pause" style="font-size: 17px;padding-top: 1px;"></i>        
-              </div>
-            </template>
-            <template v-else>
-              <div class="cont-mic" style="background:#606060" @click.prevent="playSoundClicked()">
-                <i class="fas fa-play" style="font-size: 17px;padding-left: 3px;padding-top: 1px;"></i>
-              </div>
-            </template>
+        <template v-else>
+          <div class="time" style="margin-right: 20px;">
+            {{hour}}:{{minute}}:{{second}}
+          </div>
+          <div class="soundVol">
+            <!-- <div id="vol0" class="vol"></div> 
+            <div id="vol1" class="vol"></div>
+            <div id="vol2" class="vol"></div>
+            <div id="vol3" class="vol"></div>
+            <div id="vol4" class="vol"></div>
+            <div id="vol5" class="vol"></div>
+            <div id="vol6" class="vol"></div>
+            <div id="vol7" class="vol"></div>
+            <div id="vol8" class="vol"></div>
+            <div id="vol9" class="vol"></div>  -->
           </div>
         </template>
-      </div>
-      <div class="time">
-        {{hour}}:{{minute}}:{{second}}
-      </div>
-      <div class="soundVol">
-        <!-- <div id="vol0" class="vol"></div> 
-        <div id="vol1" class="vol"></div>
-        <div id="vol2" class="vol"></div>
-        <div id="vol3" class="vol"></div>
-        <div id="vol4" class="vol"></div>
-        <div id="vol5" class="vol"></div>
-        <div id="vol6" class="vol"></div>
-        <div id="vol7" class="vol"></div>
-        <div id="vol8" class="vol"></div>
-        <div id="vol9" class="vol"></div> -->
-      </div>
+      </template>
+      <template v-else>
+        <div id="wave-container" class="wave-container">
+            <!-- <div class="dot d1"></div>
+            <div class="dot d2"></div>
+            <div class="dot d3"></div>
+            <div class="dot d4"></div> -->
+            <div class="dot2 d5"></div>
+            <div class="dot2 d6"></div>
+            <div class="dot2 d7"></div>
+            <div class="dot2 d8"></div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
+import BaseNav from '../components/Navbar/BaseNav';
 import axios from 'axios'
 import Swal from 'sweetalert2';
 import { mapState, mapActions, mapMutations } from 'vuex'
@@ -65,6 +120,7 @@ try{
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'ko-KR';
+  
   recognition.maxAlternatives = 1;
 }
 catch(ex){}
@@ -95,6 +151,9 @@ const alert_get_stt_fail = Swal.mixin({
 }) 
 
 export default {
+  components: {
+    BaseNav,
+  },
   data() {
     return {
       audio_id:-1,
@@ -110,7 +169,17 @@ export default {
 
       swal_saveingRec: null,
       tmp_idx: 0,
+
+      loadingPlayer: true,
+
+      sttLangTxt: '한국어',
     }
+  },
+  created(){
+    setTimeout(() => {
+      this.loadingPlayer = false
+    },500)
+    recognition.lang = ko-KR;  
   },
   computed: {
     ...mapState([
@@ -126,6 +195,7 @@ export default {
       'audio',
       'rec_length',
       'user_id',
+      'stt_lang',
     ]),
   },
   methods: {
@@ -143,6 +213,11 @@ export default {
     ...mapActions([
       'FETCH_NOTE',
     ]),
+    changeSttLang(lang, langTxt){
+      document.getElementById ('dropdown-menu-stt').classList.remove('show');
+      recognition.lang = lang;  
+      this.sttLangTxt = langTxt
+    },
     update_sentence_text(event_object_list) {
         var transcript = "";
         for (var i = event_object_list.resultIndex; i < event_object_list.results.length; ++i) {
@@ -429,7 +504,7 @@ export default {
   right: 50%;
   left: 50%;
 }
-.player{
+.player-edit{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -437,12 +512,13 @@ export default {
   /* border: 1px solid #dbdbdb; */
   /* border-radius: 100px; */
   min-width: 16rem;
+  width: 16rem;
   height: 3rem;
   font-size: 24px;
-  padding: 0 1.4rem;
+  padding: 0;
   box-shadow: 0 1px 3px rgba(50, 50, 93, 0.15), 0 1px 0 rgba(0, 0, 0, 0.02);
   border-radius: 2rem;
-  padding-left: 6px;
+  padding: 0 8px;
 }
 .btn-record{
   display: flex;
@@ -459,4 +535,70 @@ export default {
   /* width: 2rem; */
 }
 
+/* #wave-container {
+    margin-top: 20px;
+    position: relative;
+    height: 100px;
+    width: 60px;
+} */
+.dot2 {
+    transform-origin: 50% 50%;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    top: 0;
+    background-color: #C0392B;
+    position: absolute;
+    animation: cycle 1s infinite ease-in-out;
+    opacity: 0;
+}
+
+.d5{
+    top: 16px;
+    left: -30px;
+    animation-delay: -0.1s;
+    background-color: #FF0033;
+}
+.d6 {
+    top: 16px;
+    left: -18px;
+    animation-delay: -0.2s;
+    background-color: #FF7700;
+}
+.d7 {
+    top: 16px;
+    left: -6px;
+    animation-delay: -0.3s;
+    background-color: #FBBC05;
+}
+.d8 {
+    top: 16px;
+    left: 6px;
+    animation-delay: -0.4s;
+    background-color: rgb(64, 143, 85);
+}
+
+@keyframes vertical-movement {
+    0%{
+        transform: translateY(14px) scale(1.2);
+        opacity:1;
+    }
+    99% {
+        transform: translateY(0px) scale(1) ;
+        opacity:1;
+    }
+    100%{
+        opacity:0;
+    }
+}
+@keyframes cycle{
+    0%,100%{
+        transform: scale(1);
+        opacity:1;
+    }
+    50%{
+        transform: scale(1.3);
+        opacity:1;
+    }
+}
 </style>

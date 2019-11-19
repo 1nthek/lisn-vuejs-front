@@ -202,7 +202,7 @@ export default {
   padding: 0 1.4rem;
   box-shadow: 0 1px 3px rgba(50, 50, 93, 0.15), 0 1px 0 rgba(0, 0, 0, 0.02);
   border-radius: 2rem;
-  padding-left: 6px;
+  padding: 0 8px;
 }
 .btn-record{
   display: flex;

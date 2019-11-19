@@ -85,6 +85,8 @@ export const store = new Vuex.Store({
     interval_stt: null,
     colored_stt_id: null,
 
+    stt_lang: 'ko-KR',
+
     tiptap_editor: new Editor({
       onUpdate: ({ state, getHTML, getJSON, transaction }) => {
         store.dispatch('UPDATE_NOTE', { title: store.state.noteTitle, content: getHTML() });
