@@ -118,7 +118,12 @@
           </div>
         </div>
        </div>
-  <!-- <app-footer></app-footer>  -->
+  <div class="footer">
+      <div class="footer_text">
+        <a href="/policies/service" class="ns-kr">이용 약관</a>
+        <a href="/policies/privacy" style="margin-left:1rem;" class="ns-kr">개인정보 처리방침</a>
+      </div>
+  </div>
 </div>
 </div>
 
@@ -490,6 +495,21 @@ p {
     top: 0;
     left: 0;
     background-size:cover;
+}
+.footer {
+  position: fixed;
+    width: 100%;
+    bottom: 0;
+    height: 3rem;
+    padding: 0;
+    text-align: center;
+    background:none;
+}
+.footer a {
+  color: white;
+}
+.footer_text {
+  font-size:1.2rem;
 }
 #home-header {
     position: fixed;

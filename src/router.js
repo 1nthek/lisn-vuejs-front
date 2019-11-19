@@ -7,6 +7,8 @@ import NotFound from '../src/views/PageNotFound'
 import Home from '../src/views/Home'
 import Profile from '../src/components/Profile'
 import Contact from '../src/components/Contact'
+import Service from '../src/components/Service'
+import Privacy from '../src/components/Privacy'
 
 import AllNotes from '../src/components/List/allNotes'
 import SharedNotes from '../src/components/List/sharedNotes'
@@ -26,6 +28,14 @@ export default new Router({
     {
       path: '/home',
       component: Home
+    },
+    {
+      path: '/policies/service',
+      component: Service
+    },
+    {
+      path: '/policies/privacy',
+      component: Privacy
     },
     {
       path: '/',
