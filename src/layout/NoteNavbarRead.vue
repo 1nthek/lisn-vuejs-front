@@ -123,6 +123,8 @@ export default {
         this.$router.push('/sharedNotes')
       } else if(this.curDirectory == 'directory'){
         this.$router.push(`/folder/${this.directory_id}/${this.directory_name}`)
+      } else{
+        this.$router.push('/allNotes')
       }
     },
     removeSharedPerson(user_name, remove_user_id){

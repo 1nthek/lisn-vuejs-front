@@ -55,7 +55,7 @@ export default {
     }
     else{
         setTokenInHeader(this.token);
-        this.set_curDirectory('sharedNotesList')
+        this.set_curDirectory('sharedNotes')
         this.fetch();
         this.$amplitude.setUserId(this.user_id);
         this.$amplitude.logEvent('sharedNotesList');
