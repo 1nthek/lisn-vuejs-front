@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
     minute: '00',
     second: '00',
 
-    isNewNote: true,
+    curDirectory: "allNotes",
 
     recordTimer: null,
     playTimer: null,
@@ -158,8 +158,8 @@ export const store = new Vuex.Store({
       state.audio_timestamp = [];
       state.sttText = [];
     },
-    set_isNewNote(state, val){
-      state.isNewNote = val;
+    set_curDirectory(state, val){
+      state.curDirectory = val;
     },
     set_isPlaying(state, val){
       state.isPlaying = val;
@@ -254,6 +254,9 @@ export const store = new Vuex.Store({
       state.sttText = [];
     },
     setNoteData(state, value) {
+      state.directory_id = value.directory_id
+      state.directory_name = value.directory_name
+      
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;

@@ -50,7 +50,7 @@ export default {
       isEditingSTT: false,
     }
   },
-  destroyed(){
+  beforeDestroy(){
     if(document.getElementById('screenBlur')){
       document.getElementById('screenBlur').remove()
     }

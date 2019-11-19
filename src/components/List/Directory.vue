@@ -64,18 +64,20 @@ export default {
     }
     else{
       setTokenInHeader(this.token);
+      this.set_curDirectory('directory')
       this.fetch();
     }
   },
   watch: {
     $route(to) {
       this.isLoading = true;
+      this.set_curDirectory('directory')
       this.fetch();
     }
   },
   methods: {
     ...mapMutations([
-      'set_isNewNote',
+      'set_curDirectory',
     ]),
     ...mapActions([
       'FETCH_DIRECTORY_LISTS',
@@ -88,7 +90,6 @@ export default {
         this.isLoading = false;
     },
     create_note() {
-      this.set_isNewNote(true)
       this.CREATE_NOTE_AND_SET_DIRECTORY(this.$route.params.fid)
       this.$amplitude.setUserId(this.user_id)
       this.$amplitude.logEvent('Create_Note')

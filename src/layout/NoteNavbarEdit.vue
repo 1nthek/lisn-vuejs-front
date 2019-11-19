@@ -29,20 +29,19 @@ export default {
     ...mapState([
       'note_id',
       'isNewNote',
+      'directory_id',
+      'directory_name',
+      'curDirectory'
     ]),
   },
   methods: {
     gotoLish(){
-      if(this.isNewNote){
-        this.$router.go(-1);
-      }
-      else{
-        if(window.history.length <= 3){
-          // this.$router.push('/note/' + this.note_id)
-        }
-        else{
-          this.$router.go(-2)
-        }
+      if(this.curDirectory == 'allNotes'){
+        this.$router.push('/allNotes')
+      } else if(this.curDirectory == 'sharedNotes'){
+        this.$router.push('/sharedNotes')
+      } else if(this.curDirectory == 'directory'){
+        this.$router.push(`/folder/${this.directory_id}/${this.directory_name}`)
       }
     },
     isRecording(para){

@@ -2,12 +2,7 @@
    <div>
         <div style="margin-bottom:30px;width: 100%;background: white;">
             <div style="padding: 0 15px;display: flex;justify-content: space-between;align-items: center;height: 40px;">
-            <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">공유 받은 노트</div>
-            <button class="create-btn" @click.prevent="create_note()">
-                <div class="ns-kr create-btn-cont">
-                + 새 노트
-                </div>
-            </button>
+              <div class="ns-kr" style="margin: 0 20px;font-size: 24px;color:black;font-weight: bold;">공유 받은 노트</div>
             </div>
         </div>
         <div v-if="isLoading" class="cont-isLoading">
@@ -63,12 +58,13 @@ export default {
     }
     else{
         setTokenInHeader(this.token);
+        this.set_curDirectory('sharedNotes')
         this.fetch();
     }
   },
   methods: {
     ...mapMutations([
-      'set_isNewNote',
+      'set_curDirectory',
     ]),
     ...mapActions([
       'FETCH_SHARED_LISTS',
@@ -79,7 +75,6 @@ export default {
       this.isLoading = false;
     },
     create_note(){
-      this.set_isNewNote(true);
       this.CREATE_NOTE();
       this.$amplitude.setUserId(this.user_id);
       this.$amplitude.logEvent('Create_Note');

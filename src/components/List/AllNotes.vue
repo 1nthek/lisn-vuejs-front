@@ -63,12 +63,13 @@ export default {
     }
     else{
       setTokenInHeader(this.token);
+      this.set_curDirectory('allNotes')
       this.fetch();
     }
   },
   methods: {
     ...mapMutations([
-      'set_isNewNote',
+      'set_curDirectory',
     ]),
     ...mapActions([
       'FETCH_LISTS',
@@ -79,7 +80,6 @@ export default {
       this.isLoading = false
     },
     create_note(){
-      this.set_isNewNote(true)
       this.CREATE_NOTE()
       this.$amplitude.setUserId(this.user_id)
       this.$amplitude.logEvent('Create_Note')

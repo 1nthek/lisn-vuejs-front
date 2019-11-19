@@ -62,13 +62,7 @@
                 </div>
                 <div v-if="showColors" style="background: rgba(0, 0, 0, 0.6);position: fixed;z-index: 1060;top: 0;right: 0;bottom: 0;left: 0;cursor: default; transition: all 100ms ease-in 0s;" @click.prevent="showColors = false"></div>
                 <div class="folder-color-cont" v-if="!showColors" @click.prevent="showColors = true">
-                    <div v-if="directory_color==0" class="folder-color color-0"></div>
-                    <div v-if="directory_color==1" class="folder-color color-1"></div>
-                    <div v-if="directory_color==2" class="folder-color color-2"></div>
-                    <div v-if="directory_color==3" class="folder-color color-3"></div>
-                    <div v-if="directory_color==4" class="folder-color color-4"></div>
-                    <div v-if="directory_color==5" class="folder-color color-5"></div>
-                    <div v-if="directory_color==6" class="folder-color color-6"></div>
+                    <div class="folder-color" :class="['color-'+this.directory_color]"></div>
                 </div>
                 <div v-if="!showColors" class="nav-link-text" style="margin-left: 4px;" @click.self="menu_clicked()" >{{ link.name }}</div>            
               </div>

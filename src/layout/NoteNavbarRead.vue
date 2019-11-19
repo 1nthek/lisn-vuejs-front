@@ -1,6 +1,6 @@
 <template>
   <div class="noteNavbar-container">
-    <div @click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+    <div @click="gotoLish()" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
       <i class="fas fa-chevron-left"></i>&nbsp;노트 리스트
     </div>
 
@@ -102,6 +102,9 @@ export default {
       'searchedPeople',
       'user_id',
       'noteUserId',
+      'directory_id',
+      'directory_name',
+      'curDirectory'
     ]),
   },
    methods: {
@@ -117,6 +120,15 @@ export default {
       'FETCH_SEARCH_USER',
       'MASTER_UNSHARE_NOTE',
     ]),
+    gotoLish(){
+      if(this.curDirectory == 'allNotes'){
+        this.$router.push('/allNotes')
+      } else if(this.curDirectory == 'sharedNotes'){
+        this.$router.push('/sharedNotes')
+      } else if(this.curDirectory == 'directory'){
+        this.$router.push(`/folder/${this.directory_id}/${this.directory_name}`)
+      }
+    },
     removeSharedPerson(user_name, remove_user_id){
       let self = this;
       Swal.fire({
@@ -177,7 +189,6 @@ export default {
         let self = this;
         this.FETCH_EDIT(this.note_id).then(data =>{
           if( data === "editable" ){
-            this.set_isNewNote(false);
             self.UPDATE_EDIT(self.note_id);
             self.$router.push('/noteEdit/'+ self.note_id);
           }
