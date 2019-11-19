@@ -64,6 +64,7 @@ export default {
     ...mapMutations([
       'setCurrentTime',
       'playSound',
+      'set_sttText',
     ]),
     ...mapActions([
       'FETCH_AUDIO',
@@ -83,8 +84,13 @@ export default {
       ele2.onclick = async () =>  { 
         const sentence_id = item.id
         const content = ele.innerHTML
-        await this.UPDATE_SENTENCE({sentence_id, content})
-        await this.FETCH_SENTENCE(sentence_id)
+        if(this.isRecording){
+          this.set_sttText({sentence_id, content})
+        }
+        else{
+          await this.UPDATE_SENTENCE({sentence_id, content})
+          await this.FETCH_SENTENCE(sentence_id)
+        }
         document.getElementById('editSTT').remove()
         document.body.removeChild(ele2)
       };

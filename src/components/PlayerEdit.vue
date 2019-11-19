@@ -216,28 +216,11 @@ export default {
       })
       self.clear_player_data();
       setTimeout(async () => {
-        await axios.get( this.domain + '/note?note_id=' + this.note_id)
-          .then(res => {
-            res.data.audios.forEach(element => {
-              var audio_id = element.audio_id;
-              var sentences = element.sentences;
-              var idx=0;
-              sentences.forEach(ele => {
-                self.$set(self.sttText, idx++, {content: ele.content, id: idx, begin: ele.started_at, end: ele.ended_at, audioId: audio_id});
-              })
-            });
-          })
-          .catch(() => {
-            self.swal_saveingRec.close();
-            self.swal_saveingRec = null;
-            alert_get_stt_fail.fire();
-          });
-        
+        await self.FETCH_NOTE()
         if(self.swal_saveingRec){
           self.swal_saveingRec.close();
         }
       },300)
-      self.FETCH_NOTE()
     },
     startRecording(stream) {
         this.$emit('openSTT');

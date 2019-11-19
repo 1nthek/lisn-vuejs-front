@@ -158,6 +158,9 @@ export const store = new Vuex.Store({
       state.audio_timestamp = [];
       state.sttText = [];
     },
+    set_sttText(state, { sentence_id, content}){
+      state.sttText[sentence_id].content = content
+    },
     set_curDirectory(state, val){
       state.curDirectory = val;
     },
@@ -254,6 +257,8 @@ export const store = new Vuex.Store({
       state.sttText = [];
     },
     setNoteData(state, value) {
+      state.sttText = [];
+
       state.directory_id = value.directory_id
       state.directory_name = value.directory_name
       
