@@ -46,7 +46,7 @@ export default {
   data(){
     return{
       audioId: -1,
-      isMinimized: true,
+      isMinimized: false,
       isEditingSTT: false,
     }
   },

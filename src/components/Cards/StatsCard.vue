@@ -30,7 +30,7 @@
           <div id="folder-move" @click.stop="moveDirectory(note_id)" class="card-icon-cont">
               <i class="fas fa-folder"></i>
           </div>
-          <div id="trash" @click.stop="deleteNote(note_id)" class="card-icon-cont" style="margin-left: 4px;">
+          <div id="trash" @click.stop="deleteNote(note_id, title)" class="card-icon-cont" style="margin-left: 4px;">
               <i class="fas fa-trash"></i>
           </div>
         </div>
@@ -119,29 +119,29 @@ export default {
       this.$amplitude.setUserId(this.user_id);
       this.$amplitude.logEvent('moveFolder');
     },
-    deleteNote(note_id) {
+    deleteNote(note_id, title) {
       const directory_id = this.$route.params.fid
       const directory_name = this.$route.params.name
       const router_name = this.$route.name
 
-      this.DESTROY_NOTE({note_id, directory_id, directory_name, router_name});
-      // Swal.fire({
-      //   // title: '휴지통으로 이동',
-      //   // text: `휴지통에서 완전히 삭제할 수 있습니다`,
-      //   title: '노트 삭제',
-      //   text: '"' + title + '"를 휴지통으로 이동합니다.',
-      //   // type: 'warning',
-      //   showCancelButton: true,
-      //   confirmButtonClass: 'btn btn-danger btn-fill',
-      //   cancelButtonClass: 'btn btn-secondary btn-fill',
-      //   confirmButtonText: '삭제',
-      //   cancelButtonText: '취소',
-      //   buttonsStyling: false
-      // }).then(result => {
-      //   if (result.value) {
-      //     this.DESTROY_NOTE({note_id, title});
-      //   }
-      // });
+      // this.DESTROY_NOTE({note_id, directory_id, directory_name, router_name});
+      Swal.fire({
+        // title: '휴지통으로 이동',
+        // text: `휴지통에서 완전히 삭제할 수 있습니다`,
+        title: '노트 삭제',
+        text: `'${title}' 를 휴지통으로 이동하시겠습니까?`,
+        // type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-danger btn-fill',
+        cancelButtonClass: 'btn btn-secondary btn-fill',
+        confirmButtonText: '이동',
+        cancelButtonText: '취소',
+        buttonsStyling: false
+      }).then(result => {
+        if (result.value) {
+          this.DESTROY_NOTE({note_id, directory_id, directory_name, router_name});
+        }
+      });
       this.$amplitude.setUserId(this.user_id);
       this.$amplitude.logEvent('sendNoteToTrash');
     },
