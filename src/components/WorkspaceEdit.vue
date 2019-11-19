@@ -2,7 +2,7 @@
 <div style="display:flex;align-items: center;justify-content: center;">
     <div class="lisn-workspace">
       <div class="lisn-workspace-container workspace-width">
-          <s-t-t ref="stt"></s-t-t>
+          <STTEdit ref="stt"></STTEdit>
           <div class="divider"></div>
           <div class="note-container">
             <template v-if="isLoading">
@@ -21,12 +21,12 @@
 
 <script>
 import NoteEdit from './NoteEdit.vue'
-import STT from './STT.vue'
+import STTEdit from './STTEdit.vue'
 
 export default {
   components: {
     NoteEdit,
-    STT,
+    STTEdit,
   },
   props: {
     isLoading: Boolean,

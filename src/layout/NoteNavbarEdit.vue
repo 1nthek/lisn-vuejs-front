@@ -1,12 +1,12 @@
 <template>
   <div class="noteNavbar-container">
-      <div v-on:click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
-        <i class="fas fa-chevron-left"></i>&nbsp;돌아가기
+      <div @click="gotoLish()" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+        <i class="fas fa-chevron-left"></i>&nbsp;노트 리스트
       </div>
 
       <player-edit v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></player-edit>
 
-      <button v-on:click="finishWriting()" class="end-btn" style="position: relative;">
+      <button v-on:click="$router.push('/note/' + note_id)" class="end-btn" style="position: relative;">
         <div class="ns-kr" style="font-size: 16px; margin: 8px 14px;font-weight: bold;width: 90px;"><i class="fas fa-edit"></i>&nbsp;작성완료</div>
       </button>
       <!-- <div v-on:click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
@@ -29,23 +29,20 @@ export default {
     ...mapState([
       'note_id',
       'isNewNote',
+      'directory_id',
+      'directory_name',
+      'curDirectory'
     ]),
   },
   methods: {
-    finishWriting(){
-      console.log(window.history.length);
-      if(this.isNewNote){
-        this.$router.go(-1);
+    gotoLish(){
+      if(this.curDirectory == 'allNotes'){
+        this.$router.push('/allNotes')
+      } else if(this.curDirectory == 'sharedNotes'){
+        this.$router.push('/sharedNotes')
+      } else if(this.curDirectory == 'directory'){
+        this.$router.push(`/folder/${this.directory_id}/${this.directory_name}`)
       }
-      else{
-        if(window.history.length <= 3){
-          this.$router.push('/allNotes');
-        }
-        else{
-          this.$router.go(-2);
-        }
-      }
-      
     },
     isRecording(para){
       this.$emit('isRecording', para);

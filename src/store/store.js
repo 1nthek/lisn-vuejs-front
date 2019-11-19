@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
     minute: '00',
     second: '00',
 
-    isNewNote: true,
+    curDirectory: "allNotes",
 
     recordTimer: null,
     playTimer: null,
@@ -158,8 +158,11 @@ export const store = new Vuex.Store({
       state.audio_timestamp = [];
       state.sttText = [];
     },
-    set_isNewNote(state, val){
-      state.isNewNote = val;
+    set_sttText(state, { sentence_id, content}){
+      state.sttText[sentence_id].content = content
+    },
+    set_curDirectory(state, val){
+      state.curDirectory = val;
     },
     set_isPlaying(state, val){
       state.isPlaying = val;
@@ -254,6 +257,11 @@ export const store = new Vuex.Store({
       state.sttText = [];
     },
     setNoteData(state, value) {
+      state.sttText = [];
+
+      state.directory_id = value.directory_id
+      state.directory_name = value.directory_name
+      
       state.tiptap_editor.setContent(value.content)
       state.noteTitle = value.title;
       state.content = value.content;
@@ -265,13 +273,12 @@ export const store = new Vuex.Store({
       state.note_updated_at = date.getFullYear() + ". " + (parseInt(date.getMonth()) + 1) + ". " + date.getDate() + ". " + (parseInt(date.getHours()) > 12 ? "오후 " + parseInt(date.getHours() - 12) : "오전 " + date.getHours()) + "시 " + date.getMinutes() + "분";
 
       value.audios.forEach(element => {
-        state.isRecordable = false;
-        var audio_id = element.audio_id;
-        var sentences = element.sentences;
-        var idx = 0;
+        state.isRecordable = false
+        var audio_id = element.audio_id
+        var sentences = element.sentences
 
         sentences.forEach(ele => {
-          state.sttText.push({ content: ele.content, id: idx++, begin: ele.started_at, end: ele.ended_at, audioId: audio_id });
+          state.sttText.push({ content: ele.content, id: ele.sentence_id, begin: ele.started_at, end: ele.ended_at, audioId: audio_id });
         })
         axios.get(state.domain + "/note/audio?audio_id=" + audio_id)
           .then((res) => {
@@ -435,6 +442,19 @@ export const store = new Vuex.Store({
     },
   },
   actions: {
+    FETCH_SENTENCE({ state, commit }, sentence_id){
+      return api.sentence.fetch(sentence_id).then(data => {
+        const objIndex = state.sttText.findIndex((obj => obj.id == sentence_id))
+        state.sttText[objIndex].content = data.content
+      })
+    },
+    UPDATE_SENTENCE({ }, { sentence_id, content}){
+      var formData = new FormData()
+      formData.append('sentence_id', sentence_id)
+      formData.append('content', content)
+      return api.sentence.update(formData)
+    },
+
     FETCH_LISTS({ state, commit }) {
       return api.list.fetch(state.user_id).then(data => {
         commit('SET_DIRECTORY_ID', null);

@@ -27,7 +27,16 @@ const request = (method, url, data) => {
 }
 
 export const setTokenInHeader = token => {
-  axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null;
+  axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
+}
+
+export const sentence = {
+  fetch(sentence_id) {
+    return request('get', `/note/sentence?sentence_id=${sentence_id}`)
+  },
+  update(formData) {
+    return request('put', `/note/sentence`, formData);
+  },
 }
 
 export const list = {

@@ -73,8 +73,10 @@ export default {
       this.$router.replace('/');
     }
     else{
-      setTokenInHeader(this.token);
-      this.fetch();
+      setTokenInHeader(this.token)
+      this.fetch()
+      this.$amplitude.setUserId(this.user_id)
+      this.$amplitude.logEvent('trashList')
     }
   },
   methods: {
@@ -89,6 +91,7 @@ export default {
     },
     select(){
       this.selectAll = false;
+      document.getele
     },
     allSelected(){
       this.selected = [];
@@ -99,9 +102,11 @@ export default {
       }
     },
     restoreNote() {
-     for(let item in this.selected){
-       this.RESTORE_NOTE(this.selected[item]);
-     }
+      for(let item in this.selected){
+        this.RESTORE_NOTE(this.selected[item]);
+      }
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('restoreNote');
     },
     deleteNote() {
       Swal.fire({
@@ -121,6 +126,8 @@ export default {
           }
         }
       });
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('deleteNote');
     }
   }
 }

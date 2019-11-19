@@ -1,7 +1,7 @@
 <template>
   <div class="noteNavbar-container">
-    <div v-on:click="$router.go(-1)" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
-      <i class="fas fa-chevron-left"></i>&nbsp;돌아가기
+    <div @click="gotoLish()" class="ns-kr go-back" style="font-size: 20px;font-weight:bold;color:black;position: relative;z-index: 2;margin: 10px;">
+      <i class="fas fa-chevron-left"></i>&nbsp;노트 리스트
     </div>
 
     <PlayerRead v-on:scrollSTT="$emit('scrollSTT')" v-on:openSTT="$emit('openSTT')" v-on:isRecording="isRecording"></PlayerRead>
@@ -79,10 +79,6 @@ import PlayerRead from '../components/PlayerRead'
 import BaseNav from '../components/Navbar/BaseNav';
 import Swal from 'sweetalert2';
 import { mapState, mapMutations, mapActions } from 'vuex'
-import VueAmplitude from 'vue-amplitude'
-import Vue from 'vue'
-
-Vue.use(VueAmplitude, { apiKey: 'f1f895bc97a1dfc905ea1bbc1f4af3f7' });
 
 export default {
   components: {
@@ -102,6 +98,9 @@ export default {
       'searchedPeople',
       'user_id',
       'noteUserId',
+      'directory_id',
+      'directory_name',
+      'curDirectory'
     ]),
   },
    methods: {
@@ -117,6 +116,15 @@ export default {
       'FETCH_SEARCH_USER',
       'MASTER_UNSHARE_NOTE',
     ]),
+    gotoLish(){
+      if(this.curDirectory == 'allNotes'){
+        this.$router.push('/allNotes')
+      } else if(this.curDirectory == 'sharedNotes'){
+        this.$router.push('/sharedNotes')
+      } else if(this.curDirectory == 'directory'){
+        this.$router.push(`/folder/${this.directory_id}/${this.directory_name}`)
+      }
+    },
     removeSharedPerson(user_name, remove_user_id){
       let self = this;
       Swal.fire({
@@ -135,59 +143,57 @@ export default {
           self.MASTER_UNSHARE_NOTE({note_id, remove_user_id});
         }
       });
-
-    },
-    selectPerson(person){
-      if(person.user_id == this.user_id){
-          Swal.fire("자신에게는 공유를 할 수 없습니다.");
-          return;
-      }
-      let self = this;
-      this.openSearch = false;
-      Swal.fire({
-        title: '노트 공유',
-        text: person.user_email+' 님께 노트를 공유하겠습니까?',
-        // type: 'warning',
-        showCancelButton: true,
-        confirmButtonClass: 'btn btn-success btn-fill',
-        cancelButtonClass: 'btn btn-danger btn-fill',
-        confirmButtonText: '공유',
-        cancelButtonText: '취소',
-        buttonsStyling: false
-      }).then(async(result) => {
-        if (result.value) {
-          await self.SHARE_NOTE(person.user_email);
-          await self.FETCH_SHAREDUSER_LISTS(self.note_id);
-          this.$amplitude.setUserId(this.user_id);
-          this.$amplitude.logEvent('Share');  
+      },
+      selectPerson(person){
+        if(person.user_id == this.user_id){
+            Swal.fire("자신에게는 공유를 할 수 없습니다.");
+            return;
         }
-      });
-    },
-    typing(e) {
-      if(e.target.value == ""){
+        let self = this;
+        this.openSearch = false;
+        Swal.fire({
+          title: '노트 공유',
+          text: person.user_email+' 님께 노트를 공유하겠습니까?',
+          // type: 'warning',
+          showCancelButton: true,
+          confirmButtonClass: 'btn btn-success btn-fill',
+          cancelButtonClass: 'btn btn-danger btn-fill',
+          confirmButtonText: '공유',
+          cancelButtonText: '취소',
+          buttonsStyling: false
+        }).then(async(result) => {
+          if (result.value) {
+            await self.SHARE_NOTE(person.user_email);
+            await self.FETCH_SHAREDUSER_LISTS(self.note_id);
+            this.$amplitude.setUserId(this.user_id);
+            this.$amplitude.logEvent('Share');  
+          }
+        });
+      },
+      typing(e) {
+        if(e.target.value == ""){
+          this.clear_searched_people();
+        }
+        else{
+          this.FETCH_SEARCH_USER(e.target.value);
+        }
+      },
+      isRecording(para){
+        this.$emit('isRecording', para);
+      },
+      editNote(){
+        let self = this;
+        this.FETCH_EDIT(this.note_id).then(data =>{
+          if( data === "editable" ){
+            self.UPDATE_EDIT(self.note_id);
+            self.$router.push('/noteEdit/'+ self.note_id);
+          }
+        })
+      },
+      shareNote(){
         this.clear_searched_people();
-      }
-      else{
-        this.FETCH_SEARCH_USER(e.target.value);
-      }
-    },
-    isRecording(para){
-      this.$emit('isRecording', para);
-    },
-    editNote(){
-      let self = this;
-      this.FETCH_EDIT(this.note_id).then(data =>{
-        if( data === "editable" ){
-          this.set_isNewNote(false);
-          self.UPDATE_EDIT(self.note_id);
-          self.$router.push('/noteEdit/'+ self.note_id);
-        }
-      })
-    },
-    shareNote(){
-      this.clear_searched_people();
-      this.openSearch = true;
-    },
+        this.openSearch = true;
+      },
    }
 };
 </script>
