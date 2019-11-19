@@ -120,8 +120,8 @@
        </div>
   <div class="footer">
       <div class="footer_text">
-        <a href="/policies/service" class="ns-kr">이용 약관</a>
-        <a href="/policies/privacy" style="margin-left:1rem;" class="ns-kr">개인정보 처리방침</a>
+        <div @click="$router.push('/policies/service')" class="ns-kr" style="cursor:pointer">이용 약관</div>
+        <div @click="$router.push('/policies/privacy')" class="ns-kr" style="cursor:pointer;margin-left:26px">개인정보 처리방침</div>
       </div>
   </div>
 </div>
@@ -510,6 +510,10 @@ p {
 }
 .footer_text {
   font-size:1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 #home-header {
     position: fixed;
