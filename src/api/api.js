@@ -30,6 +30,12 @@ export const setTokenInHeader = token => {
   axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
 }
 
+export const sentence = {
+  update(formData) {
+    return request('put', `/note/sentence`, formData);
+  },
+}
+
 export const list = {
   fetch(user_id) {
     return request('get', `/list/note/all?user_id=${user_id}`)

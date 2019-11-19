@@ -11,8 +11,8 @@
   <vuescroll ref="vs">
         <div class="lisn-stt-container">
           <ul id="v-for-object" class="demo">
-            <template v-for="(item, index) in this.$store.state.sttText">
-              <div :key="index" style="padding: 0.5rem 0; margin:5px" >
+            <template v-for="item in this.$store.state.sttText" >
+              <div style="padding: 0.5rem 0; margin:5px" :key="item.id">
                   <div class="single-stt-cont" style="display:flex;">
                     <div v-show="!isMinimized" style="font-size: 23px;" class="stt-icon">
                       <i class="fas fa-user-circle"></i>
@@ -26,12 +26,7 @@
                         ~&nbsp;{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.end/1000)/3600)%60 }}{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.end/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.end/1000)/60)%60 }}:{{ parseInt(item.end/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.end/1000)%60 }}
                       </div>
                       <div v-show="!isMinimized">
-                        <div class="stt-content" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`">
-                          {{item.content}}
-                        </div>
-                        <!-- <div class="stt-content-edit" :id="`stt-${item.id}`" contentEditable="true">
-                          {{item.content}}
-                        </div> -->
+                        <div class="stt-content" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`" v-html="item.content"></div>
                       </div>
                     </div>
                   </div>
@@ -55,6 +50,11 @@ export default {
       isEditingSTT: false,
     }
   },
+  destroyed(){
+    if(document.getElementById('screenBlur')){
+      document.getElementById('screenBlur').remove()
+    }
+  },
   computed:{
     ...mapState([
       'isRecording',
@@ -67,6 +67,8 @@ export default {
     ]),
     ...mapActions([
       'FETCH_AUDIO',
+      'UPDATE_SENTENCE',
+      'FETCH_SENTENCE',
     ]),
     editingSTT(item){
       var ele = document.createElement('div');
@@ -76,8 +78,13 @@ export default {
       ele.innerHTML = item.content
       document.getElementById(`stt-${item.id}`).parentElement.prepend(ele)
       var ele2 = document.createElement('div')
+      ele2.setAttribute("id", 'screenBlur');
       ele2.classList.add('screen-blur')
-      ele2.onclick = () => { 
+      ele2.onclick = async () =>  { 
+        const sentence_id = item.id
+        const content = ele.innerHTML
+        await this.UPDATE_SENTENCE({sentence_id, content})
+        await this.FETCH_SENTENCE({sentence_id, content})
         document.getElementById('editSTT').remove()
         document.body.removeChild(ele2)
       };
@@ -114,7 +121,7 @@ export default {
 
 <style>
 .screen-blur{
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     position: fixed;
     z-index: 1060;
     top: 0px;

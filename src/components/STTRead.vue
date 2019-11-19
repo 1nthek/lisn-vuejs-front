@@ -23,9 +23,7 @@
                         ~&nbsp;{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : parseInt(parseInt(item.end/1000)/3600)%60 }}{{ parseInt(parseInt(item.end/1000)/3600)%60 == 0 ? '' : ':'}}{{ parseInt(parseInt(item.end/1000)/60)%60 &lt; 10 ? '0' : ''}}{{ parseInt(parseInt(item.end/1000)/60)%60 }}:{{ parseInt(item.end/1000)%60 &lt; 10 ? '0' : '' }}{{ parseInt(item.end/1000)%60 }}
                       </div>
                       <div v-show="!isMinimized">
-                        <div class="stt-content" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`">
-                          {{item.content}}
-                        </div>
+                        <div class="stt-content" @click="getAudioAndPlay(item)" :id="`stt-${item.id}`" v-html="item.content"></div>
                       </div>
                     </div>
                   </div>
