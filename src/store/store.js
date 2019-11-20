@@ -591,14 +591,35 @@ export const store = new Vuex.Store({
       formData.append('note_id', state.note_id);
       return api.note.share(formData)
         .then(data => {
-          Swal.fire('공유 성공: ' + email)
+          Swal.fire({
+            // toast: true,
+            position: 'center',
+            showConfirmButton: false,
+            timer: 2000,
+            type: 'success',
+            text: `${email} 님에게 공유가 되었습니다`,
+          })
         })
         .catch(err => {
           if (err.status == 400 && err.data == "Already Exist") {
-            Swal.fire('이미 공유된 이메일: ' + email)
+            Swal.fire({
+              toast: true,
+              position: 'center',
+              showConfirmButton: false,
+              timer: 2000,
+              type: 'error',
+              title: `이미 공유된 이메일: ${email}`,
+            })
           }
           else if (err.status == 400) {
-            Swal.fire('존재하지 않는 이메일: ' + email)
+            Swal.fire({
+              toast: true,
+              position: 'center',
+              showConfirmButton: false,
+              timer: 2000,
+              type: 'error',
+              title: `존재하지 않는 이메일: ${email}`,
+            })
           }
         })
     },

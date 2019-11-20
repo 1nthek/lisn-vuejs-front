@@ -240,6 +240,10 @@ export default {
         
         ]),
     },
+    created() {
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('policies_privacy');
+    },
     methods: {
         ...mapMutations([
         

@@ -155,7 +155,7 @@ export default {
         this.openSearch = false;
         Swal.fire({
           title: '노트 공유',
-          text: person.user_email+' 님께 노트를 공유하겠습니까?',
+          text: person.user_email+' 님에게 노트를 공유하겠습니까?',
           // type: 'warning',
           showCancelButton: true,
           confirmButtonClass: 'btn btn-success btn-fill',
@@ -168,7 +168,7 @@ export default {
             await self.SHARE_NOTE(person.user_email);
             await self.FETCH_SHAREDUSER_LISTS(self.note_id);
             this.$amplitude.setUserId(this.user_id);
-            this.$amplitude.logEvent('Share');  
+            this.$amplitude.logEvent('SHARE_NOTE');  
           }
         });
       },
