@@ -329,9 +329,11 @@ export const store = new Vuex.Store({
       state.interval_stt = setInterval(() => {
         var curTime = state.audio.currentTime*1000;
         if (state.colored_stt_id != null){
-          document.getElementById("stt-" + state.colored_stt_id).style.backgroundColor = "white";
-          document.getElementById("stt-" + state.colored_stt_id).style.color = "black";
-          document.getElementById("stt-" + state.colored_stt_id).style.fontWeight = "normal";
+          if (document.getElementById("stt-" + state.colored_stt_id)!=null){
+            document.getElementById("stt-" + state.colored_stt_id).style.backgroundColor = "white";
+            document.getElementById("stt-" + state.colored_stt_id).style.color = "black";
+            document.getElementById("stt-" + state.colored_stt_id).style.fontWeight = "normal";
+          }
           state.colored_stt_id = null;
         }
         for (let i = 0; i < state.sttText.length;++i){

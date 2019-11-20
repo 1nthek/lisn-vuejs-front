@@ -179,7 +179,7 @@ export default {
     setTimeout(() => {
       this.loadingPlayer = false
     },500)
-    recognition.lang = ko-KR;  
+    recognition.lang = 'ko-KR';  
   },
   computed: {
     ...mapState([
@@ -402,12 +402,12 @@ export default {
             function(stream) {
               localstream = stream
               self.startRecording(stream)
-              self.$amplitude.setUserId(this.user_id)
+              self.$amplitude.setUserId(self.user_id)
               self.$amplitude.logEvent('startRecording')
             },
             function(ex) {
-              this.$amplitude.setUserId(this.user_id);
-              this.$amplitude.logEvent('err_no_mic');
+              self.$amplitude.setUserId(self.user_id);
+              self.$amplitude.logEvent('err_no_mic');
               Swal.fire({
                 toast: true,
                 position: 'center',

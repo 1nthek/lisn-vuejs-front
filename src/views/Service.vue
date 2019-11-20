@@ -7,12 +7,12 @@
                 </div>
                 <ul class="nav__right ns-kr" :class="{'active': this.navOpen }">
                   <li> 
-                    <div @click="$router.push('/policies/service')">
+                    <div @click="$router.replace('/policies/service')">
                       <span class="nav__link nav__link--cta">이용 약관</span>
                     </div>
                   </li>
                   <li>
-                    <div @click="$router.push('/policies/privacy')">
+                    <div @click="$router.replace('/policies/privacy')">
                       <span class="nav__link nav__link--cta">개인정보 처리방침</span>
                     </div>
                   </li>
@@ -400,7 +400,8 @@ ul {
     top: 0;
     right: 0;
     left: 0;
-    background: white; 
+    background: #E2E2E2;
+    box-shadow: 0 0 0 1px rgba(15,15,15,.1), 0 2px 4px rgba(15,15,15,.1);
     display:block;
 }
 #home-header.scrolled {
@@ -426,7 +427,7 @@ ul {
 .home-nav {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 14px 30px;
+    padding: 10px 30px;
     display: flex;
     justify-content: space-between;
 }
