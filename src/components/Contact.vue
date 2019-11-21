@@ -36,6 +36,10 @@ export default {
             contact_content:'',
         }
     },
+    created(){
+      this.$amplitude.setUserId(this.user_id);
+      this.$amplitude.logEvent('Contact_Us_Page');   
+    },
     methods: {
         ...mapActions([
             'CREATE_CONTACT'
@@ -53,12 +57,12 @@ export default {
           Swal.fire({
             position: 'center',
             type: 'success',
-            title: '소중한 의견 감사합니다! (꾸벅)',
+            title: '소중한 의견 감사합니다!',
             showConfirmButton: false,
-            timer: 2500
+            timer: 1800
           })
-            this.$amplitude.setUserId(this.user_id);
-            this.$amplitude.logEvent('Contact_Us');   
+          this.$amplitude.setUserId(this.user_id);
+          this.$amplitude.logEvent('Send_Message'); 
         }
     }
 }

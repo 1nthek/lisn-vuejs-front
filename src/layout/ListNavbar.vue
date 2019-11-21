@@ -112,6 +112,7 @@ export default {
       'user_name',
       'user_email',
       'user_picture_url',
+      'user_id',
     ]),
     routeName() {
       const { name } = this.$route;
@@ -137,6 +138,8 @@ export default {
       'FETCH_PROFILE',
     ]),
     signOut(){
+      this.$amplitude.setUserId(this.user_id)
+      this.$amplitude.logEvent('signOut')
       let self = this;
       gapi.load('auth2', function () {
         gapi.auth2.init().then(function () {

@@ -101,12 +101,12 @@ export default {
     ]),
     recBtnPressed(){
         Swal.fire({
-        toast: true,
-        position: 'center',
-        showConfirmButton: false,
-        timer: 3000,
-        type: 'error',
-        title: '녹음은 수정 모드에서만 가능합니다.'
+          toast: true,
+          position: 'center',
+          showConfirmButton: false,
+          timer: 3000,
+          type: 'error',
+          title: '녹음은 수정 모드에서만 가능합니다.'
         })
     },
     playSoundClicked() {
