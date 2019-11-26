@@ -24,7 +24,7 @@
                     <div class="about-intro">
                       <h1 class="about-intro_title ns-kr">LISN 서비스 소개</h1>
                       <div class="about-sample">
-                        <img src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/about_sample.png">
+                        <img src="https://storage.googleapis.com/src-lisn/about_sample.png">
                       </div>
                       <p class="about-intro_subtitle ns-kr">
                         LISN은 언제 어디서나 실시간으로 음성을 텍스트로 변환하고 정리 할 수 있는 서비스입니다. <br>나만의 음성 노트를 만들어 정리하고 공유해보세요.  
@@ -34,19 +34,19 @@
                       <h1 class="about-intro_title ns-kr">LISN 기능</h1>
                       <div class="introduction-section_function">
                         <div class="introduction-section_container">
-                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_01.png">
+                          <img class="function_image" src="https://storage.googleapis.com/src-lisn/func_01.png">
                           <h1 class="function_title ns-kr">녹음</h1>
                         </div>
                         <div class="introduction-section_container">
-                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_02.png">
+                          <img class="function_image" src="https://storage.googleapis.com/src-lisn/func_02.png">
                           <h1 class="function_title ns-kr">실시간 변환</h1>
                         </div>
                         <div class="introduction-section_container">
-                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_03.png">
+                          <img class="function_image" src="https://storage.googleapis.com/src-lisn/func_03.png">
                           <h1 class="function_title ns-kr">노트 관리</h1>
                         </div>
                         <div class="introduction-section_container">
-                          <img class="function_image" src="https://src-lisn.s3.ap-northeast-2.amazonaws.com/func_04.png">
+                          <img class="function_image" src="https://storage.googleapis.com/src-lisn/func_04.png">
                           <h1 class="function_title ns-kr">공유</h1>
                         </div>
                       </div>
@@ -149,10 +149,10 @@ export default {
       navOpen: false,
       isLoading: true,
       videos: [
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video02.mp4',
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video03.mp4',
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video06.mp4',
-        'https://src-lisn.s3.ap-northeast-2.amazonaws.com/video07.mp4',
+        'https://storage.googleapis.com/src-lisn/video02.mp4',
+        'https://storage.googleapis.com/src-lisn/video03.mp4',
+        'https://storage.googleapis.com/src-lisn/video06.mp4',
+        'https://storage.googleapis.com/src-lisn/video07.mp4'
       ],
       selectVideo: null,
       open01: false,
