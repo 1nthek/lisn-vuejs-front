@@ -119,11 +119,6 @@ export const store = new Vuex.Store({
       content: "",
       // autoFocus: true,
     }),
-
-    domain: 'https://lisn.ai/api',
-
-    // baseDomain: 'https://lisn.ai',
-    // baseURL:`${baseDomain}/api`,
   },
   getters: {
     isAuth(state) {
